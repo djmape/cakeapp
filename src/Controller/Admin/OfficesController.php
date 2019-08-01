@@ -294,16 +294,6 @@ class OfficesController extends AppController
 
             $this->log($exists,'debug');
 
-            if ($exists > 0) {
-                $this->Flash->success('Already Existed!', [
-                    'params' => [
-                        'saves' => 'Already Existed!'
-                        ]
-                    ]);
-                $this->log($exists,'debug');
-                return $this->redirect(['action' => 'positions', $office_id]);
-            }
-            else {
                 if ($saved = $this->OfficeEmployees->save($office_employees)) {
                     $this->Flash->success('Employee Added!', [
                         'params' => [
@@ -311,11 +301,11 @@ class OfficesController extends AppController
                             ]
                         ]);
                     $this->log("yay",'debug');
+                    return $this->redirect(['action' => 'positions', $office_id]);
                 }
                 else {
                     $this->Flash->error(__('Unable to add your article.'));
                 }
-            }
             
         }
 
