@@ -68,7 +68,16 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Officer Position</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->select('officers_position_id',$organization_officers_positions, array('class' => 'form-control','label' => false,'default' => $organization_officer->office_position_id )); ?>
+                                        <?php
+                                            if ($organization_officers_positions_count == 0 ) {
+                                                $noAvailablePosition = [
+                                                ];
+                                                echo $this->Form->select('officers_position_id',$noAvailablePosition, array('id' => 'officers_positions','class' => 'form-control','label' => false ));
+                                            }
+                                            else  {
+                                                echo $this->Form->select('officers_position_id',$organization_officers_positions, array('id' => 'officers_positions','class' => 'form-control','label' => false ));
+                                            } 
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
@@ -105,7 +114,7 @@
                                 </div>
                                 <div class="form-group row m-b-15" style="margin-right: 1%;">
                                     <div class="pull-right">
-                                        <?php echo $this->Form->button(__('<i class="fa fa-edit"></i >Edit Officer'), array('class' => 'btn btn-sm btn-yellow'));
+                                        <?php echo $this->Form->button(__('<i class="fa fa-edit"></i >Edit Officer'), array('id' => 'submit_button','class' => 'btn btn-sm btn-yellow'));
                                               echo $this->Form->end();
                                         ?>
                                     </div>
@@ -160,7 +169,9 @@
     <script>
         $(document).ready(function() {
             App.init();
+            AppendCurrentPosition();
         });
+
 
         $("#inputGroupFile01").change(function(event) {  
             RecurFadeIn();
@@ -197,6 +208,14 @@
             $(".alert").text(text).addClass("loading");  
         }
 
+        function AppendCurrentPosition() {
+            var currentPosition = new Option("<?php echo $organization_officer->officers_position_id ?>", "<?php echo $organization_officer->officers_position_id ?>");
+            /// jquerify the DOM object 'o' so we can use the html method
+            $(currentPosition).html("<?php echo $organization_officer->organization_officers_position->officers_position_name?>");
+            $("#officers_positions").append(currentPosition);
+            $('#officers_positions option[value=<?php echo $organization_officer->officers_position_id ?>]').attr('selected','selected');
+            $("#officers_positions select").val("<?php echo $organization_officer->officers_position_id ?>");
+        }
     </script>
 
 </html>

@@ -71,37 +71,38 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Employee Name</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->select('employee_id',$employees, array('class' => 'form-control','label' => false )); ?>
+                                        <?php
+                                            if ($employee_count == 0 ) {
+                                                $noAvailableEmployee = [
+                                                    'No Available Employee' => 'No Available Employee'
+                                                ];
+                                                echo $this->Form->select('employee_id',$noAvailableEmployee, array('class' => 'form-control','label' => false ));
+                                            }
+                                            else  {
+                                                echo $this->Form->select('employee_id',$employees, array('class' => 'form-control','label' => false ));
+                                            } 
+                                        ?>
                                     </div>
                                 </div>
-                <?php
-                  if ($positions->count() == 0) {
-                ?>
-                    <div class="form-group row m-b-15">
-                        <label class="col-md-3 control-label">Office Position</label>
-                        <div class="col-md-9">
-                                <select class="form-control" disabled>
-                                    <option>
-                                        No available position/s
-                                    </option>
-                                </select>
-                            </div>
-                    </div>
-                <?php
-                  ;} else {
-                ?>
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Office Position</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->select('office_position_id',$positions, array('class' => 'form-control','label' => false )); ?>
+                                        <?php
+                                            if ($office_officers_positions_count == 0 ) {
+                                                $noAvailablePosition = [
+                                                    'No Available Position' => 'No Available Position'
+                                                ];
+                                                echo $this->Form->select('office_position_id',$noAvailablePosition, array('class' => 'form-control','label' => false ));
+                                            }
+                                            else  {
+                                                echo $this->Form->select('office_position_id',$positions, array('class' => 'form-control','label' => false ));
+                                            } 
+                                        ?>
                                     </div>
                                 </div>
-                <?php 
-                    }
-                ?>
                                 <div class="form-group row m-b-15" style="margin-right: 1%">
                                     <div class="pull-right">
-                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i> Add Employee'), array('class' => 'btn btn-sm btn-yellow'));
+                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i> Add Employee'), array('id' => 'submit_button','class' => 'btn btn-sm btn-yellow'));
                                               echo $this->Form->end();  
                                         ?>
                                     </div>
@@ -157,6 +158,12 @@
     <script>
         $(document).ready(function() {
             App.init();
+            <?php if ($office_officers_positions_count == 0 || $employee_count == 0) {
+            ?>
+                $( "#submit_button" ).prop( "disabled", true );
+            <?php
+                }
+            ?>
             FormMultipleUpload.init();
         });
     </script>

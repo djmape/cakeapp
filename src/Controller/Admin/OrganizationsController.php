@@ -16,7 +16,6 @@ class OrganizationsController extends AppController
         $users =  $this->Users->find('all')->where(['Users.id' => $this->Auth->user('id')]);
         $users = $users->first(); 
         $this->set(compact('users', $users));
-        $this->log($users->email,'debug');
     }
 
     public function initialize()
@@ -212,6 +211,8 @@ class OrganizationsController extends AppController
 
     public function addOfficer($organization_id)
     {
+        $organization_officers_positions_count = 1;
+
         $this->adminSideBar('All Organizations');
         $this->loadModel('OrganizationOfficers');
         $this->loadModel('OrganizationOfficersPositions');
@@ -220,7 +221,13 @@ class OrganizationsController extends AppController
                             return $q->where(["OrganizationOfficers.active"=>1])->where(["OrganizationOfficers.organization_id"=>$organization_id]);
                          }
                       );
-        $this->set('organization_officers_positions', $organization_officers_positions);
+        if ($organization_officers_positions->count() == 0) {
+            $this->log($organization_officers_positions->count(). ' zero','debug');
+            $organization_officers_positions_count = 0;
+        }
+        else {
+            $this->set('organization_officers_positions', $organization_officers_positions);
+        }
 
 
         $this->loadModel('Organizations');
@@ -280,10 +287,15 @@ class OrganizationsController extends AppController
             
         }
 
+        // checks if there are available positions
+        $this->set('organization_officers_positions_count', $organization_officers_positions_count);
+
     }
 
     public function editOfficer($organization_officer_id,$organization_id)
     {
+        $organization_officers_positions_count = 1;
+
         $this->adminSideBar('All Organizations');
         $this->loadModel('OrganizationOfficersPositions');
         $this->loadModel('OrganizationOfficers');
@@ -294,13 +306,20 @@ class OrganizationsController extends AppController
                       )->where(["OrganizationOfficersPositions.active"=>1]);
         $this->set('organization_officers_positions', $organization_officers_positions);
 
+        if ($organization_officers_positions->count() == 0) {
+            $this->log($organization_officers_positions->count(). ' zero','debug');
+            $organization_officers_positions_count = 0;
+        }
+        else {
+            $this->set('organization_officers_positions', $organization_officers_positions);
+        }
 
         $this->loadModel('Organizations');
         $organizations =  $this->Organizations->find('all')->where(['Organizations.organization_id' => $organization_id]);
         $this->set('organizations', $organizations->first());
 
         $organization_officer =  $this->OrganizationOfficers->find('all', 
-                   array('conditions'=>array('OrganizationOfficers.organization_officer_id'=>$organization_officer_id)));
+                   array('conditions'=>array('OrganizationOfficers.organization_officer_id'=>$organization_officer_id)))->contain(['OrganizationOfficersPositions']);
         $organization_officer = $organization_officer->first();
         $this->set('organization_officer', $organization_officer);
 
@@ -357,6 +376,9 @@ class OrganizationsController extends AppController
             }
             
         }
+
+        // checks if there are available positions
+        $this->set('organization_officers_positions_count', $organization_officers_positions_count);
     }
 
     public function removeOfficer()

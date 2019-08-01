@@ -44,7 +44,9 @@ class OfficesController extends AppController
         $this->set('office', $office);
 
         $this->loadModel('OfficeEmployees');
-        $office_employees = $this->OfficeEmployees->find('all')->contain(['Employees','Offices','OfficePositions'])->where(['Offices.office_id' => $office_id])->where(['Employees.active' => 1])->where(['OfficeEmployees.active' => 1]);
+        $office_employees = $this->OfficeEmployees->find('all')->contain(['OfficePositions' => ['sort' => ['OfficePositions.office_position_priority' => 'DESC']],'Employees','Offices'])->innerJoinWith('OfficePositions')->order([
+        'OfficePositions.office_position_priority' => 'ASC'
+        ])->where(['Offices.office_id' => $office_id])->where(['Employees.active' => 1])->where(['OfficeEmployees.active' => 1])->where(['OfficePositions.active' => 1]);
         $office_employees = $this->Paginator->paginate($office_employees);
         $this->set(compact('office_employees'));
 	}

@@ -221,14 +221,19 @@ class OfficesController extends AppController
         $this->set('offices', $offices);
 
         $this->loadModel('OfficeEmployees');
-        $office_employees = $this->OfficeEmployees->find('all')->contain(['Employees','Offices','OfficePositions'])->where(['Offices.office_id' => $office_id])->where(['Employees.active' => 1])->where(['OfficeEmployees.active' => 1]);
-        $office_employees = $this->Paginator->paginate($office_employees);
+        $office_employees = $this->OfficeEmployees->find('all')->contain(['OfficePositions' => ['sort' => ['OfficePositions.office_position_priority' => 'DESC']],'Employees','Offices'])->innerJoinWith('OfficePositions')->order([
+        'OfficePositions.office_position_priority' => 'ASC'
+        ])->where(['Offices.office_id' => $office_id])->where(['Employees.active' => 1])->where(['OfficeEmployees.active' => 1])->where(['OfficePositions.active' => 1]);
+        $office_employees = $this->paginate($office_employees);
         $this->set(compact('office_employees'));
     }
 
 
     public function addPosition($office_id)
     {
+        $office_officers_positions_count = 1;
+        $employee_count = 1;
+
         $this->adminSideBar('New Office');
         $this->loadModel('OfficeEmployees');
 
@@ -239,9 +244,20 @@ class OfficesController extends AppController
 
         $this->loadModel('Employees'); 
         $employees =  $this->Employees->find('list', ['keyField' => 'employee_id', 'valueField' => function ($row) {
-            return $row['employee_lastname'] . ', ' . $row['employee_firstname'] . ' ' . substr($row['employee_middlename'],0,1);
-        }])->where(['Employees.active' => 1]);
-        $this->set('employees', $employees);
+            return $row['employee_lastname'] . ', ' . $row['employee_firstname'] . ' ' . substr($row['employee_middlename'],0,1);}])->notMatching("OfficeEmployees", 
+                         function($q) use($office_id) {
+                            return $q->where(["OfficeEmployees.active"=>1])->where(["OfficeEmployees.office_id"=>$office_id]);
+                         }
+                      )->where(["Employees.active"=> 1 ]);
+
+        if ($employees->count() == 0) {
+            $this->log($employees->count(). ' zero','debug');
+            $employee_count = 0;
+        }
+        else {
+            $this->set('employees', $employees);
+        }
+
 
         $this->loadModel('OfficePositions');
         // Get unassigned positions only
@@ -250,8 +266,15 @@ class OfficesController extends AppController
                             return $q->where(["OfficeEmployees.active"=>1])->where(["OfficeEmployees.office_id"=>$office_id]);
                          }
                       );
+
+        if ($positions->count() == 0) {
+            $this->log($positions->count(). ' zero','debug');
+            $office_officers_positions_count = 0;
+        }
+        else {
+            $this->set('positions', $positions);
+        }
         $this->log($positions->count(),'debug');
-        $this->set('positions', $positions);
 
 
         $office_employees = $this->OfficeEmployees->newEntity();
@@ -288,7 +311,6 @@ class OfficesController extends AppController
                             ]
                         ]);
                     $this->log("yay",'debug');
-                    return $this->redirect(['action' => 'positions', $office_id]);
                 }
                 else {
                     $this->Flash->error(__('Unable to add your article.'));
@@ -298,10 +320,17 @@ class OfficesController extends AppController
         }
 
         $this->set('office_employees', $office_employees);
+
+        // checks if there are available positions
+        $this->set('office_officers_positions_count', $office_officers_positions_count);
+        // checks if there are available employees
+        $this->set('employee_count', $employee_count);
     }
 
     public function editOfficePosition($office_employees_id,$office_id,$employee_id)
     {   
+        $office_officers_positions_count = 1;
+
         $this->adminSideBar('New Office');
         $this->loadModel('OfficeEmployees');
 
@@ -323,11 +352,18 @@ class OfficesController extends AppController
 
         $this->loadModel('OfficePositions'); 
         $positions =  $this->OfficePositions->find('list', ['keyField' => 'office_position_id', 'valueField' => 'office_position_name' ])->notMatching("OfficeEmployees", 
-                         function($q) {
+                         function($q) use ($office_id) {
                             return $q->where(["OfficeEmployees.active"=>1])->where(["OfficeEmployees.office_id"=>$office_id]);
                          }
                       );
-        $this->set('positions', $positions);
+
+        if ($positions->count() == 0) {
+            $this->log($positions->count(). ' zero','debug');
+            $office_officers_positions_count = 0;
+        }
+        else {
+            $this->set('positions', $positions);
+        }
 
         if ($this->request->is(['post', 'put'])) {
 
@@ -346,17 +382,7 @@ class OfficesController extends AppController
             $office_employee->office_position_id = $office_position_id;
             $office_employee->active =  1;
 
-            if ($exists > 0) {
-                $this->Flash->success('Already Existed!', [
-                    'params' => [
-                        'saves' => 'Already Existed!'
-                        ]
-                    ]);
-                $this->log($exists,'debug');
-                return $this->redirect(['action' => 'positions', $office_id]);
-            }
-            else {
-                if ($officeEmployeesTable->save($office_employee)) {
+            if ($officeEmployeesTable->save($office_employee)) {
                     $this->Flash->success('Office Employee Updated!', [
                         'params' => [
                             'saves' => 'Office Employee Updated!'
@@ -368,8 +394,10 @@ class OfficesController extends AppController
                     debug($offices->errors());
                     $this->Flash->error(__('Unable to add your article.'));
                 }
-            }
         }
+
+        // checks if there are available positions
+        $this->set('office_officers_positions_count', $office_officers_positions_count);
     }
 
     public function removeEmployee()

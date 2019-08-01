@@ -75,8 +75,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
-                                    <label class="col-md-3 control-label">Current Office Position</label>
+                                    <label class="col-md-3 control-label">Office Position</label>
                                     <div class="col-md-9">
+                                        <?php
+                                            if ($office_officers_positions_count == 0 ) {
+                                                $noAvailablePosition = [
+                                                ];
+                                                echo $this->Form->select('office_position_id',$noAvailablePosition, array('id' => 'office_positions','class' => 'form-control','label' => false ));
+                                            }
+                                            else  {
+                                                echo $this->Form->select('office_position_id',$positions, array('id' => 'office_positions','class' => 'form-control','label' => false ));
+                                            } 
+                                        ?>
                                         <select class="form-control" disabled>
                                             <option>
                                                 <?= $office_employees->office_position->office_position_name ?>
@@ -84,32 +94,6 @@
                                         </select>
                                     </div>
                                 </div>
-
-                <?php
-                  if ($positions->count() == 0) {
-                ?>
-                    <div class="form-group row m-b-15">
-                        <label class="col-md-3 control-label">Change Office Position To</label>
-                        <div class="col-md-9">
-                                <select class="form-control" disabled>
-                                    <option>
-                                        No available position/s
-                                    </option>
-                                </select>
-                            </div>
-                    </div>
-                <?php
-                  ;} else {
-                ?>
-                                <div class="form-group row m-b-15">
-                                    <label class="col-md-3 control-label">Change Office Position To</label>
-                                    <div class="col-md-9">
-                                        <?php echo $this->Form->select('office_position_id',$positions, array('class' => 'form-control','label' => false,'default' => 'see default' )); ?>
-                                    </div>
-                                </div>
-                <?php 
-                    }
-                ?>
                                 <div class="form-group row m-b-15" style="margin-right: 1%">
                                     <div class="pull-right">
                                         <?php echo $this->Form->button(__('<i class="fa fa-edit"></i>  Edit Office Employee'), array('class' => 'btn btn-sm btn-yellow'));
@@ -168,8 +152,18 @@
     <script>
         $(document).ready(function() {
             App.init();
+            AppendCurrentPosition();
             FormMultipleUpload.init();
         });
+
+        function AppendCurrentPosition() {
+            var currentPosition = new Option("<?php echo $office_employees->office_position_id ?>", "<?php echo $office_employees->office_position_id ?>");
+            /// jquerify the DOM object 'o' so we can use the html method
+            $(currentPosition).html("<?php echo $office_employees->office_position->office_position_name?>");
+            $("#office_positions").append(currentPosition);
+            $('#office_positions option[value=<?php echo $office_employees->office_position_id ?>]').attr('selected','selected');
+            $("#office_positions select").val("<?php echo $office_employees->office_position_id ?>");
+        }
     </script>
 
 </html>

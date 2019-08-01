@@ -68,7 +68,17 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Officer Position</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->select('officers_position_id',$organization_officers_positions, array('class' => 'form-control','label' => false )); ?>
+                                        <?php
+                                            if ($organization_officers_positions_count == 0 ) {
+                                                $noAvailablePosition = [
+                                                    'No Available Position' => 'No Available Position'
+                                                ];
+                                                echo $this->Form->select('officers_position_id',$noAvailablePosition, array('class' => 'form-control','label' => false ));
+                                            }
+                                            else  {
+                                                echo $this->Form->select('officers_position_id',$organization_officers_positions, array('class' => 'form-control','label' => false ));
+                                            } 
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
@@ -106,7 +116,7 @@
                                 </div>
                                 <div class="form-group row m-b-15" style="margin-right: 1%">
                                     <div class="pull-right">
-                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i> Add Officer'), array('class' => 'btn btn-sm btn-yellow'));
+                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i> Add Officer'), array('id' => 'submit_button','class' => 'btn btn-sm btn-yellow'));
                                               echo $this->Form->end();
                                         ?>
                                     </div>
@@ -161,6 +171,12 @@
     <script>
         $(document).ready(function() {
             App.init();
+            <?php if ($organization_officers_positions_count == 0 ) {
+            ?>
+                $( "#submit_button" ).prop( "disabled", true );
+            <?php
+                }
+            ?>
         });
 
         $("#inputGroupFile01").change(function(event) {  
