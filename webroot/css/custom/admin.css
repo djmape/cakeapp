@@ -1,0 +1,94 @@
+
+label {
+	color: #7e0e09;
+}
+
+.panel {
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.panel-body {
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 0;
+}
+
+.panel-inverse>.panel-heading>h5 {
+	color: #fff;
+}
+
+.btn.btn-primary {
+    color: #7e0e09;
+    background: #f8d900;
+    border-color: #f8d900;
+}
+
+.btn-primary.active, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open .dropdown-toggle.btn-primary {
+    background: #efd101;
+    border-color: #efd101;
+}
+
+.btn.btn-yellow {
+	color: #7e0e09;
+	background: #fdea08;
+	border-color: #fdea08;
+}
+
+.btn.btn-yellow>a {
+	color: #7e0e09;
+    text-decoration: none;
+}
+
+.btn-yellow.active, .btn-yellow:active, .btn-yellow:focus, .btn-yellow:hover, .open .dropdown-toggle.btn-yellow {
+    background: #efd101;
+    border-color: #efd101;
+    text-decoration: none;
+}
+
+.btn.btn-info>a {
+	color: #fff;
+    text-decoration: none;
+}
+
+.sidebar .nav>li li.has-sub.active>a {
+    color: #7e0e09;
+}
+
+.navbar.navbar-inverse .navbar-brand, .sidebar .nav > li.active > a, .sidebar .nav > li.active > a:focus, .sidebar .nav > li.active > a:hover, .page-sidebar-minified .sidebar .nav > li.has-sub.active:focus > a, .page-sidebar-minified .sidebar .nav > li.has-sub.active:hover > a, .page-sidebar-minified .sidebar .nav > li.has-sub.active > a, .label.label-theme, .btn.btn-scroll-to-top {
+    background: #ffffff;
+}
+
+/* ?? */
+.sidebar .nav>li.active>a, .sidebar .nav>li.active>a:focus, .sidebar .nav>li.active>a:hover {
+    color: #7e0e09;
+    font-weight: bold;
+}
+
+.sidebar .nav>li.active>a, .sidebar .nav>li.active>a:focus, .sidebar .nav>li.active>a:hover {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.nosub {
+    background: #4d0000;
+}
+
+/* Image upload image preview */
+#img_preview {
+    max-height: 150px;
+    max-width: 150px;
+    height:150px;
+    width:auto;
+    display:block;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.home_carousel_imgs {
+  margin-bottom: 10%
+}
+
+.carousel_img {
+  padding: 3%
+}

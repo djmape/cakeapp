@@ -1,0 +1,27 @@
+
+    
+    <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <?php echo $this->Html->css("../plugins/jquery-ui/themes/base/minified/jquery-ui.min.css")?>
+    <!-- <link href="assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" /> -->
+    <?php echo $this->Html->css("bootstrap.min.css")?>
+    <!-- <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" /> -->
+    <?php echo $this->Html->css("../plugins/font-awesome/css/font-awesome.min.css"); ?>
+    <!-- <link href="assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" /> -->
+    <?php echo $this->Html->css("animate.min.css")?>
+    <!-- <link href="assets/css/animate.min.css" rel="stylesheet" /> -->
+    <?php echo $this->Html->css("style.min.css")?>
+    <!--  <link href="assets/css/style.min.css" rel="stylesheet" /> -->
+    <?php echo $this->Html->css("style-responsive.min.css")?>
+    <!--  <link href="assets/css/style-responsive.min.css" rel="stylesheet" /> -->
+    <?php echo $this->Html->css("theme/default.css")?>
+    <!-- ================== END BASE CSS STYLE ================== -->
+
+    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
+    <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css")?>
+    <!-- <link href="assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet"/> -->
+    <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css")?>
+    <!-- <link href="assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet"/> -->
+    <?php echo $this->Html->css("../plugins/bootstrap-wizard/css/bwizard.min.css")?>
+    <!-- ================== END PAGE LEVEL STYLE ================== -->
+    
