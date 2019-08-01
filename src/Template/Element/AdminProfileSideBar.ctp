@@ -19,7 +19,7 @@
           <li>
             <ul class="nav nav-profile">
               <!-- Return -->
-              <li class="<?php if ($active == 'profile') echo 'active'?>">
+              <li class="<?php if ($active == '') echo 'active'?>">
                 <?php echo $this->Html->link('<i class="fa fa-reply fw"></i>Admin Configuration',['prefix' => "admin", 'controller' => 'Abouts','action'=>'index'],array('escape' => false)) ?>
               </li>
               <!-- Profile -->

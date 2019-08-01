@@ -52,7 +52,7 @@
                 <div class="form-group row m-b-15">
                     <label class="col-md-4 col-form-label">Current Password</label>
                     <div class="col-md-12">
-                        <?php echo $this->Form->control('current_password', array('type' => 'password','style' => '','class' => 'form-control', 'label' => false )); ?>
+                        <?php echo $this->Form->control('current_password', array('type' => 'password','id' => 'current_password','style' => '','class' => 'form-control', 'label' => false )); ?>
                     </div>
                 </div>
                 <div class="form-group row m-b-15">
@@ -125,12 +125,19 @@
         });
 
         function checkPasswordIsMatched() {
-            if ($('#new_password').val() == $('#confirm_password').val()) {
-                $( "#submit_button" ).prop( "disabled", false );
+            if($("#current_password").val().length > 0 || $("#new_password").val().length > 0 || $("#confirm_password").val().length > 0)
+            {
+                if ($('#new_password').val() == $('#confirm_password').val()) {
+                    $( "#submit_button" ).prop( "disabled", false );
+                }
+                else {
+                    $( "#submit_button" ).prop( "disabled", true );
+                }
             }
             else {
                 $( "#submit_button" ).prop( "disabled", true );
             }
+
         }
 
         
