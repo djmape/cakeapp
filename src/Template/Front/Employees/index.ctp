@@ -95,12 +95,12 @@
 
 								 	<tr>
 										<td style="height: 200px;">
-											<div class="col-md-4">
-												<?php echo $this->Html->image("../webroot/img/upload/".$employee->employee_photo, array('style' => 'width:auto; max-width:40%; height: 100%;width: 100%; margin-left: 5%')); ?>
+											<div class="col-md-4" style=" width: 150px; height: 150px; padding-left: 2%; padding-right: 2%; margin-right: 10%">
+												<?php echo $this->Html->image("../webroot/img/upload/".$employee->employee_photo, array('style' => 'width: 150px; height: 150px; object-fit: cover; border-radius: 50% ')); ?>
 											</div>
 												<p><h5><b><?= $employee->employee_lastname,', ',$employee->employee_firstname,' ',substr($employee->employee_middlename,0,1),'.' ?></b></h5></p>
-												<p><h6><?= $employee->employee_position->employee_position_name;?></h6></p>
-												<p><h6><?= $employee->employee_email;?></h6></p>
+												<p><h6><b>Position: </b><?= $employee->employee_position->employee_position_name;?></h6></p>
+												<p><h6><b>Email: </b><?= $employee->employee_email;?></h6></p>
 									    </td>
 									</tr>
                                 <?php endforeach; ?>

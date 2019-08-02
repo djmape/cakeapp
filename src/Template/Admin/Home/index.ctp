@@ -35,10 +35,16 @@
     <!-- Include custom.css -->
     <?php echo $this->Html->css("custom/admin.css")?>
 
+    <style type="text/css">
+        #a:hover #b {
+            display: block;
+        }
+    </style>
+
 </head>
 
 
-<body>
+<body onload="startTime()">
 
     <?php echo $this->element('AdminSideBar');?>
     <?php echo $this->Flash->render(); ?>
@@ -49,7 +55,15 @@
         <!-- end breadcrumb -->
         <!-- begin page-header -->
         <h1 class="page-header">Polytechnic University of the Philippines - Quezon City <small>Web Portal</small></h1>
-            
+        <div class="widget widget-stats bg-yellow">
+            <!-- begin Server Time Widget -->
+                        <div class="stats-icon"><i class="fa fa-calendar" style="color: #7e0e09"></i></div>
+                        <div class="stats-info">
+                            <h4>SERVER TIME</h4>
+                            <div id="calendar-clock" style="font-size: 24px"></div>    
+                        </div>
+                    </div>
+
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
             <div class="row">
@@ -60,7 +74,7 @@
                         <div class="panel-heading">
                             <h5> 
                                 <i class="fa fa-plus"></i>
-                                <b> Add Home Images </b> 
+                                <b> Home Images </b> 
                             </h5>
                         </div>
                         <div class="panel-body">
@@ -75,7 +89,9 @@
                                         <?php } ?> 
                                             <td style="background-color: yellow; width: 200px; height: 200px; margin: 0">
                                                 <div style="position: relative; width: 100%; height: 100%;">
-                                                <div style="position: absolute; width: 100%; height: 100%;">
+                                                <div id="a" style="position: absolute; width: 100%; height: 100%;">
+                                                    <div id="b" style="position: absolute; width: 100%; height: 100%; background-color: gray; opacity: 0.5;">
+                                                    </div>
                                                     <?php echo $this->Html->image("../webroot/img/upload/".$carousel_img->home_carousel_img_name, array('style' => 'max-height:100%; max-width: 100%; height: 100%; width: 100% ;object-fit: cover')); ?>
                                                 </div>
                                                 <div style="position: absolute;">
@@ -233,6 +249,24 @@
                     }
                 });
         }
+
+
+    function startTime() {
+        var today = new Date();
+        var d = today.toDateString();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('calendar-clock').innerHTML = d + " " + h + ":" + m + ":" + s;
+        var t = setTimeout(startTime, 500);
+    }
+
+    function checkTime(i) {
+        if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+        return i;
+    }
 
     </script>
 

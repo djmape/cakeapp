@@ -19,6 +19,12 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <html>
 <head>
     <?php echo $this->Flash->render(); ?>
+    <?php echo $this->Html->meta( 
+        'PUPlogo.png', 
+        '/PUPlogo.png', 
+        array ('type' => 'icon' ) 
+    );
+    ?>
     <!--
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

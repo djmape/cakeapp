@@ -86,7 +86,7 @@
     			<h1 class="page-header" style="color: #7e0e09;">
             			<?= $organization->organization_name ?>
     			</h1>
-						<?php echo $this->Html->image("../webroot/img/upload/".$organization->organization_photo, array('style' => 'max-width:100%; max-height:100%;')); ?>
+						<?php echo $this->Html->image("../webroot/img/upload/".$organization->organization_photo, array('style' => 'max-width:100%; max-height:100%')); ?>
 						<h4><?= $organization->organization_acronym ?></h4>
 						<p style="font-size: 14px"><?= $organization->organization_type ?></p>
 						<!--<p style="font-size: 14px"><b>Organization</b></p>
@@ -109,9 +109,9 @@
                                     <?php foreach ($organization_officers as $organization_officer): ?>
 
 								 	<tr>
-										<td style="height: 200px;">
-											<div class="col-md-4 center-block">
-												<?php echo $this->Html->image("../webroot/img/upload/".$organization_officer->officer_photo, array('class' => 'center-block','style' => 'width:auto; max-width:40%; height: 100%;width: 100%;;width: 100%; margin-left: 5%')); ?>
+										<td style="height: 200px; width: 100%">
+											<div class="col-md-4 center-block" style=" width: 150px; height: 150px; padding-left: 2%; padding-right: 2%; margin-right: 10%">
+												<?php echo $this->Html->image("../webroot/img/upload/".$organization_officer->officer_photo, array('class' => 'center-block','style' => ' height:  150px; width:  150px; border-radius: 50%; object-fit: cover;')); ?>
 											</div>
 												<p>
 													<h5>
@@ -122,6 +122,7 @@
 												</p>
 												<p>
 													<h6>
+                                                        <b> Position: </b>
 														<?= $organization_officer->organization_officers_position->officers_position_name;?>
 													</h6>
 												</p>

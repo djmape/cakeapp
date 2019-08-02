@@ -92,3 +92,17 @@ label {
 .carousel_img {
   padding: 3%
 }
+
+.widget-stats .stats-info h4 {
+    font-size: 14px;
+    margin: 5px 0;
+    color: #7e0e09;
+}
+
+.widget {
+    color: #7e0e09;
+}
+
+.bg-yellow {
+    background: #fdea08!important;
+}

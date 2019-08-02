@@ -51,9 +51,17 @@
 if (!isset($params['escape']) || $params['escape'] !== false) {
     $message = h($message);
 }
+
+if (isset($saves)) {
     $messages = $params['saves'];
+
 ?>
 
-	<script>
-		swal('Error!','<?php echo $messages ?>','error');
-	</script>
+    <script>
+        swal('Error!','<?php echo $messages ?>','error');
+    </script>
+
+<?php
+    }
+?>
+

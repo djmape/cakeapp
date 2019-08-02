@@ -126,31 +126,24 @@
     <ol class="carousel-indicators">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <?php foreach ($home_carousel_imgs as $i => $carousel_img): ?> 
-          <li data-target="#myCarousel" data-slide-to="<?php echo $i + 1 ?>"></li>
+          <li data-target="#myCarousel" data-slide-to="<?php echo $i ?>"></li>
         <?php endforeach; ?>
     </ol>
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox" style="height: 650px">
   
-      <div class="item active">
-        <div class="view slidescss" style="background:url('webroot/img/PUPlogo.png')no-repeat fixed center; background-size: cover;">
-        </div>
-        <div class="carousel-caption">
-          <h3 style="color: white">Polytechnic University of the Philippines</h3>
-          <p>Quezon City</p>
-        </div>
-      </div>
 
-      <?php foreach ($home_carousel_imgs as $carousel_img): ?> 
+      <?php foreach ($home_carousel_imgs as $i => $carousel_img): ?> 
 
-      <div class="item">
+      <div class="item <?php if ($i == 0 ) echo 'active' ?> ">
         <div class="view slidescss" style="background:url('webroot/img/upload/<?= $carousel_img->home_carousel_img_name ?>')no-repeat fixed center; background-size: cover;">
         </div>
-        <div class="carousel-caption">
-          <h3 style="color: white">Polytechnic University of the Philippines</h3>
+        <div class="carousel-caption" style="padding: 1%; background: rgba(0, 0, 0, 0.4);">
+          <h3 style="color: white;">Polytechnic University of the Philippines</h3>
           <p>Quezon City</p>
         </div>
+        <div></div>
 
       </div>
 

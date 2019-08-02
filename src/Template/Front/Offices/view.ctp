@@ -95,8 +95,8 @@
 
 								 	<tr>
 										<td style="height: 200px;">
-											<div class="col-md-4">
-												<?php echo $this->Html->image("../webroot/img/upload/".$office_employee->employee->employee_photo, array('style' => 'width:auto; max-width:25%; height: 100%;width: 100%;')); ?>
+											<div class="col-md-4" style="padding-left: 5%">
+												<?php echo $this->Html->image("../webroot/img/upload/".$office_employee->employee->employee_photo, array('style' => 'width:auto; max-width:45%; height: 100%;width: 100%;border-radius: 50%')); ?>
 											</div>
 												<p>
 													<h6>
