@@ -19,6 +19,11 @@
           <li>
             <ul class="nav nav-profile">
 
+              <!-- Visit Website -->
+              <li class="">
+                <?php echo $this->Html->link('<i class="fa fa-globe fw"></i>View Website',['prefix' => "front", 'controller' => 'Home','action'=>'index'],array('escape' => false)) ?>
+              </li>
+
               <!-- Home -->
               <li class="<?php if ($active == 'home') echo 'active'?>">
                 <?php echo $this->Html->link('<i class="fa fa-home fw"></i>Home',['prefix' => "admin", 'controller' => 'Home','action'=>'index'],array('escape' => false)) ?>

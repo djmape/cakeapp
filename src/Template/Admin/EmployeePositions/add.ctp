@@ -79,7 +79,7 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Priority</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->select('employee_position_priority',$priority, array('class' => 'form-control')); ?>
+                                        <?php echo $this->Form->select('employee_position_priority',$available_positions, array('class' => 'form-control')); ?>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15" style="margin-right: 1%">
