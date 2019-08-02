@@ -32,7 +32,7 @@ class HomeController extends AppController
     {
         $this->loadModel('HomeCarouselImgs');
 
-        $home_carousel_imgs = $this->paginate($this->HomeCarouselImgs->find('all')->where(['HomeCarouselImgs.active' => 1]));
+        $home_carousel_imgs = $this->paginate($this->HomeCarouselImgs->find('all')->where(['HomeCarouselImgs.active' => 1])->where(['HomeCarouselImgs.visibility' => 1]));
         $this->set(compact('home_carousel_imgs'));
 
         $this->paginate = [ 'page' => 1, 'limit' => 5, 'maxLimit' => 5 ];

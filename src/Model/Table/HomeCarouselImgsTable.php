@@ -58,6 +58,21 @@ class HomeCarouselImgsTable extends Table
             ->requirePresence('active', 'create')
             ->allowEmptyString('active', false);
 
+        $validator
+            ->scalar('home_carousel_img_caption')
+            ->maxLength('home_carousel_img_caption', 100)
+            ->allowEmptyString('home_carousel_img_caption');
+
+        $validator
+            ->scalar('home_carousel_img_description')
+            ->maxLength('home_carousel_img_description', 100)
+            ->allowEmptyString('home_carousel_img_description');
+
+        $validator
+            ->integer('visibility')
+            ->requirePresence('visibility', 'create')
+            ->allowEmptyString('visibility', false);
+
         return $validator;
     }
 }

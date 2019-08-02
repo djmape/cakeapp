@@ -9,6 +9,9 @@ use Cake\ORM\Entity;
  * @property int $home_carousel_img_id
  * @property string $home_carousel_img_name
  * @property int $active
+ * @property string|null $home_carousel_img_caption
+ * @property string|null $home_carousel_img_description
+ * @property int $visibility
  */
 class HomeCarouselImg extends Entity
 {
@@ -23,6 +26,9 @@ class HomeCarouselImg extends Entity
      */
     protected $_accessible = [
         'home_carousel_img_name' => true,
-        'active' => true
+        'active' => true,
+        'home_carousel_img_caption' => true,
+        'home_carousel_img_description' => true,
+        'visibility' => true
     ];
 }

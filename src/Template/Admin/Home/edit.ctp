@@ -51,14 +51,6 @@
         <!-- end breadcrumb -->
         <!-- begin page-header -->
         <h1 class="page-header">Polytechnic University of the Philippines - Quezon City <small>Web Portal</small></h1>
-        <div class="widget widget-stats bg-yellow">
-            <!-- begin Server Time Widget -->
-                        <div class="stats-icon"><i class="fa fa-calendar" style="color: #7e0e09"></i></div>
-                        <div class="stats-info">
-                            <h4>SERVER TIME</h4>
-                            <div id="calendar-clock" style="font-size: 24px"></div>    
-                        </div>
-                    </div>
 
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
@@ -74,70 +66,7 @@
                             </h5>
                         </div>
                         <div class="panel-body">
-                            <div class="home_carousel_imgs">
-                                <table style="width: 100%">
-                                    <tr>
-                                <?php $row_counter = 1; 
-                                      foreach ($home_carousel_imgs as $i => $carousel_img): ?>
-                                        <?php if (($i + 5) % 5 == 0) { ?> 
-                                            </tr>
-                                            <tr >
-                                        <?php } ?> 
-                                            <td style="background-color: gray; width: 200px; height: 200px; margin: 0">
-                                                <div class="boxa" style="position: relative; width: 100%; height: 100%; ">
-                                                <div style="position: absolute; width: 100%; height: 100%;">
-                                                    <?php echo $this->Html->image("../webroot/img/upload/".$carousel_img->home_carousel_img_name, array('style' => 'max-height:100%; max-width: 100%; height: 100%; width: 100% ;object-fit: cover')); ?>
-                                                </div>
-                                                        <?php if ($carousel_img->visibility == 0) { ?>
-                                                        <div class="hidden-image" style="position: absolute; width: 100%; height: 100%; text-align: center">
-                                                            <div style="background-color: black;position: absolute; width: 100%; height: 100%;opacity: 0.2; text-align: center">
-                                                            </div>
-                                                            <i class="fa fa-eye-slash" style="font-size: 100px;opacity: 0.5; color: white">
-                                                            </i>
-                                                        </div>
-                                                        <?php } ?>
-                                                    <div class="boxb" style=" display: none; text-align: center" >
-                                                        <div style="background-color: black;position: absolute; width: 100%; height: 100%;opacity: 0.5">
-                                                        </div>
-                                                        <!-- begin buttons div -->
-                                                        <div id="b" style="position: absolute; padding: auto; left: 50%;top: 50%;transform: translate(-50%, -50%);">
-                                                            <button type="button" class="btn btn-images btn-sm" style="margin: 10%">
-                                                                <i class="fa fa-edit">
-                                                                </i>
-                                                                <?= $this->Html->link('Edit', ['action' => 'edit', $carousel_img->home_carousel_img_id]) ?>
-                                                            </button>
-                                                            <br>
-                                                            <?php if ($carousel_img->visibility == 0) { ?>
-                                                                <button type="button" class="btn btn-images btn-sm" onclick="confirmUnhide(<?php echo $carousel_img->home_carousel_img_id ?> )" style="margin: 10%">
-                                                                    <i class="fa fa-eye">
-                                                                    </i>
-                                                                    Unhide
-                                                                </button>
-                                                                <br>
-                                                            <?php } else { ?>
-                                                                <button type="button" class="btn btn-images btn-sm" onclick="confirmHide(<?php echo $carousel_img->home_carousel_img_id ?> )" style="margin: 10%">
-                                                                    <i class="fa fa-eye-slash">
-                                                                    </i>
-                                                                    Hide
-                                                                </button>
-                                                                <br>
-                                                            <?php } ?>
-                                                            <button type="button" class="btn btn-images btn-sm" onclick="confirmDelete(<?php echo $carousel_img->home_carousel_img_id ?> )" style="margin: 10%">
-                                                                <i class="fa fa-trash">
-                                                                </i>
-                                                                Delete
-                                                            </button>
-                                                            <br>
-                                                        </div>
-                                                        <!-- end buttons div -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                <?php endforeach; ?>
-                                    </tr>
-                                    </table>
-                            </div>
-                                <?php echo $this->Form->create($home_carousel_img,array('enctype'=>'multipart/form-data','data-parsley-validate' => true)); ?>
+                            <?php echo $this->Form->create($home_carousel_imgs,array('enctype'=>'multipart/form-data','data-parsley-validate' => true)); ?>
                             <form class="form-horizontal">
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Upload Image</label>
@@ -148,7 +77,7 @@
                                                 <?php echo $this->Form->control('home_carousel_img_name', array('id' => 'inputGroupFile01','type'=>'file','label' => false, 'required' => false));?>
                                         </span>
                                         <div id="img_contain" class="col-md-2" style=" height: 150px; width: 150px; margin-right: 1%; padding: 0">
-                                            <?php echo $this->Html->image("../webroot/img/img_holder.png", array('id' => 'img_preview','style' => 'width:100%; height:auto;','class' => 'center-block')); ?>
+                                            <?php echo $this->Html->image("../webroot/img/upload/".$home_carousel_imgs->home_carousel_img_name, array('id' => 'img_preview','style' => 'width:100%; height:auto;','class' => 'center-block')); ?>
                                         </div>
                                         <label id="img_filename" style="margin-left: 1%">No image uploaded</label>
                                     </div>
@@ -156,13 +85,13 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Caption Title</label>
                                     <div class="col-md-7">
-                                        <?php echo $this->Form->control('image_caption', array('class' => 'form-control','label' => false)); ?>
+                                        <?php echo $this->Form->control('image_caption', array('class' => 'form-control','label' => false,'default' => $home_carousel_imgs->home_carousel_img_caption)); ?>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Description<br>(max of 100 characters)</label>
                                     <div class="col-md-7">
-                                        <?php echo $this->Form->control('image_description', array('class' => 'form-control','label' => false,'style' => 'height: 50px')); ?>
+                                        <?php echo $this->Form->control('image_description', array('class' => 'form-control','label' => false,'style' => 'height: 50px','default' => $home_carousel_imgs->home_carousel_img_description)); ?>
                                     </div>
                                     <label id="img_filename" class="col-md-7" style="margin-left: 1%"></label>
                                 </div>
@@ -263,70 +192,6 @@
         }
 
 
-        function confirmUnhide($home_carousel_img_id) {
-            var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"Home","action"=>"unhide"]); ?>';
-            var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"Home","action"=>"index"]); ?>';
-            swal({
-                title: "Are you sure?",
-                text: "You want to unhide image?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#ff5b57',
-                confirmButtonClass: "btn btn-info",
-                confirmButtonText: "Unhide",
-                cancelButtonText: "Cancel"
-            },  function(isConfirm) {
-                    if (isConfirm) {
-                        $.ajax({
-                            type:'post',
-                            url: targeturl,              
-                            data: {'home_carousel_img_id' : $home_carousel_img_id},
-                            success:function(query)  {
-                            // $("#divLoading").removeClass('show');
-                            // $('#state').append(result);
-                                window.location = redirectURL;
-                            },
-                            error:function(xhr, ajaxOptions, thrownError) {
-                                swal("Error", $home_carousel_img_id, "error");
-                            }
-                        });
-                    }
-                });
-        }
-
-
-        function confirmHide($home_carousel_img_id) {
-            var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"Home","action"=>"hide"]); ?>';
-            var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"Home","action"=>"index"]); ?>';
-            swal({
-                title: "Are you sure?",
-                text: "You want to hide image?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#ff5b57',
-                confirmButtonClass: "btn btn-info",
-                confirmButtonText: "Hide",
-                cancelButtonText: "Cancel"
-            },  function(isConfirm) {
-                    if (isConfirm) {
-                        $.ajax({
-                            type:'post',
-                            url: targeturl,              
-                            data: {'home_carousel_img_id' : $home_carousel_img_id},
-                            success:function(query)  {
-                            // $("#divLoading").removeClass('show');
-                            // $('#state').append(result);
-                                window.location = redirectURL;
-                            },
-                            error:function(xhr, ajaxOptions, thrownError) {
-                                swal("Error", $home_carousel_img_id, "error");
-                            }
-                        });
-                    }
-                });
-        }
-
-
         function confirmDelete($home_carousel_img_id) {
             var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"Home","action"=>"delete"]); ?>';
             var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"Home","action"=>"index"]); ?>';
@@ -378,11 +243,9 @@
 
     $(".boxa").hover(function () {
     $(this).find('.boxb').fadeIn(100);
-    $(this).find('.hidden-image').fadeOut(100);
 },
 function () {
     $(this).find('.boxb').fadeOut(100);
-    $(this).find('.hidden-image').fadeIn(100);
 });
 
 

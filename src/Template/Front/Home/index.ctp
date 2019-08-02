@@ -139,11 +139,12 @@
       <div class="item <?php if ($i == 0 ) echo 'active' ?> ">
         <div class="view slidescss" style="background:url('webroot/img/upload/<?= $carousel_img->home_carousel_img_name ?>')no-repeat fixed center; background-size: cover;">
         </div>
-        <div class="carousel-caption" style="padding: 1%; background: rgba(0, 0, 0, 0.4);">
-          <h3 style="color: white;">Polytechnic University of the Philippines</h3>
-          <p>Quezon City</p>
-        </div>
-        <div></div>
+        <?php if ($carousel_img->home_carousel_img_caption != '') { ?>
+          <div class="carousel-caption" style="padding: 1%; background: rgba(0, 0, 0, 0.4);">
+            <h3 style="color: white;"><?= $carousel_img->home_carousel_img_caption ?></h3>
+            <p><?= $carousel_img->home_carousel_img_description ?></p>
+          </div>
+        <?php ; } ?>
 
       </div>
 

@@ -106,3 +106,27 @@ label {
 .bg-yellow {
     background: #fdea08!important;
 }
+
+.btn.btn-images {
+    color: white;
+    background-color: transparent;
+}
+
+.btn.btn-images>a {
+    color: white;
+    text-decoration: none;
+}
+
+.btn-images.active, .btn-images:active, .btn-images:focus, .btn-images:hover, .open .dropdown-toggle.btn-images {
+    background: #efd101;
+    border-color: #efd101;
+    text-decoration: none;
+    color: #7e0e09;
+}
+
+.btn-images>a.active, .btn-images>a:active, .btn-images>a:focus, .btn-images>a:hover, .open .dropdown-toggle.btn-images>a {
+    background: #efd101;
+    border-color: #efd101;
+    text-decoration: none;
+    color: #7e0e09;
+}
