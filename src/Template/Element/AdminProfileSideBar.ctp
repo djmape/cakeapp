@@ -30,6 +30,10 @@
               <li class="<?php if ($active == 'password') echo 'active'?>">
                 <?php echo $this->Html->link('<i class="fa fa-lock fw"></i>Password',['prefix' => "admin", 'controller' => 'Users','action'=>'changePassword', $users->id],array('escape' => false)) ?>
               </li>
+              <!-- Register -->
+              <li class="<?php if ($active == 'register') echo 'active'?>">
+                <?php echo $this->Html->link('<i class="fa fa-plus fw"></i>Add User',['prefix' => "admin", 'controller' => 'Users','action'=>'register'],array('escape' => false)) ?>
+              </li>
 
               <!-- start Logout -->
               <li class="<?php if ($active == 'Logout') echo 'active'?>">

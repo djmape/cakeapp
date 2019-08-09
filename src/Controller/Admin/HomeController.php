@@ -113,7 +113,7 @@ class HomeController extends AppController
                         }
                     }
                     else {
-                        $imageFileName = $$home_carousel_imgs->home_carousel_img_name;
+                        $imageFileName = $home_carousel_imgs->home_carousel_img_name;
                     }
 
             $homeImagesTable = TableRegistry::get('HomeCarouselImgs');

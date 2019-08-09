@@ -80,7 +80,7 @@ class AppController extends Controller
             ],
             'loginRedirect' => [
                 'prefix' => 'admin',
-                'controller' => 'Abouts', 
+                'controller' => 'Home', 
                 'action' => 'index'
             ],
              // If unauthorized, return them to page they were just on

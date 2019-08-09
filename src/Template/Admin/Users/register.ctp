@@ -1,7 +1,7 @@
 <html>
 <head>
     <!-- ================== BEGIN BASE CSS STYLE ================== -->
-    <title> Admin Panel | Add Employee </title>
+    <title> Admin Panel | Add User </title>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <?php echo $this->Html->css("../plugins/jquery-ui/themes/base/minified/jquery-ui.min.css")?>
     <?php echo $this->Html->css("bootstrap.min.css")?>
@@ -75,15 +75,22 @@
                                         <label id="img_filename" style="margin-left: 1%">No image uploaded</label>
                                     </div>
                                 </div>
+                
                 <div class="form-group row m-b-15">
-                    <label class="col-md-3 col-form-label">Current Password</label>
+                    <label class="col-md-3 col-form-label">Password</label>
                     <div class="col-md-7">
-                        <?php echo $this->Form->control('current_password', array('type' => 'password','style' => '','class' => 'form-control', 'label' => false )); ?>
+                        <?php echo $this->Form->control('password', array( 'type' => 'password','id' => 'new_password','style' => '','class' => 'form-control', 'label' => false,'onfocusout' => 'checkPasswordIsMatched()' )); ?>
+                    </div>
+                </div>
+                <div class="form-group row m-b-15">
+                    <label class="col-md-3 col-form-label">Confirm Password</label>
+                    <div class="col-md-7">
+                        <?php echo $this->Form->control('confirm_password', array( 'type' => 'password','id' => 'confirm_password','style' => '','class' => 'form-control', 'label' => false,'onfocusout' => 'checkPasswordIsMatched()')); ?>
                     </div>
                 </div>
                                 <div class="form-group row m-b-15" style="margin-right: 1%">
                                     <div class="pull-right">
-                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i> Update Profile'), array('class' => 'btn btn-sm btn-yellow'));
+                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i> Update Profile'), array('id' => 'submit_button','class' => 'btn btn-sm btn-yellow'));
                                               echo $this->Form->end();
                                         ?>
                                     </div>
@@ -139,6 +146,8 @@
     <script>
         $(document).ready(function() {
             App.init();
+            $( "#submit_button" ).prop( "disabled", true );
+            checkPasswordIsMatched();
         });
 
         $("#inputGroupFile01").change(function(event) {  
@@ -175,6 +184,23 @@
             $(".alert").show();
             $(".alert").text(text).addClass("loading");  
         }
+
+        function checkPasswordIsMatched() {
+            if($("#new_password").val().length > 0 || $("#confirm_password").val().length > 0)
+            {
+                if ($('#new_password').val() == $('#confirm_password').val()) {
+                    $( "#submit_button" ).prop( "disabled", false );
+                }
+                else {
+                    $( "#submit_button" ).prop( "disabled", true );
+                }
+            }
+            else {
+                $( "#submit_button" ).prop( "disabled", true );
+            }
+
+        }
+
 
     </script>
 

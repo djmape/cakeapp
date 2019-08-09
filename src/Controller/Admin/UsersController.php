@@ -168,9 +168,9 @@ class UsersController extends AppController
                 }
             }
             else {
-                    $this->Flash->success('incorrect Password', [
+                    $this->Flash->error('Incorrect Password', [
                     'params' => [
-                        'saves' => 'incorrect Password!'
+                        'saves' => 'Incorrect Password!'
                         ]
                     ]);
             }
@@ -299,9 +299,67 @@ class UsersController extends AppController
         $this->set('user',$user);
     }
 
+    public function register()
+    {    
+        $this->adminProfileSideBar('register');
+        $user = $this->Users->newEntity();
+
+        if ($this->request->is(['post'])) {
+
+            if (!empty($this->request->data)) {
+                if (!empty($this->request->data['user_photo']['name'])) {
+                    $file = $this->request->data['user_photo']; //put the data into a var for easy use
+
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+                    $arr_ext = array('jpg', 'jpeg', 'gif','png'); //set allowed extensions
+                    $setNewFileName = time() . "_" . rand(000000, 999999);
+
+                    //only process if the extension is valid
+                    if (in_array($ext, $arr_ext)) {
+                        //do the actual uploading of the file. First arg is the tmp name, second arg is 
+                        //where we are putting it
+                        move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/upload/' . $setNewFileName . '.' . $ext);
+
+                        //prepare the filename for database entry 
+                        $imageFileName = $setNewFileName . '.' . $ext;
+                        }
+                    }
+                    else {
+                        $imageFileName = '_default.png';
+                    }
+
+
+                $user->email = $this->request->data['email'];
+                $user->user_photo = $imageFileName;
+                $user->password = $this->request->data['password'];
+
+                 if ($this->Users->save($user)) {
+                    $this->Flash->success('User Added!', [
+                    'params' => [
+                        'saves' => 'User Added!'
+                        ]
+                    ]);
+                    //return $this->redirect(['action' => 'profile', $this->Auth->user('id')]);
+                }
+                else {
+                    $this->Flash->error('Unable to update', [
+                    'params' => [
+                        'saves' => 'Unable to update!'
+                        ]
+                    ]);
+                }
+            
+        }
+    }
+
+    $this->set('user', $user);
+
+    }
+
+
     public function isAuthorized($user) {
 
-    if (in_array($this->request->action, ['edit', 'delete','user','changePassword','profile'])) {
+    if (in_array($this->request->action, ['edit', 'delete','user','changePassword','profile','register'])) {
         return true;
     }
 

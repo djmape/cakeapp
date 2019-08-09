@@ -124,15 +124,39 @@
   <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel" data-ride="carousel" style="height: 87%; width: 100%; margin: 0">
     <!-- Indicators -->
     <ol class="carousel-indicators">
+      <?php
+        if (count($home_carousel_imgs) == 0) {
+      ?>
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <?php ;} else {
+      ?>
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <?php foreach ($home_carousel_imgs as $i => $carousel_img): ?> 
           <li data-target="#myCarousel" data-slide-to="<?php echo $i ?>"></li>
         <?php endforeach; ?>
+      <?php
+        }
+      ?>
     </ol>
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox" style="height: 650px">
-  
+      <!-- start if no active carousel image -->
+      <?php
+        if (count($home_carousel_imgs) == 0) {
+      ?>
+      <div class="item active">
+        <div class="view slidescss" style="background:url('webroot/img/PUPlogo.png')no-repeat fixed center; background-size: cover;">
+        </div>
+          <div class="carousel-caption" style="padding: 1%; background: rgba(0, 0, 0, 0.4);">
+            <h3 style="color: white;">Polytechnic University of the Philippines</h3>
+            <p>Quezon City</p>
+          </div>
+      </div>
+      <!-- end if no active carousel image -->
+      <!-- start if active carousel image/s -->
+      <?php ;} else {
+      ?>
 
       <?php foreach ($home_carousel_imgs as $i => $carousel_img): ?> 
 
@@ -149,6 +173,10 @@
       </div>
 
       <?php endforeach; ?>
+      <!-- end if active carousel image/s -->
+      <?php
+        }
+      ?>
     </div>
 
     <!-- Left and right controls -->
