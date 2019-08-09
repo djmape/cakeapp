@@ -41,9 +41,7 @@
     <?php echo $this->element('AdminSideBar');?>
     <?php echo $this->Flash->render(); ?>
     <div id="content" class="content">
-        <!-- begin page-header -->
-        <h1 class="page-header">Polytechnic University of the Philipiines - Quezon City <small>Web Portal</small></h1>
-        <!-- end page-header -->
+    <?php echo $this->element('AdminHeader');?>
             
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">

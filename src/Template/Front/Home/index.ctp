@@ -130,9 +130,8 @@
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
       <?php ;} else {
       ?>
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <?php foreach ($home_carousel_imgs as $i => $carousel_img): ?> 
-          <li data-target="#myCarousel" data-slide-to="<?php echo $i ?>"></li>
+          <li data-target="#myCarousel" data-slide-to="<?php echo $i?>" class="<?php if ($i == 0 ) echo 'active' ?>"></li>
         <?php endforeach; ?>
       <?php
         }
