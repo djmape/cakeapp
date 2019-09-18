@@ -5,7 +5,7 @@
 <!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
-	<title>PUPQC | <?= h($row->event_title) ?></title>
+	<title>PUPQC | <?= $row->event_title ?></title>
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
@@ -46,6 +46,26 @@
     <?php echo $this->Html->css("../plugins/sweetalert/dist/sweetalert.css")?>
     <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert.min.js")?>
     <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert-dev.js")?>
+
+    <style type="text/css">
+    	
+	.btn.btn-yellow {
+	color: #7e0e09;
+	background: #fdea08;
+	border-color: #fdea08;
+	}
+
+	.btn.btn-yellow>a {
+	color: #7e0e09;
+    text-decoration: none;
+	}
+
+	.btn-yellow.active, .btn-yellow:active, .btn-yellow:focus, .btn-yellow:hover, .open .dropdown-toggle.btn-yellow {
+    background: #efd101;
+    border-color: #efd101;
+    text-decoration: none;
+	}
+    </style>
 </head>
 <body>
 	<!-- begin #page-loader -->
@@ -59,22 +79,22 @@
 
 	<!-- begin #content -->
 	<div id="content" class="content" style="background-color: #fff">
+    <?php echo $this->Flash->render(); ?>
 		
 		<div class="row">
 			<div class="col-md-12">
-						<h2><?= h($row->event_title) ?></h2>
+						<h2><?= $row->event_title ?></h2>
 						<br>
-						<p style="font-size: 14px"> <b> Location: </b> <?= h($row->event_location) ?></p>
-						<br>
+						<p style="font-size: 14px"> <b> Location: </b> <?= $row->event_location ?></p>
+						
 						<p style="font-size: 14px">  <b> Event Period: </b>
-													 <?= h($row->event_start_date) ?>
+													 <?= $row->event_start_date ?>
 													 <?= $row->event_start_time ?>
 													 - 
-													 <?= h($row->event_end_date) ?> 
+													 <?= $row->event_end_date ?> 
 													 <?= $row->event_end_time ?>
 						</p>
-						<br>
-						<p style="font-size: 14px"> <b> Participants: </b> <?= h($row->event_participants) ?></p>
+						<p style="font-size: 14px"> <b> Participants: </b> <?= $row->event_participants ?></p>
 						<br>
 						<div style="margin-bottom: 5%; margin-top: 5%;">
 							<?php echo $this->Html->image("../webroot/img/upload/".$row->event_photo, array('class' => 'center-block','style' => 'max-width:100%; max-height:500px;')); ?>
@@ -88,14 +108,58 @@
             						echo "<b> Sponsor: </b>";
         						}
 							?>
-							 <?= h($row->event_sponsors) ?>
+							 <?= $row->event_sponsor ?>
 						</p>
 						<br>
-
+						<!-- For Embed Location
 						<iframe id="locationIframe" src="<?php echo $row->event_location_embed?>" class="center-block" width="80%" height="500" frameborder="0" style="border:0; display: hidden" allowfullscreen></iframe>
 						<br>
+						-->
 
 						<p><small>Last Updated: <?= $row->event_modified ?></small></p>
+
+						<!-- begin Question Panel -->
+                    	<div class="panel panel-inverse" style="margin-top: 1%">
+                    		<div class="panel-heading">
+                            <h5 style="color: white">
+                                <i class="fa fa-plus"></i>
+                                <b> Questions about <?= $row->event_title ?> </b>
+                            </h5>
+                        	</div>
+                        	<div class="panel-body">
+								<?php echo $this->Form->create($email, ['url' => ['action' => 'sendMail',$row->event_id]]); ?>
+                                <div class="form-group row m-b-15">
+                                    <div class="col-md-12">
+                                    <label class="col-md-4 col-form-label">Event</label>
+                                        <?php echo $this->Form->control('subject', array('class' => 'form-control','label' => false,'default' => $row->event_title,'disabled' => true)); ?>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-b-15">
+                                    <label class="col-md-4 col-form-label">Email</label>
+                                    <div class="col-md-12">
+                                		<?php echo $this->Form->control('email', array('class' => 'form-control','label' => false)); ?>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-b-15">
+                                    <label class="col-md-4 col-form-label">Name</label>
+                                    <div class="col-md-12">
+                                		<?php echo $this->Form->control('name', array('class' => 'form-control','label' => false)); ?>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-b-15">
+                                    <label class="col-md-4 col-form-label">Message</label>
+                                    <div class="col-md-12">
+                               			 <?php echo $this->Form->control('message', array('type' => 'textarea','class' => 'form-control','label' => false)); ?>
+                                    </div>
+                                </div>
+                            <div class="pull-right" style=" margin-bottom: 1%">
+                                <?php echo $this->Form->button(__('Send'), array('class' => 'btn btn-sm btn-yellow'));
+                                      echo $this->Form->end();
+                                ?>
+                            </div>
+                        	</div>
+                    	</div>
+						<!-- end Question Panel -->
 				
 		</div>
 	</div>
@@ -107,9 +171,7 @@
 </div>
 <!-- end page container -->
 </body>
-<footer>
     <?php echo $this->element('footer');?>
-</footer>
 
 
 <!-- ================== BEGIN BASE JS ================== -->

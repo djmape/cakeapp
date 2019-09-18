@@ -7,17 +7,6 @@ use App\Controller\AppController;
 
 class OrganizationsController extends AppController
 {
-    public function navBar() {
-        $this->loadModel('Courses');
-        $courses =  $this->Courses->find('all');
-        $this->set(compact('courses', $courses));
-        $this->loadModel('Organizations');
-        $organizations =  $this->Organizations->find('all');
-        $this->set(compact('organizations', $organizations));
-        $this->loadModel('Offices');
-        $offices =  $this->Offices->find('all');
-        $this->set(compact('offices', $offices));
-    }
 
     public function initialize()
     {

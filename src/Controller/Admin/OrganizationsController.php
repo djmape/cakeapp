@@ -89,8 +89,12 @@ class OrganizationsController extends AppController
             $organization->organization_status = 1;
 
             if ($saved = $this->Organizations->save($organization)) {
-                $this->Flash->success(__('Your article has been saved.'));
-                return $this->redirect(['action' => 'edit', $saved->organization_id]);
+                $this->Flash->success('Organization Added!', [
+                    'params' => [
+                        'saves' => 'Organization Added!'
+                        ]
+                    ]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 debug($organization->errors());
@@ -154,10 +158,16 @@ class OrganizationsController extends AppController
             }
 
             if ($organizationsTable->save($organization)) {
-                $this->Flash->success(__('Your article has been updated.'));
-                return $this->redirect(['action' => 'edit', $organization_id]);
+                $this->Flash->success('Organization Updated!', [
+                    'params' => [
+                        'saves' => 'Organization Updated!'
+                        ]
+                    ]);
+                return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to update your article.'));
+            else {
+                $this->Flash->error(__('Unable to update organization.'));
+            }
         }
 
         $this->set('organization', $organization);
@@ -220,7 +230,7 @@ class OrganizationsController extends AppController
                          function($q) use($organization_id) {
                             return $q->where(["OrganizationOfficers.active"=>1])->where(["OrganizationOfficers.organization_id"=>$organization_id]);
                          }
-                      );
+                      )->where(["OrganizationOfficersPositions.active"=>1]);
         if ($organization_officers_positions->count() == 0) {
             $this->log($organization_officers_positions->count(). ' zero','debug');
             $organization_officers_positions_count = 0;
@@ -367,8 +377,12 @@ class OrganizationsController extends AppController
             }
 
             if ($officersTable->save($officers)) {
-                $this->Flash->success(__('Your article has been saved.'));
-                return $this->redirect(['action' => 'editOfficer', $organization_officer_id, $organization_id]);
+                $this->Flash->success('Officer Updated!', [
+                    'params' => [
+                        'saves' => 'Officer Updated!'
+                        ]
+                    ]);
+                return $this->redirect(['action' => 'officers', $organization_id]);
             }
             else {
                 debug($officers->errors());

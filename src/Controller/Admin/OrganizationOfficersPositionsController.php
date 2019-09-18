@@ -29,7 +29,9 @@ class OrganizationOfficersPositionsController extends AppController
 
     public function index()
     {   
-        $organization_officers_positions = $this->Paginator->paginate($this->OrganizationOfficersPositions->find('all')->where(['OrganizationOfficersPositions.active' => 1]));
+        $organization_officers_positions = $this->Paginator->paginate($this->OrganizationOfficersPositions->find('all')->where(['OrganizationOfficersPositions.active' => 1])->order([
+        'OrganizationOfficersPositions.officers_position_priority' => 'ASC'
+        ]));
         $this->set(compact('organization_officers_positions'));
     }
 
@@ -50,7 +52,7 @@ class OrganizationOfficersPositionsController extends AppController
                         'saves' => 'Officer Position Added!!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'edit', $saved->officers_position_id]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 $this->Flash->error(__('Unable to add your article.'));
@@ -81,7 +83,7 @@ class OrganizationOfficersPositionsController extends AppController
                         'saves' => 'Officer Position Updated!!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'edit',$officers_position_id]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 $this->Flash->error(__('Unable to update your article.'));

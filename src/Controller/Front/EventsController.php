@@ -6,6 +6,8 @@ namespace App\Controller\Front;
 use App\Controller\AppController;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
+use Cake\Mailer\Email;
+use App\Form\EmailForm;
 
 class EventsController extends AppController
 {
@@ -52,6 +54,9 @@ class EventsController extends AppController
 
     public function view($event_id)
 	{
+        $email = new EmailForm();
+        $this->set('email', $email);
+
         $this->loadModel('Events');
         $this->updateEventStatus();
 
@@ -178,11 +183,42 @@ class EventsController extends AppController
         }
     }
 
+    public function sendMail($event_id) 
+    {
+        $this->layout = false;
+        $this->autoRender = false;
+
+        $email = new EmailForm();
+        if ($this->request->is('post')) {
+            $message = $this->request->data['message']; 
+            $subject = $this->request->data['subject'];           
+            $email = new Email();
+            $email->transport('mail');
+            $email->from([$this->request->data['email'] => $this->request->data['name']])
+            ->to('pup.maroon.cake@gmail.com')
+            ->subject(sprintf('Event Inquiry:  %s', $this->request->data['subject']))
+            //->attachments($path) //Path of attachment file
+            ->send($message);
+
+            if ( $email->send() ) {
+                $this->Flash->sent('Message Sent!');
+                return $this->redirect(['action' => 'view', $event_id]);
+            } 
+            else {
+                $this->Flash->sent('Unable to send mesaage!');
+                return $this->redirect(['action' => 'view', $event_id]);
+            }
+        }
+
+        $this->set('email', $email);
+
+    }
+
     public function isAuthorized($user)
     {
         $action = $this->request->getParam('action');
         // The add and tags actions are always allowed to logged in users.
-        if (in_array($action, ['add', 'tags','index','view'])) {
+        if (in_array($action, ['add', 'tags','index','view','sendMail'])) {
             return true;
         }
 

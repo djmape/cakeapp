@@ -32,7 +32,9 @@ class OfficesController extends AppController
     public function index()
     {
         $this->adminSideBar('all');
-        $offices = $this->Paginator->paginate($this->Offices->find('all')->where(['Offices.active' => 1]));
+        $offices = $this->Paginator->paginate($this->Offices->find('all')->where(['Offices.active' => 1])->order([
+        'Offices.priority' => 'ASC'
+        ]));
         $this->set(compact('offices'));
     }
 
@@ -88,13 +90,18 @@ class OfficesController extends AppController
                 $offices->office_name = $this->request->data['office_name'];
                 $offices->office_description = $this->request->data['office_description'];
                 $offices->office_photo = $imageFileName;
+                $offices->priority = $this->request->data['priority'];
                 $offices->active = 1;
 
             }
 
-            if ($this->Offices->save($offices)) {
-                $this->Flash->success(__('Your article has been saved.'));
-                #return $this->redirect(['action' => 'index']);
+            if ($saved = $this->Offices->save($offices)) {
+                $this->Flash->success('Office Added!', [
+                    'params' => [
+                        'saves' => 'Office Added!'
+                        ]
+                    ]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 $this->Flash->error(__('Unable to add your article.'));
@@ -149,11 +156,16 @@ class OfficesController extends AppController
             $offices->office_name = $this->request->data['office_name'];
             $offices->office_description = $this->request->data['office_description'];
             $offices->office_photo = $imageFileName;
+            $offices->priority = $this->request->data['priority'];
 
 
             if ($officesTable->save($offices)) {
-                $this->Flash->success(__('Your article has been saved.'));
-                return $this->redirect(['action' => 'edit', $office_id]);
+                $this->Flash->success('Office Updated!', [
+                    'params' => [
+                        'saves' => 'Office Updated!'
+                        ]
+                    ]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 debug($offices->errors());
@@ -334,7 +346,6 @@ class OfficesController extends AppController
                    array('conditions'=>array('Employees.employee_id'=>$employee_id)));
         $this->set('employee', $employees->first());
 
-
         $office_employees = $this->OfficeEmployees->find('all', 
                    array('conditions'=>array('OfficeEmployees.office_employees_id'=>$office_employees_id)))->contain(['OfficePositions']);
         $office_employees = $office_employees->first();
@@ -399,17 +410,17 @@ class OfficesController extends AppController
         
         if ($this->request->is(['post', 'put'])) {
 
-            $office_position_id = $this->request->getData('office_position_id');
+            $office_employees_id = $this->request->getData('office_employees_id');
 
             $officeEmployeesTable = TableRegistry::get('OfficeEmployees');
 
             $officeEmployeesTable = TableRegistry::getTableLocator()->get('OfficeEmployees');
-            $office_employee = $officeEmployeesTable->get($office_position_id);
+            $office_employee = $officeEmployeesTable->get($office_employees_id);
 
             $office_employee->active = 0;
 
             if ($this->OfficeEmployees->save($office_employee)) {
-                $this->Flash->success('Contact Number Removed!', [
+                $this->Flash->success('Employee Removed!', [
                     'params' => [
                         'saves' => 'Employee Removed!!'
                         ]
@@ -457,7 +468,7 @@ class OfficesController extends AppController
                         'saves' => 'Office Position Added!!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'editOfficePosition', $saved->office_position_id]);
+                return $this->redirect(['action' => 'officePositions']);
             }
             else {
                 $this->Flash->error(__('Unable to add your article.'));
@@ -493,7 +504,7 @@ class OfficesController extends AppController
                         'saves' => 'Office Position Updated!!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'editOfficePositions',$office_position_id]);
+                return $this->redirect(['action' => 'officePositions']);
             }
             else {
                 $this->Flash->error(__('Unable to update your article.'));

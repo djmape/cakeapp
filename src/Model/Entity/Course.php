@@ -10,12 +10,13 @@ use Cake\ORM\Entity;
  * @property string $course_name
  * @property string $course_acronym
  * @property int $organization_id
- * @property string $course_mission
- * @property string $course_vision
- * @property string $course_goal
- * @property string $course_objective
+ * @property string|null $course_mission
+ * @property string|null $course_vision
+ * @property string|null $course_goal
+ * @property string|null $course_objective
  * @property string $course_type
  * @property int $active
+ * @property string|null $other_info
  *
  * @property \App\Model\Entity\Organization $organization
  */
@@ -40,6 +41,7 @@ class Course extends Entity
         'course_objective' => true,
         'course_type' => true,
         'active' => true,
+        'other_info' => true,
         'organization' => true
     ];
 }

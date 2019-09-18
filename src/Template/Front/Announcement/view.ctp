@@ -84,10 +84,10 @@
 			<div class="col-md-12">
 
     			<h1 class="page-header" style="color: #7e0e09;">
-            			<?= h($row->announcement_title) ?>
+            			<?= $row->announcement_title ?>
     			</h1>
-												<p style="font-size: 14px"><?= h($row->announcement_body) ?></p>
-												<p><small>Last Updated: <?= $row->announcement_modified->format(DATE_RFC850) ?></small></p>
+					<p style="font-size: 14px"><?= $row->announcement_body ?></p>
+					<p><small>Last Updated: <?= $row->announcement_modified->format(DATE_RFC850) ?></small></p>
 			</div>
 		</div>
 	</div>
@@ -102,8 +102,7 @@
 
 </body>
 
-<footer style="    position: absolute;
-    bottom: 0;
+<footer style=" bottom: 0;
     width: 100%;">
     <?php echo $this->element('footer');?>
 </footer>

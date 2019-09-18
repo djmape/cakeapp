@@ -74,6 +74,11 @@ class OfficesTable extends Table
             ->maxLength('office_photo', 1000)
             ->allowEmptyString('office_photo');
 
+        $validator
+            ->integer('priority')
+            ->requirePresence('priority', 'create')
+            ->allowEmptyString('priority', false);
+
         return $validator;
     }
 }

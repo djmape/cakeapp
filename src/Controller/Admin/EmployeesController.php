@@ -33,17 +33,17 @@ class EmployeesController extends AppController
         $employees = $this->Employees->find('all')->contain(['EmployeePositions' => ['sort' => ['EmployeePositions.employee_position_priority' => 'DESC']]])->innerJoinWith('EmployeePositions')->order([
         'EmployeePositions.employee_position_priority' => 'ASC'
         ])->where(['Employees.active' => 1]);
-        $employees = $this->Paginator->paginate($employees);
+        $employees = $this->paginate($employees);
         $this->set(compact('employees'));
-        $employee_name = $employees->first();
-        $this->log($employee_name, 'debug');
     }
 
     public function add()
     {
         $this->adminSideBar('add');
         $this->loadModel('EmployeePositions');
-        $employee_positions =  $this->EmployeePositions->find('list', ['keyField' => 'employee_position_id', 'valueField' => 'employee_position_name']);
+        $employee_positions =  $this->EmployeePositions->find('list', ['keyField' => 'employee_position_id', 'valueField' => 'employee_position_name'])->where(['EmployeePositions.active' => 1])->order([
+        'EmployeePositions.employee_position_priority' => 'ASC'
+        ]);
         $this->set('employee_positions', $employee_positions);
 
         $employee = $this->Employees->newEntity();
@@ -88,8 +88,12 @@ class EmployeesController extends AppController
             }
 
             if ($saved = $this->Employees->save($employee)) {
-                $this->Flash->success(__('Your article has been saved.'));
-                return $this->redirect(['action' => 'edit', $saved->employee_id]);
+                $this->Flash->success('Employee Added!', [
+                    'params' => [
+                        'saves' => 'Employee Added!'
+                        ]
+                    ]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 debug($employee->errors());
@@ -107,7 +111,9 @@ class EmployeesController extends AppController
         $this->loadModel('EmployeePositions');
         $employee = $this->Employees->find('all', 
                    array('conditions'=>array('Employees.employee_id'=>$employee_id)));
-        $employee_positions =  $this->EmployeePositions->find('list', ['keyField' => 'employee_position_id', 'valueField' => 'employee_position_name']);
+        $employee_positions =  $this->EmployeePositions->find('list', ['keyField' => 'employee_position_id', 'valueField' => 'employee_position_name'])->where(['EmployeePositions.active' => 1])->order([
+        'EmployeePositions.employee_position_priority' => 'ASC'
+        ]);
         $employee_name = $this->Employees->find('all')->where(['Employees.employee_id'=>$employee_id])->contain(['EmployeePositions']);
 
         $row = $employee->first();
@@ -164,14 +170,18 @@ class EmployeesController extends AppController
             }
 
             if ($employeesTable->save($employees)) {
-                $this->Flash->success(__('Your article has been saved.'));
-                return $this->redirect(['action' => 'edit', $employee_id]);
+                $this->Flash->success('Employee Updated!', [
+                    'params' => [
+                        'saves' => 'Employee Updated!'
+                        ]
+                    ]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 debug($employee->errors());
+                $this->Flash->error(__('Unable to add employee.'));
             }
             
-            $this->Flash->error(__('Unable to add your article.'));
         }
         // Get a list of tags.
 

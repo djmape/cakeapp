@@ -89,12 +89,12 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-4 col-form-label">Hymn</label>
                                     <div class="col-md-12">
-                                        <?php echo $this->Form->control('about_hymn', array('style' => 'height: 200px','class' => 'form-control wysiwyg', 'label' => false, 'default'=> $row->about_objective )); ?>
+                                        <?php echo $this->Form->control('about_hymn', array('style' => 'height: 200px','class' => 'form-control wysiwyg', 'label' => false, 'default'=> $row->about_hymn )); ?>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
                                     <div class="pull-right" style="margin-right: 1%">
-                                        <?php echo $this->Form->button(__('Update About Information'), array('class' => 'btn btn-sm btn-primary'));
+                                        <?php echo $this->Form->button(__('Update About Information'), array('class' => 'btn btn-sm btn-yellow'));
                                               echo $this->Form->end();
                                         ?>
                                     </div>

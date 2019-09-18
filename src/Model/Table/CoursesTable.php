@@ -69,26 +69,22 @@ class CoursesTable extends Table
         $validator
             ->scalar('course_mission')
             ->maxLength('course_mission', 2550)
-            ->requirePresence('course_mission', 'create')
-            ->allowEmptyString('course_mission', false);
+            ->allowEmptyString('course_mission');
 
         $validator
             ->scalar('course_vision')
             ->maxLength('course_vision', 2550)
-            ->requirePresence('course_vision', 'create')
-            ->allowEmptyString('course_vision', false);
+            ->allowEmptyString('course_vision');
 
         $validator
             ->scalar('course_goal')
             ->maxLength('course_goal', 2550)
-            ->requirePresence('course_goal', 'create')
-            ->allowEmptyString('course_goal', false);
+            ->allowEmptyString('course_goal');
 
         $validator
             ->scalar('course_objective')
             ->maxLength('course_objective', 2550)
-            ->requirePresence('course_objective', 'create')
-            ->allowEmptyString('course_objective', false);
+            ->allowEmptyString('course_objective');
 
         $validator
             ->scalar('course_type')
@@ -100,6 +96,10 @@ class CoursesTable extends Table
             ->integer('active')
             ->requirePresence('active', 'create')
             ->allowEmptyString('active', false);
+
+        $validator
+            ->scalar('other_info')
+            ->allowEmptyString('other_info');
 
         return $validator;
     }

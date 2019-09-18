@@ -50,7 +50,7 @@ class ContactNumbersController extends AppController
                         'saves' => 'Contact Number Added!!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'edit', $saved->contact_number_id]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 debug($number->errors());
@@ -86,7 +86,7 @@ class ContactNumbersController extends AppController
                         'saves' => 'Contact Number Updated!!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'edit', $contact_number_id]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 $this->Flash->error(__('Unable to add your article.'));

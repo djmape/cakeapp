@@ -70,7 +70,7 @@
                                     <div class="pull-right" style="margin-right: 1%">
                                         
                         <?php 
-                            echo $this->Form->button(__('Update Announcement'), array('class' => 'btn btn-sm btn-primary'));
+                            echo $this->Form->button(__('Update Announcement'), array('class' => 'btn btn-sm btn-yellow'));
                             echo $this->Form->end();
                         ?>
                                     </div>

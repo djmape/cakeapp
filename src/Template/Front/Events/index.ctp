@@ -147,8 +147,8 @@
                                                 <b> Participants: </b>
                                                 <?= $event->event_participants?>
                                             </div>
+                           <!--                         
                                             <div class="panel-body">
-
                           <?php 
                             if (strlen($event->event_body) >= 250 )  {
                           ?>
@@ -167,6 +167,7 @@
                             }
                           ?>
                                             </div>
+                      -->
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

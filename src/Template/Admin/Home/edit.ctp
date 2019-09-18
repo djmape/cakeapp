@@ -45,12 +45,7 @@
     <?php echo $this->Flash->render(); ?>
 
     <div id="content" class="content">
-        <ol class="breadcrumb pull-right">
-            <li class="breadcrumb-item active">Logged in: <?= $users->email ?></li>
-        </ol>
-        <!-- end breadcrumb -->
-        <!-- begin page-header -->
-        <h1 class="page-header">Polytechnic University of the Philippines - Quezon City <small>Web Portal</small></h1>
+    <?php echo $this->element('AdminHeader');?>
 
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
@@ -98,7 +93,7 @@
                                 </div>
                                 <div class="form-group row m-b-15" style="margin-right: 1%">
                                     <div class="pull-right">
-                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i> Add Image'), array('class' => 'btn btn-sm btn-yellow'));
+                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i> Update Image'), array('class' => 'btn btn-sm btn-yellow'));
                                               echo $this->Form->end();
                                         ?>
                                     </div>

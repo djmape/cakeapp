@@ -155,7 +155,7 @@
                 <a href="javascript:;">
                   <b class="caret pull-right"></b>
                   <i class="fa fa fa-cog"></i>
-                  <span>Settings</span>
+                  <span>Positions</span>
                 </a>
                 <ul class="sub-menu">
                   <li class="<?php if ($expand == 'settings' && $active == 'employees') echo 'active'?>">
@@ -164,7 +164,7 @@
                     <?php echo $this->Html->link('Officers Positions',array('prefix' => "admin", 'controller' => 'OrganizationOfficersPositions','action'=>'index')) ?></li>
                   <li class="<?php if ($expand == 'settings' && $active == 'offices') echo 'active'?>">
                     <?php echo $this->Html->link('Office Positions',array('prefix' => "admin", 'controller' => 'Offices','action'=>'officePositions')) ?>
-                    </li>
+                  </li>
                 </ul>
               </li>
               <!-- end Settings -->

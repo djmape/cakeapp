@@ -39,13 +39,6 @@ class EventsController extends AppController
         $this->set(compact('event'));
     }
 
-    public function view($slug = null)
-	{
-        $this->loadComponent('Paginator');
-        $articles = $this->Paginator->paginate($this->Articles->find('all',array('order'=>array('Articles.created DESC')))->where(['Articles.status' => 1]));
-        $this->set(compact('articles'));
-	}
-
     public function add()
     {   
         $this->adminSideBar('add');
@@ -90,7 +83,7 @@ class EventsController extends AppController
                 $event->event_sponsors = $this->request->data['event_sponsors'];
                 $event->event_participants = $this->request->data['event_participants'];
                 $event->event_location = $this->request->data['event_location'];
-                $event->event_location_embed = $this->request->data['event_location_embed'];
+                //$event->event_location_embed = $this->request->data['event_location_embed'];
                 $event->event_status = '';
                 $event->event_photo = $imageFileName;
                 $event->active = 1;
@@ -98,8 +91,12 @@ class EventsController extends AppController
             }
 
             if ($saved  =$this->Events->save($event)) {
-                $this->Flash->success(__('Your article has been saved.'));
-                return $this->redirect(['action' => 'edit', $saved->event_id]);
+                $this->Flash->success('Event Added!', [
+                    'params' => [
+                        'saves' => 'Event Added!'
+                        ]
+                    ]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 debug($event->errors());
@@ -169,7 +166,7 @@ class EventsController extends AppController
                 $event->event_sponsors = $this->request->data['event_sponsors'];
                 $event->event_participants = $this->request->data['event_participants'];
                 $event->event_location = $this->request->data['event_location'];
-                $event->event_location_embed = $this->request->data['event_location_embed'];
+                //$event->event_location_embed = $this->request->data['event_location_embed'];
                 $event->event_photo = $imageFileName;
 
 
@@ -179,6 +176,7 @@ class EventsController extends AppController
                         'saves' => 'Event Updated!'
                         ]
                     ]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 $this->Flash->error(__('Unable to update your event.'));

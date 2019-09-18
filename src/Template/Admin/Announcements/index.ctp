@@ -81,15 +81,29 @@
                                         <tbody>
                                 <!-- Here is where we iterate through our $articles query object, printing out article info -->
                                 <?php foreach ($announcements as $announcement): ?>
-                                    <tr>
+                                    <tr style="font-size: 12px">
                                         <td>
                                         </td>
                                         <td>
                                             <?= $this->Html->link($announcement->announcement_title, ['action' => 'edit', $announcement->announcement_id]) ?>
                                         </td>
                                         <td>
-                                            <?= substr($announcement->announcement_body,0,255)?>
-                                            . . .
+
+                                        <?php 
+
+                            if (strlen($announcement->announcement_body) >= 255 )  {
+                          ?>
+                              <?= substr($announcement->announcement_body,0,255) ?>
+                              . . .
+                          <?php
+                            }
+                            else {
+                          ?>
+                            <?= $announcement->announcement_body ?>
+                                        <?php
+                                            }
+                                        ?>
+                                            
                                         </td>
                                         <td>
                                             <?= $announcement->announcement_modified->format('l, F d, Y g:i A') ?>

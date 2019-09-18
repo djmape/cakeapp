@@ -216,11 +216,11 @@
                                         <div id="img_contain" class="col-md-2" style=" height: 150px; width: 150px; margin-right: 1%; padding: 0">
                                             <?php echo $this->Html->image("../webroot/img/img_holder.png", array('id' => 'img_preview','style' => 'width:100%; height:auto;','class' => 'center-block')); ?>
                                         </div>
-                                        <label id="img_filename" style="margin-left: 1%">No image uploaded</label>
+                                        <label id="img_filename" style="margin-left: 1%;">No image uploaded</label>
                                     </div>
                                 </div>
-                            <div class="pull-right">
-                                <?php echo $this->Form->button(__('Add Event'), array('class' => 'btn btn-sm btn-primary'));
+                            <div class="pull-right" style=" margin-bottom: 1%">
+                                <?php echo $this->Form->button(__('Add Event'), array('class' => 'btn btn-sm btn-yellow'));
                                       echo $this->Form->end();
                                 ?>
                             </div>
@@ -288,10 +288,10 @@
 
     tinymce.init({
             selector: '.wysiwyg',
-            plugins: "lists link image imagetools paste",
-            toolbar: "undo redo | fontsizeselect bold italic subscript superscript | numlist bullist  outdent indent | insertfile | alignleft aligncenter alignright alignjustify | link unlink | image",
+            plugins: "lists link image imagetools paste table",
+            toolbar: "undo redo | fontsizeselect bold italic subscript superscript | numlist bullist  outdent indent | insertfile | alignleft aligncenter alignright alignjustify | link unlink | image | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
                 imagetools_cors_hosts: ['localhost/cakeapp'],
-            menubar : false,
+            menubar : "table",
             statusbar: false
         });
 

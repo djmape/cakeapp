@@ -37,14 +37,6 @@ class AnnouncementsController extends AppController
         $this->set(compact('announcements'));
     }
 
-    public function view($slug = null)
-	{
-        $this->loadComponent('Paginator');
-        $this->loadModel('Articles');
-        $articles = $this->Paginator->paginate($this->Articles->find('all',array('order'=>array('Articles.created DESC')))->where(['Articles.status' => 1]));
-        $this->set(compact('articles'));
-	}
-
     public function add()
     {
         $this->adminSideBar('add');
@@ -57,8 +49,13 @@ class AnnouncementsController extends AppController
             $announcement->announcement_body = $this->request->getData('announcement_body');
             $announcement->active = 1;
 
-            if ($this->Announcements->save($announcement)) {
-                $this->Flash->success(__('Your article has been saved.'));
+            if ($saved = $this->Announcements->save($announcement)) {
+                $this->Flash->success('Announcement Added!', [
+                    'params' => [
+                        'saves' => 'Announcement Added!'
+                        ]
+                    ]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 debug($announcement->errors("?"));
@@ -97,6 +94,7 @@ class AnnouncementsController extends AppController
                         'saves' => 'Announcement Updated!'
                         ]
                     ]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 $this->Flash->error(__('Unable to edit announcement'));  

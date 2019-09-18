@@ -46,10 +46,21 @@ class CoursesController extends AppController
 
     public function add()
     {   
+        $organizations_count = 1;
+
         $this->adminSideBar('add');
+
         $this->loadModel('Organizations');
-        $organizations =  $this->Organizations->find('list', ['keyField' => 'organization_id', 'valueField' => 'organization_name']);
+        $organizations =  $this->Organizations->find('list', ['keyField' => 'organization_id', 'valueField' => 'organization_name'])->where(["Organizations.active"=>1]);
         $this->set('organizations', $organizations);
+
+        if ($organizations->count() == 0) {
+            $this->log($organizations->count(). ' zero','debug');
+            $organizations_count = 0;
+        }
+        else {
+            $this->set('organizations', $organizations);
+        }
 
         $course = $this->Courses->newEntity();
         if ($this->request->is('post')) {
@@ -62,6 +73,7 @@ class CoursesController extends AppController
             $course->course_goal = $this->request->data['course_goal'];
             $course->course_objective = $this->request->data['course_objective'];
             $course->course_type = $this->request->data['course_type'];
+            $course->other_info = $this->request->data['other_info'];
             $course->active = 1;
 
             if ($saved = $this->Courses->save($course)) {
@@ -70,23 +82,40 @@ class CoursesController extends AppController
                         'saves' => 'Course Added!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'edit', $saved]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
-                $this->Flash->error(__('Unable to add course.'));
+                $this->Flash->error('Course Added!', [
+                    'params' => [
+                        'saves' => 'Course Added!'
+                        ]
+                    ]);
             }
         }
         $this->set('course',$course);
+
+        // checks if there are available organizations
+        $this->set('organizations_count', $organizations_count);
     }
     
     public function edit($course_id)
     {
+        $organizations_count = 1;
+
         $this->loadModel('Organizations');
-        $organizations =  $this->Organizations->find('list', ['keyField' => 'organization_id', 'valueField' => 'organization_name']);
+        $organizations =  $this->Organizations->find('list', ['keyField' => 'organization_id', 'valueField' => 'organization_name'])->where(["Organizations.active"=>1]);
         $this->set('organizations', $organizations);
 
+        if ($organizations->count() == 0) {
+            $this->log($organizations->count(). ' zero','debug');
+            $organizations_count = 0;
+        }
+        else {
+            $this->set('organizations', $organizations);
+        }
+
         $course = $this->Courses->find('all', 
-                   array('conditions'=>array('Courses.course_id'=>$course_id)));
+                   array('conditions'=>array('Courses.course_id'=>$course_id)))->contain(['Organizations']);
 
         $row = $course->first();
         
@@ -104,6 +133,7 @@ class CoursesController extends AppController
                 $course->course_goal = $this->request->data['course_goal'];
                 $course->course_objective = $this->request->data['course_objective'];
                 $course->course_type = $this->request->data['course_type'];
+                $course->other_info = $this->request->data['other_info'];
 
             if ($coursesTable->save($course)) {
                 $this->Flash->success('Course Updated!', [
@@ -111,7 +141,7 @@ class CoursesController extends AppController
                         'saves' => 'Course Updated!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'edit', $course_id]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 $this->Flash->error(__('Unable to update course.'));
@@ -120,6 +150,9 @@ class CoursesController extends AppController
 
         $this->set('course', $course);
         $this->set('row', $row);
+
+        // checks if there are available organizations
+        $this->set('organizations_count', $organizations_count);
     }
 
     public function delete()

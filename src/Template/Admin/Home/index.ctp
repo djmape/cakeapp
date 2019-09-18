@@ -46,14 +46,16 @@
 
     <div id="content" class="content">
     <?php echo $this->element('AdminHeader');?>
+            	<!--
         <div class="widget widget-stats bg-yellow">
-            <!-- begin Server Time Widget -->
+             begin Server Time Widget 
                         <div class="stats-icon"><i class="fa fa-calendar" style="color: #7e0e09"></i></div>
                         <div class="stats-info">
                             <h4>SERVER TIME</h4>
                             <div id="calendar-clock" style="font-size: 24px"></div>    
                         </div>
                     </div>
+                -->
 
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
@@ -64,12 +66,12 @@
                     <div class="panel panel-inverse">
                         <div class="panel-heading">
                             <h5> 
-                                <i class="fa fa-plus"></i>
+                                <i class="fa fa-home"></i>
                                 <b> Home Images </b> 
                             </h5>
                         </div>
                         <div class="panel-body">
-                            <div class="home_carousel_imgs">
+                            <div class="home_carousel_imgs" >
                                 <table style="width: 100%">
                                     <tr>
                                 <?php $row_counter = 1; 
@@ -131,6 +133,13 @@
                                 <?php endforeach; ?>
                                     </tr>
                                     </table>
+                            <!-- Horizontal Line Separator -->
+                        	<hr>
+                            <h5 style="color: #7e0e09"> 
+                                <i class="fa fa-plus"></i>
+                                <b> Add Image </b> 
+                            </h5>
+                            <br>
                             </div>
                                 <?php echo $this->Form->create($home_carousel_img,array('enctype'=>'multipart/form-data','data-parsley-validate' => true)); ?>
                             <form class="form-horizontal">

@@ -35,14 +35,7 @@
     <?php echo $this->element('AdminSideBar');?>
     <?php echo $this->Flash->render(); ?>
     <div id="content" class="content">
-        <!-- begin breadcrumb -->
-        <ol class="breadcrumb pull-right">
-            <li class="breadcrumb-item active">Logged in: <?= $users->email ?></li>
-        </ol>
-        <!-- end breadcrumb -->
-        <!-- begin page-header -->
-        <h1 class="page-header">Polytechnic University of the Philippines - Quezon City <small>Web Portal</small></h1>
-        <!-- end page-header -->
+        <?php echo $this->element('AdminHeader');?>
             
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
@@ -85,40 +78,58 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Organization</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->select('organization_id',$organizations, array('empty' => '-- Choose Organization --','class' => 'form-control','label' => false));?>
+                                        
+                                        <?php
+                                            if ($organizations_count == 0 ) {
+                                                $noAvailableOrganization = [
+                                                    '1' => 'No Available Organizations'
+                                                ];
+                                                echo $this->Form->select('organization_id',$noAvailableOrganization, array('id' => 'organizations','class' => 'form-control','label' => false ));
+                                            }
+                                            else  {
+                                                echo $this->Form->select('organization_id',$organizations, array('id' => 'organizations','class' => 'form-control','label' => false ));
+                                            } 
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Mission</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->control('course_mission', array('type' => 'textarea','class' => 'form-control','label' => false)); ?>
+                                        <?php echo $this->Form->control('course_mission', array('type' => 'textarea','class' => 'form-control wysiwyg','label' => false)); ?>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Vision</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->control('course_vision', array('type' => 'textarea','class' => 'form-control','label' => false)); ?>
+                                        <?php echo $this->Form->control('course_vision', array('type' => 'textarea','class' => 'form-control wysiwyg','label' => false)); ?>
                                     </textarea>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Goals</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->control('course_goal', array('type' => 'textarea','class' => 'form-control','label' => false)); ?>
+                                        <?php echo $this->Form->control('course_goal', array('type' => 'textarea','class' => 'form-control wysiwyg','label' => false)); ?>
                                     </textarea>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Objectives</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->control('course_objective', array('type' => 'textarea','class' => 'form-control','label' => false)); ?>
+                                        <?php echo $this->Form->control('course_objective', array('type' => 'textarea','class' => 'form-control wysiwyg','label' => false)); ?>
+                                    </textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-b-15">
+                                    <label class="col-md-3 control-label">Other</label>
+                                    <div class="col-md-9">
+                                        <?php echo $this->Form->control('other_info', array('type' => 'textarea','class' => 'form-control wysiwyg','label' => false)); ?>
                                     </textarea>
                                     </div>
                                 </div>
                                 <div class="form-group  row m-b-15">
                                     <div class="pull-right" style="margin-right: 1%">
 
-                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i> Add Course'), array('class' => 'btn btn-sm btn-primary','escape' => false));
+                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i> Add Course'), array('class' => 'btn btn-sm btn-yellow','escape' => false));
                                       echo $this->Form->end();
                                     ?>
                                     </div>
@@ -162,10 +173,23 @@
     <?php $this->Html->script("button.js")?>
     <?php $this->Html->script("dropdown.js")?>
     <!-- ================== END PAGE LEVEL JS ================== -->
+
+<!-- TinyMCE JS -->
+<?php echo $this->Html->script("tinymce/tinymce.js")?>
+<?php echo $this->Html->script("tinymce/tinymce.min.js")?>
     
     <script>
         $(document).ready(function() {
             App.init();
+        });
+
+    tinymce.init({
+            selector: '.wysiwyg',
+            plugins: "lists link image imagetools paste",
+            toolbar: "undo redo | fontsizeselect bold italic subscript superscript | numlist bullist  outdent indent | insertfile | alignleft aligncenter alignright alignjustify",
+                imagetools_cors_hosts: ['localhost/cakeapp'],
+            menubar : false,
+            statusbar: false
         });
     </script>
 

@@ -82,11 +82,7 @@
     	</h1>
 
 		<div class="row">
-			<div class="col-md-12" style="font-size: 14px">
-                <a href="https://www.pup.edu.ph/studentservices/files/ThePUPStudentHandbook.pdf">
-                    Download PUP Handbook
-                </a>
-			</div>
+			<embed src= "https://www.pup.edu.ph/studentservices/files/ThePUPStudentHandbook.pdf" width= "100%" height= "600">
 		</div>
 	</div>
 	<!-- end #content -->

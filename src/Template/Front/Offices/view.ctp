@@ -83,9 +83,14 @@
     			<h1 class="page-header" style="color: #7e0e09;">
             			<?= $office->office_name ?>
     			</h1>
+                <?php echo $this->Html->image("../webroot/img/upload/".$office->office_photo, array('style' => 'max-height: 20%; width:20%; height:20%; margin: 1%;')); ?>
 						<p style="font-size: 14px"><?= $office->office_description ?></p>
 
 
+                        <!-- begin #organization-chart -->
+                        <?php
+                            if (count($office_employees) != 0) {
+                        ?>
                         <table id="data-table" class="table-striped table-bordered nowrap" width="100%" style="border: 0">
                             <thead>
                             	<h3>Organizational Chart</h3>
@@ -113,6 +118,10 @@
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+                    <?php
+                        }
+                    ?>
+                    <!-- end #organization-chart -->
 			</div>
 		</div>
 	</div>

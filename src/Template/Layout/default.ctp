@@ -41,6 +41,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
     -->
+    <style type="text/css">
+        #content {
+            min-height: 500px
+        }
+    </style>
 </head>
 <body>
     <!--

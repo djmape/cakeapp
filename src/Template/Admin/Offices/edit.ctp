@@ -40,12 +40,7 @@
     <?php echo $this->element('AdminSideBar');?>
     <?php echo $this->Flash->render(); ?>
     <div id="content" class="content">
-        <ol class="breadcrumb pull-right">
-            <li class="breadcrumb-item active">Logged in: <?= $users->email ?></li>
-        </ol>
-        <!-- end breadcrumb -->
-        <!-- begin page-header -->
-        <h1 class="page-header">Polytechnic University of the Philippines - Quezon City <small>Web Portal</small></h1>
+        <?php echo $this->element('AdminHeader');?>
             
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
@@ -75,13 +70,24 @@
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
-                                    <label class="col-md-4 col-form-label">Upload Photo</label>
-                                    <div class="col-md-12">
-                                        <span class="btn btn-success fileinput-button">
+                                    <label class="col-md-3 control-label">Office Photo</label>
+                                    <div class="col-md-9">
+                                        <span class="btn btn-yellow fileinput-button">
                                             <i class="fa fa-plus"></i>
                                             <span>Add image</span>
-                                                <?php echo $this->Form->control('office_photo', array('type'=>'file','label' => false, 'required' => false));?>
+                                                <?php echo $this->Form->control('office_photo', array('id' => 'inputGroupFile01','type'=>'file','label' => false, 'required' => false));?>
                                         </span>
+                                        <div id="img_contain" class="col-md-2" style=" height: 150px; width: 150px; margin-right: 1%; padding: 0">
+                                            <?php echo $this->Html->image("../webroot/img/upload/".$row->office_photo, array('id' => 'img_preview','style' => 'width:100%; height:auto;','class' => 'center-block')); ?>
+                                        </div>
+                                        <label id="img_filename" style="margin-left: 1%">No image uploaded</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-b-15">
+                                    <label class="col-md-3 control-label">Priority</label>
+                                    <div class="col-md-9">
+                                        <?php echo $this->Form->control('priority', array('class' => 'form-control','label' => false,'type' => 'number', 'default' => $row->priority)); ?>
+                                        <small class="f-s-12 text-grey-darker">Set priority by number. 1 highest</small>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15" style="margin-right: 1%">
@@ -158,6 +164,43 @@
             menubar : false,
             statusbar: false
         });
+
+        // begin script for image upload
+        $("#inputGroupFile01").change(function(event) {  
+            RecurFadeIn();
+            readURL(this); 
+        });
+
+        $("#inputGroupFile01").on('click',function(event){
+            RecurFadeIn();
+        });
+
+        function readURL(input) {    
+            if (input.files && input.files[0]) {   
+                var reader = new FileReader();
+                var filename = $("#inputGroupFile01").val();
+                filename = filename.substring(filename.lastIndexOf('\\')+1);
+                reader.onload = function(e) {
+                    $('#img_preview').attr('src', e.target.result);
+                    $('#img_preview').hide();
+                    $('#img_preview').fadeIn(500);      
+                    $('#img_filename').text(filename);             
+                }
+                reader.readAsDataURL(input.files[0]);    
+            } 
+            $(".alert").removeClass("loading").hide();
+        }
+
+        function RecurFadeIn(){ 
+            console.log('ran');
+            FadeInAlert("Wait for it...");  
+        }
+
+        function FadeInAlert(text){
+            $(".alert").show();
+            $(".alert").text(text).addClass("loading");  
+        }
+        // end script for image upload
     </script>
 
 </html>

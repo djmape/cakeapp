@@ -11,6 +11,7 @@ use Cake\ORM\Entity;
  * @property string $office_description
  * @property int $active
  * @property string|null $office_photo
+ * @property int $priority
  *
  * @property \App\Model\Entity\OfficeEmployee[] $office_employees
  */
@@ -30,6 +31,7 @@ class Office extends Entity
         'office_description' => true,
         'active' => true,
         'office_photo' => true,
+        'priority' => true,
         'office_employees' => true
     ];
 }

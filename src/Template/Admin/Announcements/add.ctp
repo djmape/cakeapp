@@ -2,6 +2,7 @@
 <title> </title>
 <head>
     <!-- ================== BEGIN BASE CSS STYLE ================== -->
+    <title> Admin Panel | Add Announcement </title>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <?php echo $this->Html->css("../plugins/jquery-ui/themes/base/minified/jquery-ui.min.css")?>
     <?php echo $this->Html->css("bootstrap.min.css")?>
@@ -70,7 +71,7 @@
                                     <div class="pull-right" style="margin-right: 1%">
                                         
                         <?php 
-                            echo $this->Form->button(__('Post Announcement'), array('class' => 'btn btn-sm btn-primary'));
+                            echo $this->Form->button(__('Add Announcement'), array('class' => 'btn btn-sm btn-yellow'));
                             echo $this->Form->end();
                         ?>
                                     </div>

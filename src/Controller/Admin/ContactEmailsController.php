@@ -92,7 +92,7 @@ class ContactEmailsController extends AppController
                         'saves' => 'Email Updated!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'edit', $contact_email_id]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 $this->Flash->error(__('Unable to add your article.'));

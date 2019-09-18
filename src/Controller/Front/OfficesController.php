@@ -22,7 +22,9 @@ class OfficesController extends AppController
     {
         $this->loadModel('Offices');
 
-        $offices = $this->Offices->find('all')->where(['Offices.active' => 1]);
+        $offices = $this->Offices->find('all')->where(['Offices.active' => 1])->order([
+        'Offices.priority' => 'ASC'
+        ]);
         $offices = $this->paginate($offices);
         $this->set('offices', $offices);
 

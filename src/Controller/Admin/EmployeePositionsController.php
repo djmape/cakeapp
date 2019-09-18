@@ -29,7 +29,8 @@ class EmployeePositionsController extends AppController
 
     public function index()
     {   
-        $employee_positions = $this->Paginator->paginate($this->EmployeePositions->find('all')->where(['EmployeePositions.active' => 1]));
+        $employee_positions = $this->Paginator->paginate($this->EmployeePositions->find('all')->order(['EmployeePositions.employee_position_priority' => 'ASC'
+        ])->where(['EmployeePositions.active' => 1]));
         $this->set(compact('employee_positions'));
     }
 
@@ -49,7 +50,7 @@ class EmployeePositionsController extends AppController
                         'saves' => 'Employee Position Added!!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'edit', $saved->employee_position_id]);
+                return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('Unable to add your article.'));
         }
@@ -77,7 +78,7 @@ class EmployeePositionsController extends AppController
                         'saves' => 'Employee Position Updated!!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'edit',$employee_position_id]);
+                return $this->redirect(['action' => 'index']);
             }
             else {
                 $this->Flash->error(__('Unable to update your article.'));

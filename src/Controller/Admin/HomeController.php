@@ -27,6 +27,7 @@ class HomeController extends AppController
         $this->sideBar(); 
         $this->adminSideBar('home');
         $this->adminSideBarHasSub('');
+        $this->updateEventStatus();
     }
 
     public function index()

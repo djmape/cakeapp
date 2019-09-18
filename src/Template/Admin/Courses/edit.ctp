@@ -35,14 +35,7 @@
     <?php echo $this->element('AdminSideBar');?>
     <?php echo $this->Flash->render(); ?>
     <div id="content" class="content">
-        <!-- begin breadcrumb -->
-        <ol class="breadcrumb pull-right">
-            <li class="breadcrumb-item active">Logged in: <?= $users->email ?></li>
-        </ol>
-        <!-- end breadcrumb -->
-        <!-- begin page-header -->
-        <h1 class="page-header">Polytechnic University of the Philippines - Quezon City <small>Web Portal</small></h1>
-        <!-- end page-header -->
+        <?php echo $this->element('AdminHeader');?>
             
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
@@ -60,7 +53,6 @@
                         <div class="panel-body">
                             <?php  
                                 $course_type = [
-                                'No Organization' => 'No Organization',
                                 'Undergraduate Courses' => 'Undergraduate Courses'
                                 ];
                                 echo $this->Form->create($course);
@@ -86,7 +78,16 @@
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Organization</label>
                                     <div class="col-md-9">
-                                        <?php echo $this->Form->select('organization_id',$organizations, array('empty' => '-- Choose Organization --','class' => 'form-control','label' => false,'default'=> $row->organization_id));?>
+                                        <?php
+                                            if ($organizations_count == 0 ) {
+                                                $noAvailableOrganization = [
+                                                ];
+                                                echo $this->Form->select('organization_id',$noAvailableOrganization, array('id' => 'organizations','class' => 'form-control','label' => false ));
+                                            }
+                                            else  {
+                                                echo $this->Form->select('organization_id',$organizations, array('id' => 'organizations','class' => 'form-control','label' => false ));
+                                            } 
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
@@ -116,9 +117,16 @@
                                     </textarea>
                                     </div>
                                 </div>
+                                <div class="form-group row m-b-15">
+                                    <label class="col-md-3 control-label">Other</label>
+                                    <div class="col-md-9">
+                                        <?php echo $this->Form->control('other_info', array('type' => 'textarea','class' => 'form-control wysiwyg','label' => false,'default'=> $row->other_info)); ?>
+                                    </textarea>
+                                    </div>
+                                </div>
                                 <div class="form-group row m-b-15" style="margin-right: 0.5%">
                                     <div class="pull-right">
-                                        <?php echo $this->Form->button(__('Edit Course'), array('class' => 'btn btn-sm btn-primary'));
+                                        <?php echo $this->Form->button(__('Edit Course'), array('class' => 'btn btn-sm btn-yellow'));
                                             echo $this->Form->end();
                                         ?>
                                     </div>
@@ -172,6 +180,7 @@
     <script>
         $(document).ready(function() {
             App.init();
+            AppendCurrentPosition();
         });
 
     tinymce.init({
@@ -182,6 +191,15 @@
             menubar : false,
             statusbar: false
         });
+
+        function AppendCurrentPosition() {
+            var currentPosition = new Option("<?php echo $row->organization_id ?>", "<?php echo $row->organization_id ?>");
+            /// jquerify the DOM object 'o' so we can use the html method
+            $(currentPosition).html("<?php echo $row->organization->organization_name?>");
+            $("#organizations").append(currentPosition);
+            $('#organizations option[value=<?php echo $row->organization_id ?>]').attr('selected','selected');
+            $("#organizations select").val("<?php echo $row->organization_id ?>");
+        }
     
     </script>
 

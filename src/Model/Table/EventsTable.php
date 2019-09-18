@@ -55,7 +55,7 @@ class EventsTable extends Table
 
         $validator
             ->scalar('event_body')
-            ->maxLength('event_body', 2550)
+            ->maxLength('event_body', 10000)
             ->requirePresence('event_body', 'create')
             ->allowEmptyString('event_body', false);
 

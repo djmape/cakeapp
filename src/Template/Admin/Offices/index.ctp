@@ -40,12 +40,7 @@
     <?php echo $this->element('AdminSideBar');?>
     <?php echo $this->Flash->render(); ?>
     <div id="content" class="content">
-        <ol class="breadcrumb pull-right">
-            <li class="breadcrumb-item active">Logged in: <?= $users->email ?></li>
-        </ol>
-        <!-- end breadcrumb -->
-        <!-- begin page-header -->
-        <h1 class="page-header">Polytechnic University of the Philippines - Quezon City <small>Web Portal</small></h1>
+        <?php echo $this->element('AdminHeader');?>
             
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
@@ -74,8 +69,11 @@
                                         <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 5%;">
                                             Office Photo
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 63%px;">
+                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 60%px;">
                                             Office Name
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 5%px;">
+                                            Priority
                                         </th>
                                         <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 27%;">
                                             Actions
@@ -100,6 +98,9 @@
                                         </td>
                                         <td>
                                             <b><?= $office->office_name ?></b>
+                                        </td>
+                                        <td>
+                                            <b><?= $office->priority ?></b>
                                         </td>
                                         <td>
                                             <div class="pull-right center-block">

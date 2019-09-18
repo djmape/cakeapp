@@ -199,12 +199,14 @@
                                         <?php echo $this->Form->control('event_location', array('class' => 'form-control', 'label' => false,'default' => $row->event_location )); ?>
                                     </div>
                                 </div>
+                                <!-- Embed Location 
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-4 col-form-label">Embed Location</label>
                                     <div class="col-md-12">
                                         <?php echo $this->Form->control('event_location_embed', array('class' => 'form-control', 'label' => false,'default' => $row->event_location_embed )); ?>
                                     </div>
                                 </div>
+                                -->
                                 <div class="form-group row m-b-15">
                                     <label class="col-md-4 col-form-label">Event Photo</label>
                                     <div class="col-md-12">
@@ -219,8 +221,8 @@
                                         <label id="img_filename" style="margin-left: 1%">No image uploaded</label>
                                     </div>
                                 </div>
-                            <div class="pull-right">
-                                <?php echo $this->Form->button(__('Add Event'), array('class' => 'btn btn-sm btn-primary'));
+                            <div class="pull-right" style="margin-bottom: 1%">
+                                <?php echo $this->Form->button(__('Update Event'), array('class' => 'btn btn-sm btn-yellow'));
                                       echo $this->Form->end();
                                 ?>
                             </div>
@@ -285,12 +287,13 @@
         $('#timepicker-end').timepicker();
     });
 
+
     tinymce.init({
             selector: '.wysiwyg',
-            plugins: "lists link image imagetools paste",
-            toolbar: "undo redo | fontsizeselect bold italic subscript superscript | numlist bullist  outdent indent | insertfile | alignleft aligncenter alignright alignjustify | link unlink | image",
+            plugins: "lists link image imagetools paste table",
+            toolbar: "undo redo | fontsizeselect bold italic subscript superscript | numlist bullist  outdent indent | insertfile | alignleft aligncenter alignright alignjustify | link unlink | image | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
                 imagetools_cors_hosts: ['localhost/cakeapp'],
-            menubar : false,
+            menubar : "table",
             statusbar: false
         });
 

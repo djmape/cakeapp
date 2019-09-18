@@ -9,10 +9,10 @@ use Cake\ORM\Entity;
  * @property int $organization_id
  * @property string $organization_name
  * @property string $organization_acronym
- * @property string $organization_mission
- * @property string $organization_vision
- * @property string $organization_goal
- * @property string $organization_objective
+ * @property string|null $organization_mission
+ * @property string|null $organization_vision
+ * @property string|null $organization_goal
+ * @property string|null $organization_objective
  * @property string $organization_photo
  * @property string $organization_type
  * @property int $organization_status

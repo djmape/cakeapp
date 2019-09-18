@@ -1,7 +1,8 @@
 
-<div style="background: #7e0e09; height: 200px; padding: 2%; color: white; margin-top: 18%">
+<div style="background: #7e0e09; height: 150px; padding: 2%; color: white;s">
 	
-	<div class = "pull-right col col-lg-4">
+	<div class = "">
+    <div class = "col col-lg-4">
 	<b style="color: yellow"> Contact Us </b>
 		<p>
 			Emails: 
@@ -18,7 +19,8 @@
         	<?php endforeach; ?>
         	 |
         </p>
-
+        </div>
+            <div class = "pull-right col col-lg-4">
             <a href="https://twitter.com/official_pupqc" class="btn btn-info btn-sm">
         		<i class="fa fa-twitter">
         		</i>
@@ -33,7 +35,8 @@
             <a href="https://www.facebook.com/ThePUPOfficial/" class="btn btn-indigo btn-sm">
         		<i class="fa fa-facebook">
         		</i>
-            </a>            
+            </a>   
+            </div>         
 	</div>
 
 </div>

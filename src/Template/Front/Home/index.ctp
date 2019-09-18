@@ -206,7 +206,7 @@
                   <tr>
                     <td>
                           <h3>
-                            <?= $this->Html->link($announcement->announcement_title, ['action' => 'view', $announcement->announcement_id]) ?> 
+                            <?= $this->Html->link($announcement->announcement_title, ['controller' => 'announcement','action' => 'view', $announcement->announcement_id]) ?> 
                           </h3>
                           <p> <?= $announcement->announcement_modified?> </p>
                           <?php 
@@ -215,7 +215,7 @@
                             <h5>
                               <?= substr($announcement->announcement_body,0,500) ?>
                               <small style="font-size: 12px">
-                                <?= $this->Html->link('. . .read more', ['action' => 'view', $announcement->announcement_id]) ?>
+                                <?= $this->Html->link('. . .read more', ['controller'=>'announcement','action' => 'view', $announcement->announcement_id]) ?>
                               </small>
                             </h5>
                           <?php
@@ -265,7 +265,7 @@
                             <div class="col-md-2 center-div" style="text-align: center;max-width: 250px; height: 200px; object-fit: cover; padding: 1%; margin-right: 1%">
                                                     <?php echo $this->Html->image("../webroot/img/upload/".$event->event_photo, array('class' => 'media-object','style' => 'max-width: 100%; max-height: 100%;')); ?>
                                             </div>
-                            <?= $this->Html->link($event->event_title, ['controller' => 'Events','action' => 'view', $event->event_id]) ?> 
+                            <?= $this->Html->link($event->event_title, ['controller' => 'events','action' => 'view', $event->event_id]) ?> 
                           </p>
                       </td>
                     </tr>

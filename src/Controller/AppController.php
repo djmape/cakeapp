@@ -52,6 +52,7 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
+        $this->paginate = [ 'limit' => '1000', 'maxLimit' => '1000' ];
         $this->loadComponent('Flash');
         $this->footer();
 
@@ -151,6 +152,7 @@ class AppController extends Controller
 
     public function updateEventStatus() {
         // Update to get  events that are not past yet
+        $this->loadModel('Events');
         $events = $this->Events->find('all');
 
         $now = Time::now();

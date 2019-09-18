@@ -86,7 +86,7 @@ label {
 }
 
 .home_carousel_imgs {
-  margin-bottom: 10%
+
 }
 
 .carousel_img {
@@ -129,4 +129,10 @@ label {
     border-color: #efd101;
     text-decoration: none;
     color: #7e0e09;
+}
+
+.btn-primary.active, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open .dropdown-toggle.btn-primary {
+    background: #efd101;
+    border-color: #efd101;
+    text-decoration: none;
 }
