@@ -120,7 +120,7 @@ class AppController extends Controller
         $courses =  $this->Courses->find('all')->where(['Courses.active' => 1]);
         $this->set(compact('courses', $courses));
         $this->loadModel('Organizations');
-        $organizations =  $this->Organizations->find('all')->where(['Organizations.active' => 1]);
+        $organizations =  $this->Organizations->find('all')->where(['Organizations.active' => 1])->where(['Organizations.organization_id' != 1]);
         $this->set(compact('organizations', $organizations));
         $this->loadModel('Offices');
         $offices =  $this->Offices->find('all')->where(['Offices.active' => 1]);
