@@ -18,8 +18,15 @@ class EventsController extends AppController
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
         $this->Auth->allow(['index']);
-        $this->navBar();
-        $this->adminSideBar('events');
+        $this->navBar('events');
+
+        if ($this->Auth->user()) {
+            $this->set('login_status', true);
+            $this->header();
+        }
+        else {
+            $this->set('login_status', false);
+        }
     }
 
     public function index($event_status)

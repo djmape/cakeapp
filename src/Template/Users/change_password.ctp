@@ -1,8 +1,7 @@
 <html>
-<title> </title>
 <head>
     <!-- ================== BEGIN BASE CSS STYLE ================== -->
-    <title> Admin Panel | Add Announcement </title>
+    <title> Admin Panel | User </title>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <?php echo $this->Html->css("../plugins/jquery-ui/themes/base/minified/jquery-ui.min.css")?>
     <?php echo $this->Html->css("bootstrap.min.css")?>
@@ -23,7 +22,6 @@
     
     <!-- ================== BEGIN BASE JS ================== -->
     <?php echo $this->Html->script("../plugins/pace/pace.min.js")?>
-    <!-- ================== END BASE JS ================== -->
 
     <!-- Include custom.css -->
     <?php echo $this->Html->css("custom/admin.css")?>
@@ -32,57 +30,51 @@
 
 
 <body>
-    <?php echo $this->element('AdminSideBar');?>
+    <?php echo $this->element('AdminProfileSideBar');?>
     <?php echo $this->Flash->render(); ?>
     <div id="content" class="content">
+        <!-- end page-header -->
     <?php echo $this->element('AdminHeader');?>
-            
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
-            <div class="row">
-                <!-- begin col-12 -->
-                <div class="col-md-12 ui-sortable">
-                    <!-- begin panel -->
-                    <div class="panel panel-inverse">
-                        <div class="panel-heading">
-                            <h5>
-                                <i class="fa fa-plus"></i>
-                                <b> Add Announcements</b>
-                            </h5>
-                        </div>
-                        <div class="panel-body">
-                         <?php
-                            echo $this->Form->create($announcement);
-                        ?>
-                            <div class="form-group row m-b-15">
-                                <label class="col-md-4 col-form-label">Announcement Title</label>
-                                    <div class="col-md-12">
-                                        <?php echo $this->Form->control('announcement_title', array('class' => 'form-control', 'label' => false)); ?>
-                                    </div>
-                                </div>
-                                <div class="form-group row m-b-15">
-                                    <label class="col-md-4 col-form-label">Content</label>
-                                    <div class="col-md-12">
-                                        <?php echo $this->Form->control('announcement_body', array('style' => 'height: 200px','class' => 'form-control wysiwyg', 'label' => false, 'required' => false)); ?>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group row m-b-15">
-                                    <div class="pull-right" style="margin-right: 1%">
-                                        
-                        <?php 
-                            echo $this->Form->button(__('Add Announcement'), array('class' => 'btn btn-sm btn-yellow'));
-                            echo $this->Form->end();
-                        ?>
-                                    </div>
-                                </div>
-                        </div>
-                    <!-- end panel -->
-                </div>
-                <!-- end col-12 -->
+            <!-- begin panel-heading -->
+            <div class="panel-heading ui-sortable-handle">
+                <h5>
+                    <i class="fa fa-user"></i>
+                    <b> <?=  $users->email ?></b>
+                </h5>
             </div>
-        </div>
-    </div>
+            <!-- end panel-heading -->
+            <!-- begin panel-body -->
+            <?php echo $this->Flash->render(); ?>
+            <div class="panel-body">
+                <?php echo $this->Form->create($user,array('enctype'=>'multipart/form-data')); ?>
+                <div class="form-group row m-b-15">
+                    <label class="col-md-4 col-form-label">Current Password</label>
+                    <div class="col-md-12">
+                        <?php echo $this->Form->control('current_password', array('type' => 'password','id' => 'current_password','style' => '','class' => 'form-control', 'label' => false )); ?>
+                    </div>
+                </div>
+                <div class="form-group row m-b-15">
+                    <label class="col-md-4 col-form-label">New Password</label>
+                    <div class="col-md-12">
+                        <?php echo $this->Form->control('new_password', array( 'type' => 'password','id' => 'new_password','style' => '','class' => 'form-control', 'label' => false,'onfocusout' => 'checkPasswordIsMatched()' )); ?>
+                    </div>
+                </div>
+                <div class="form-group row m-b-15">
+                    <label class="col-md-4 col-form-label">Confirm Password</label>
+                    <div class="col-md-12">
+                        <?php echo $this->Form->control('confirm_password', array( 'type' => 'password','id' => 'confirm_password','style' => '','class' => 'form-control', 'label' => false,'onfocusout' => 'checkPasswordIsMatched()')); ?>
+                    </div>
+                </div>
+                            <div class="pull-right">
+                                <?php echo $this->Form->button(__('Change Password'), array('id' => 'submit_button','class' => 'btn btn-sm btn-primary'));
+                                      echo $this->Form->end();
+                                ?>
+                            </div>
+            <!-- end panel-body -->
+            </div>
+</div>
 
 </body>
 
@@ -112,7 +104,6 @@
     
     <!-- ================== BEGIN PAGE LEVEL JS ================== -->
     <?php $this->Html->script("/apps.min.js")?>
-    <?php $this->Html->script("button.js")?>
     <?php echo $this->Html->script("tinymce/tinymce.js")?>
     <?php echo $this->Html->script("tinymce/tinymce.min.js")?>
     <!-- ================== END PAGE LEVEL JS ================== -->
@@ -120,6 +111,8 @@
     <script>
         $(document).ready(function() {
             App.init();
+            $( "#submit_button" ).prop( "disabled", true );
+            checkPasswordIsMatched();
         });
 
         tinymce.init({
@@ -130,6 +123,24 @@
             menubar : false,
             statusbar: false
         });
+
+        function checkPasswordIsMatched() {
+            if($("#current_password").val().length > 0 || $("#new_password").val().length > 0 || $("#confirm_password").val().length > 0)
+            {
+                if ($('#new_password').val() == $('#confirm_password').val()) {
+                    $( "#submit_button" ).prop( "disabled", false );
+                }
+                else {
+                    $( "#submit_button" ).prop( "disabled", true );
+                }
+            }
+            else {
+                $( "#submit_button" ).prop( "disabled", true );
+            }
+
+        }
+
+        
     </script>
 
 </html>

@@ -24,8 +24,8 @@ class AboutsController extends AppController
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash');
         $this->sideBar(); 
-        $this->adminSideBar('about');
-        $this->adminSideBarHasSub('');
+        $this->adminHeaderSidebar('about');
+        $this->adminSideBarHasSub('site-info');
     }
 
     public function index()

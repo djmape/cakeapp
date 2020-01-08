@@ -75,17 +75,18 @@ class AppController extends Controller
             'authError' => 'Incorrect!'
             ,
             'loginAction' => [
-                'prefix' => 'admin',
                 'controller' => 'Users',
                 'action' => 'login'
             ],
             'loginRedirect' => [
-                'prefix' => 'admin',
-                'controller' => 'Home', 
+                'controller' => 'Users', 
                 'action' => 'index'
             ],
              // If unauthorized, return them to page they were just on
-            'unauthorizedRedirect' => $this->referer()
+            'unauthorizedRedirect' => [
+                'prefix' => 'front',
+                'controller' => 'abouts',
+                'action' => 'index']
         ]);
 
         // Allow the display action so our PagesController
@@ -94,28 +95,58 @@ class AppController extends Controller
         #if (prefix != 'admin') {
          #   $this->Auth->allow () ;
         #}
-
         if (empty($this->request->params['prefix']) || $this->request->params['prefix'] !== 'admin') {
             $this->Auth->allow (['index', 'view', 'display']) ;
         }
 
+        if ($this->Auth->user()) {
+            $this->set('login_status', true);
+            $this->header();
+        }
+        else {
+            $this->set('login_status', false);
+        }
+
+        $this->userSettings(false);
     }
 
     public function isAuthorized($user)
     {
-        if (isset($user['role']) && $user['role'] === 'admin') {
-            return true;
-        }
         // By default deny access.
         return false;
-
 
         if (prefix != 'admin') {
             $this->Auth->allow () ;
         }
+
+        $this->userSettings(true);
+        $this->header();
     }
 
-    public function navBar() {
+    public function header() {
+
+        $this->loadModel('Users');
+        $this->loadModel('UserTypes');
+        $this->loadModel('User_Profiles');
+
+        $getProfile = $this->User_Profiles->find('all')->where(['User_Profiles.user_profile_user_id' => $this->Auth->user('id')])->first();
+        $this->set('profile',$getProfile);
+
+        $user_type = $this->Users->find('all')->contain(["UserTypes"])->where(['Users.id' => $this->Auth->user('id')])->first();
+            $this->log($user_type->user_type->user_type_name,'debug');
+
+        if ($user_type->user_type->user_type_name == 'Administrator') {
+            $this->loadModel("User_Administrators");
+            $user =  $this->User_Administrators->find('all')->contain(['Users'])->where(['Users.id' => $this->Auth->user('id')]);
+            $this->set('user', $user->first());
+            $this->log($user->first(),'debug');
+        }
+        else {
+            $this->userHeader();
+        }
+    }
+
+    public function navBar($active) {
         $this->loadModel('Courses');
         $courses =  $this->Courses->find('all')->where(['Courses.active' => 1]);
         $this->set(compact('courses', $courses));
@@ -125,9 +156,10 @@ class AppController extends Controller
         $this->loadModel('Offices');
         $offices =  $this->Offices->find('all')->where(['Offices.active' => 1]);
         $this->set(compact('offices', $offices));
+        $this->set('active', $active);
     }
 
-    public function adminSideBar($active) {
+    public function adminHeaderSidebar($active) {
         $this->set('active', $active);
     }
 
@@ -135,8 +167,16 @@ class AppController extends Controller
         $this->set('active', $active);
     }
 
+    public function userSettingsSidebar($active) {
+        $this->set('active', $active);
+    }
+
     public function adminSideBarHasSub($expand) {
         $this->set('expand', $expand);
+    }
+
+    public function userSettings($user_settings) {
+        $this->set('user_settings', false);
     }
 
     public function footer() {
@@ -206,6 +246,60 @@ class AppController extends Controller
             $eventStatusUpdate->event_status = $event_status;
 
             $eventsTable->save($eventStatusUpdate);
+        }
+    }
+
+    public function title($title) {
+        $this->set('title', $title);
+    }
+
+    public function checkUserRole($role) {
+        $this->set('role', $role);
+    }
+
+    public function userHeader() {
+
+        $this->loadModel("Users");
+        $this->loadModel("User_Types");
+
+        $user_type = $this->Users->find('all')->contain(["UserTypes"])->where(['Users.id' => $this->Auth->user('id')])->first();
+
+        if ($user_type->user_type->user_type_name == 'Employee') {
+
+            $this->loadModel("User_Employees");
+            $this->loadModel("EmployeePositionNames");
+
+            $user = $this->User_Employees->find('all')->contain(["Users.UserTypes","EmployeePositionNames"])->innerJoinWith("EmployeePositionNames")->where(['User_Employees.user_id' => $this->Auth->user('id')]);
+
+            $this->set('user',$user->first());
+            $this->set('user_type','Employee');
+
+            $fullname = $user->first()->user_employee_lastname . ', ' . $user->first()->user_employee_firstname . ' ' .substr($user->first()->user_employee_middlename,0 ,1) . '.';
+            $this->title('PUPQC Web Portal | ' . $fullname);
+        }
+        else if ($user_type->user_type->user_type_name == 'Student') {
+
+            $this->loadModel("User_Students");
+
+            $user = $this->User_Students->find('all')->contain(["Users.UserTypes"])->where(['User_Students.user_id' => $this->Auth->user('id')]);
+
+            $this->set('user',$user->first());
+            $this->set('user_type','Student');
+
+            $fullname = $user->first()->user_student_lastname . ', ' . $user->first()->user_student_firstname . ' ' . substr($user->first()->user_student_middlename,0 ,1) . '.';
+            $this->title('PUPQC Web Portal | ' . $fullname);
+        }
+        else if ($user_type->user_type->user_type_name == 'Alumni') {
+
+            $this->loadModel("User_Alumni");
+
+            $user = $this->User_Alumni->find('all')->contain(["Users.UserTypes"])->where(['User_Alumni.user_id' => $this->Auth->user('id')]);
+            
+            $this->set('user',$user->first());
+            $this->set('user_type','Alumni');
+
+            $fullname = $user->first()->user_alumni_lastname .', '. $user->first()->user_alumni_firstname . ' ' . substr($user->first()->user_alumni_middlename,0 ,1) . '.';
+            $this->title('PUPQC Web Portal | ' . $fullname);
         }
     }
 }

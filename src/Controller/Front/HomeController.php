@@ -17,8 +17,7 @@ class HomeController extends AppController
         $this->Auth->allow(['tags']);
         $margin = 'false';
         $this->set('margin', $margin);
-        $this->navBar();
-        $this->adminSideBar('home');
+        $this->navBar(' ');
     }
 
     public function announcement()
@@ -30,6 +29,7 @@ class HomeController extends AppController
 
     public function index()
     {
+        $this->title('PUPQC Web Portal');
         $this->loadModel('HomeCarouselImgs');
 
         $home_carousel_imgs = $this->paginate($this->HomeCarouselImgs->find('all')->where(['HomeCarouselImgs.active' => 1])->where(['HomeCarouselImgs.visibility' => 1]));

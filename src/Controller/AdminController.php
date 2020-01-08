@@ -153,7 +153,7 @@ class AdminController extends AppController
         $this->set(compact('articles'));
     }
 
-    public function sub()
+    public function adminHeaderTest()
     {
 
     }

@@ -12,6 +12,7 @@
         "cakephp/migrations": "^2.0.0",
         "cakephp/plugin-installer": "^1.0",
         "froala/wysiwyg-cake": "^3.0",
+        "ircmaxell/random-lib": "^1.2",
         "mobiledetect/mobiledetectlib": "2.*",
         "tinymce/tinymce": "^5.0"
     },

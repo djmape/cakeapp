@@ -1,36 +1,14 @@
 <html>
 <head>
     <!-- ================== BEGIN BASE CSS STYLE ================== -->
-    <title> Admin Panel | Admin Home </title>
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <?php echo $this->Html->css("../plugins/jquery-ui/themes/base/minified/jquery-ui.min.css")?>
-    <?php echo $this->Html->css("bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/font-awesome/css/font-awesome.min.css"); ?>
-    <?php echo $this->Html->css("animate.min.css")?>
-    <?php echo $this->Html->css("style.min.css")?>
-    <?php echo $this->Html->css("style-responsive.min.css")?>
-    <?php echo $this->Html->css("theme/default.css")?>
-    <!-- ================== END BASE CSS STYLE ================== -->
-
-    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
-    <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/bootstrap-wizard/css/bwizard.min.css")?>
-    <?php echo $this->Html->css("../plugins/isotope/isotope.css")?> 
-    <?php echo $this->Html->css("../plugins/lightbox/css/lightbox.css")?>
-    <!-- ================== END PAGE LEVEL STYLE ================== -->
-    
-    <!-- ================== BEGIN BASE JS ================== -->
-    <?php echo $this->Html->script("../plugins/pace/pace.min.js")?>
-
-    <!-- Include custom.css -->
-    <?php echo $this->Html->css("custom/admin.css")?>
-    
+    <title> Admin Panel | Admin Home </title>    
 </head>
 
 
 <body>
-    <?php echo $this->element('AdminSideBar');?>
+    <?php echo $this->element('AdminHeaderSideBar');?>
+    <!-- Include custom.css -->
+    <?php echo $this->Html->css("custom/admin.css")?>
     <?php echo $this->Flash->render(); ?>
     <div id="content" class="content">
         <ol class="breadcrumb pull-right">

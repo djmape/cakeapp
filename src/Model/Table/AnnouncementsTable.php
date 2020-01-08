@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Announcements Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Posts
+ *
  * @method \App\Model\Entity\Announcement get($primaryKey, $options = [])
  * @method \App\Model\Entity\Announcement newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Announcement[] newEntities(array $data, array $options = [])
@@ -33,6 +35,11 @@ class AnnouncementsTable extends Table
         $this->setTable('announcements');
         $this->setDisplayField('announcement_id');
         $this->setPrimaryKey('announcement_id');
+
+        $this->belongsTo('Posts', [
+            'foreignKey' => 'announcement_post_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**
@@ -73,5 +80,19 @@ class AnnouncementsTable extends Table
             ->allowEmptyString('active', false);
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['announcement_post_id'], 'Posts'));
+
+        return $rules;
     }
 }

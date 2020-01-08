@@ -7,6 +7,8 @@ use Cake\ORM\Entity;
  * Test Entity
  *
  * @property string $test
+ * @property int $test_id
+ * @property \Cake\I18n\FrozenTime $datetime
  */
 class Test extends Entity
 {
@@ -20,6 +22,7 @@ class Test extends Entity
      * @var array
      */
     protected $_accessible = [
-        'test' => true
+        'test' => true,
+        'datetime' => true
     ];
 }

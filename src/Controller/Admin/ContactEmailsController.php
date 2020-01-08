@@ -1,5 +1,5 @@
 <?php
-// src/Controller/AdminController.php
+// src/Controller/Admin/ContactEmailsController.php
 
 namespace App\Controller\Admin;
 
@@ -8,13 +8,6 @@ use Cake\ORM\TableRegistry;
 
 class ContactEmailsController extends AppController
 {
-    public function sideBar() {
-
-        $this->loadModel('Users');
-        $users =  $this->Users->find('all')->where(['Users.id' => $this->Auth->user('id')]);
-        $users = $users->first(); 
-        $this->set(compact('users', $users));
-    }
 
     public function initialize()
     {
@@ -22,9 +15,9 @@ class ContactEmailsController extends AppController
 
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
-        $this->sideBar();
-        $this->adminSideBarHasSub('contacts');
-        $this->adminSideBar('emails');
+        $this->adminHeaderSidebar('email');
+        $this->adminSideBarHasSub('site-info');
+        $this->title('Admin | Emails');
     }
 
     public function index()
@@ -34,20 +27,17 @@ class ContactEmailsController extends AppController
         $this->set(compact('emails'));
     }
 
-    public function view($slug = null)
-	{
-        $this->loadComponent('Paginator');
-        $this->loadModel('Articles');
-        $articles = $this->Paginator->paginate($this->Articles->find('all',array('order'=>array('Articles.created DESC')))->where(['Articles.status' => 1]));
-        $this->set(compact('articles'));
-	}
-
     public function add()
-    {        
+    {      
+
+        $this->layout = false;
+        $this->autoRender = false;
+
         $email = $this->ContactEmails->newEntity();
+
         if ($this->request->is('post')) {
 
-            $email->contact_email = $this->request->data['contact_email'];
+            $email->contact_email = $this->request->getData('email');
             $email->active = 1;
 
             if ($saved = $this->ContactEmails->save($email)) {
@@ -56,7 +46,6 @@ class ContactEmailsController extends AppController
                         'saves' => 'Email Added!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'index']);
             }
             else {
                 debug($email->errors());
@@ -64,18 +53,16 @@ class ContactEmailsController extends AppController
             }
             
         }
-
         $this->set('email', $email);
     }
     
-    public function edit($contact_email_id)
+    public function edit()
     {        
-        $emails = $this->ContactEmails->find('all', 
-                   array('conditions'=>array('ContactEmails.contact_email_id'=>$contact_email_id)));
 
-        $emails = $emails->first();
+        $this->layout = false;
+        $this->autoRender = false;
 
-        $this->set('emails', $emails);
+        $contact_email_id = $this->request->getData('contact_email_id');
 
         if ($this->request->is(['post', 'put'])) {
 
@@ -84,7 +71,7 @@ class ContactEmailsController extends AppController
             $emailsTable = TableRegistry::getTableLocator()->get('ContactEmails');
             $email = $emailsTable->get($contact_email_id);
 
-            $email->contact_email = $this->request->data['contact_email'];
+            $email->contact_email = $this->request->getData('email');
 
             if ($emailsTable->save($email)) {
                 $this->Flash->success('Email Updated!', [
@@ -92,14 +79,12 @@ class ContactEmailsController extends AppController
                         'saves' => 'Email Updated!'
                         ]
                     ]);
-                return $this->redirect(['action' => 'index']);
             }
             else {
                 $this->Flash->error(__('Unable to add your article.'));
             }
             
         }
-        // Get a list of tags.
 
     }
     

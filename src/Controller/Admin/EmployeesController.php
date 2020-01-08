@@ -24,12 +24,11 @@ class EmployeesController extends AppController
         $this->loadComponent('Flash'); // Include the FlashComponent
         $this->sideBar();
         $this->adminSideBarHasSub('employees');
-        $this->adminSideBar('');
+        $this->adminHeaderSidebar('employees');
     }
 
     public function index()
     {
-        $this->adminSideBar('all');
         $employees = $this->Employees->find('all')->contain(['EmployeePositions' => ['sort' => ['EmployeePositions.employee_position_priority' => 'DESC']]])->innerJoinWith('EmployeePositions')->order([
         'EmployeePositions.employee_position_priority' => 'ASC'
         ])->where(['Employees.active' => 1]);
@@ -39,7 +38,6 @@ class EmployeesController extends AppController
 
     public function add()
     {
-        $this->adminSideBar('add');
         $this->loadModel('EmployeePositions');
         $employee_positions =  $this->EmployeePositions->find('list', ['keyField' => 'employee_position_id', 'valueField' => 'employee_position_name'])->where(['EmployeePositions.active' => 1])->order([
         'EmployeePositions.employee_position_priority' => 'ASC'

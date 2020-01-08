@@ -1,0 +1,34 @@
+
+
+.navbar-nav {
+	padding: 0.5%;
+	padding-left: 1%;
+}
+
+.top-menu {
+	height: 10%;
+}
+
+.breadcrumb>li, .breadcrumb>li a {
+    color: #ffffff;
+}
+
+.breadcrumb-item.active {
+    color: #efe729;
+}
+
+.categories-table {
+	margin-bottom: 5%;
+}
+
+.forum-content {
+	background-color: white;
+}
+
+h3 {
+	margin-bottom: 2%;
+}
+
+#data-table-select {
+	margin: 2% 0 2%!important;
+}

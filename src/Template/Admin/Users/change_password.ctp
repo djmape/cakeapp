@@ -50,21 +50,24 @@
             <div class="panel-body">
                 <?php echo $this->Form->create($user,array('enctype'=>'multipart/form-data')); ?>
                 <div class="form-group row m-b-15">
-                    <label class="col-md-4 col-form-label">Current Password</label>
-                    <div class="col-md-12">
+                    <label class="col-md-3 control-label">Confirm Password</label>
+                    <div class="col-md-9">
                         <?php echo $this->Form->control('current_password', array('type' => 'password','id' => 'current_password','style' => '','class' => 'form-control', 'label' => false )); ?>
                     </div>
-                </div>
-                <div class="form-group row m-b-15">
-                    <label class="col-md-4 col-form-label">New Password</label>
-                    <div class="col-md-12">
-                        <?php echo $this->Form->control('new_password', array( 'type' => 'password','id' => 'new_password','style' => '','class' => 'form-control', 'label' => false,'onfocusout' => 'checkPasswordIsMatched()' )); ?>
                     </div>
                 </div>
                 <div class="form-group row m-b-15">
-                    <label class="col-md-4 col-form-label">Confirm Password</label>
-                    <div class="col-md-12">
+                    <label class="col-md-3 control-label">New Password</label>
+                    <div class="col-md-9">
+                        <?php echo $this->Form->control('new_password', array( 'type' => 'password','id' => 'new_password','style' => '','class' => 'form-control', 'label' => false,'onfocusout' => 'checkPasswordIsMatched()' )); ?>
+                    </div>
+                    </div>
+                </div>
+                <div class="form-group row m-b-15">
+                    <label class="col-md-3 control-label">New Password</label>
+                    <div class="col-md-9">
                         <?php echo $this->Form->control('confirm_password', array( 'type' => 'password','id' => 'confirm_password','style' => '','class' => 'form-control', 'label' => false,'onfocusout' => 'checkPasswordIsMatched()')); ?>
+                    </div>
                     </div>
                 </div>
                             <div class="pull-right">

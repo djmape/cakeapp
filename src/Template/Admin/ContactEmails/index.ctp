@@ -1,173 +1,165 @@
-<html>
-<head>
-    <!-- ================== BEGIN BASE CSS STYLE ================== -->
-    <title> Admin Panel | Emails </title>
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <?php echo $this->Html->css("../plugins/jquery-ui/themes/base/minified/jquery-ui.min.css")?>
-    <?php echo $this->Html->css("bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/font-awesome/css/font-awesome.min.css"); ?>
-    <?php echo $this->Html->css("animate.min.css")?>
-    <?php echo $this->Html->css("style.min.css")?>
-    <?php echo $this->Html->css("style-responsive.min.css")?>
-    <?php echo $this->Html->css("theme/default.css")?>
-    <!-- ================== END BASE CSS STYLE ================== -->
+<!-- src/Template/Admin/ContactEmails/index.ctp --> 
 
-    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
-    <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/bootstrap-wizard/css/bwizard.min.css")?>
-    <?php echo $this->Html->css("../plugins/isotope/isotope.css")?> 
-    <?php echo $this->Html->css("../plugins/lightbox/css/lightbox.css")?>
-    <?php echo $this->Html->css("../plugins/sweetalert/dist/sweetalert.css")?>
-    <!-- ================== END PAGE LEVEL STYLE ================== -->
-    
-    <!-- ================== BEGIN BASE JS ================== -->
-    <?php echo $this->Html->script("../plugins/pace/pace.min.js")?>
-    <!-- ================== END BASE JS ================== -->
-
-    <!-- ================== Sweet Alert ================== -->
-    <?php echo $this->Html->css("../plugins/sweetalert/dist/sweetalert.css")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert.min.js")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert-dev.js")?>
-
-    <!-- Include custom.css -->
-    <?php echo $this->Html->css("custom/admin.css")?>
-    
-</head>
-
-
-<body>
-
-    <?php echo $this->element('AdminSideBar');?>
+    <!-- begin include -->
+    <?php echo $this->element('AdminHeaderSideBar');?>
     <?php echo $this->Flash->render(); ?>
-    <div id="content" class="content">
-        <?php echo $this->element('AdminHeader');?>
-            
-         <!-- begin row -->
-        <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
-            <div class="row">
-                <!-- begin col-12 -->
-                <div class="col-md-12 ui-sortable">
-                    <!-- begin panel -->
-                    <div class="panel panel-inverse">
-                        <div class="panel-heading">
-                            <h5>
-                                <i class="fa fa-at"></i>
-                                <b> All Emails</b>
-                            </h5>
-                        </div>
-                        <div class="panel-body">
-                            <button type="button" class="btn btn-yellow btn-sm row m-b-15" style="margin-left: 0.5%">
-                                <i class="fa fa-plus">
-                                </i>
-                                <?= $this->Html->link('Add Email', ['action' => 'add']) ?>
-                            </button>
-                            <div id="data-table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <table id="data-table" class="table table-striped table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="data-table_info">
-                                            <thead>
-                                    <tr role="row">
-                                        <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 5%;">
-                                            #
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 75%;">
-                                            Email
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 16%;">
-                                            Actions
-                                        </th>
-                                    </tr>
-                                            </thead>
-                                        <tbody>
-                                    <?php foreach ($emails as $i => $email): ?>
-                                    <tr>
-                                        <td>
-                                            <?= $i + 1?>
-                                        </td>
-                                        <td>
-                                            <b>
-                                                <?= $email->contact_email ?>
-                                            </b>
-                                        </td>
-                                        <td>
-                                            <div class="center-block">
-                                                <button type="button" class="btn btn-info btn-sm">
-                                                    <i class="fa fa-edit">
-                                                    </i>
-                                                    <?= $this->Html->link('Edit', ['action' => 'edit', $email->contact_email_id]) ?>
-                                                </button>
-                                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $email->contact_email_id ?> )">
-                                                    <i class="fa fa-trash">
-                                                    </i>
-                                                    Remove
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            <!-- end table -->
-                            </table>
-                        <!-- end col-sm-12 -->
-                        </div>
-                    <!-- end row -->
-                    </div>
-                <!-- end data-table_wrapper -->
-                </div>
-                <!-- panel-body -->
-                </div>
-        <!-- end panel -->
-        </div>
-    <!-- end col-md-12 ui-sortable -->
-    </div>
-    <!-- end row -->
-</div>
-</div>
-</div>
 
+    <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
+    <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
+    <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css"); ?> 
+
+    <!-- end include -->
+
+    <!-- begin #content -->
+    <div id="content" class="content">
+        <!-- begin breadcrumb -->
+        <ol class="breadcrumb pull-right">
+            <li class="breadcrumb-item">
+                <a href="javascript:;">
+                    Home
+                </a>
+            </li>
+            <li class="breadcrumb-item active">
+                <?php echo $this->Html->link('Emails',['prefix' => "admin", 'controller' => 'ContactEmails','action'=>'index']) ?>
+            </li>
+        </ol>
+        <!-- end breadcrumb -->
+        <!-- begin page-header -->
+        <h1 class="page-header">Emails</h1>
+        <!-- end page-header -->
+        <!-- begin Add Email button -->
+        <div style="margin-bottom: 2%">
+            <a href="#modal-dialog-add-email" class="btn btn-yellow btn-sm" data-toggle="modal">
+                <i class="fa fa-plus"></i>
+                Add Email
+            </a>
+        </div>
+        <!-- begin table -->
+        <table id="data-table-select" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 5%;">
+                    #
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 77%;">
+                        Email
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 18%;">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($emails as $i => $email): ?>
+                <tr class="odd gradeX" data-email-id="<?= $email->contact_email_id ?>">
+                    <td>
+                        <?= $i + 1?>
+                    </td>
+                    <td>
+                        <b> <?= $email->contact_email ?> </b>
+                    </td>
+                    <td>
+                        <div class="center-block">
+                            <button type="button" class="openUpdateEmailModal btn btn-info btn-sm" href="#modal-dialog-update-email"  data-toggle="modal" data-email-id="<?php echo $email->contact_email_id ?>" data-email = "<?php echo $email->contact_email ?>">
+                                <i class="fa fa-edit"></i>
+                                Edit
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $email->contact_email_id ?> )">
+                                <i class="fa fa-trash"></i>
+                                Remove
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <!-- end table -->
+    </div>
+    <!-- end #content -->
+
+    <!-- begin modals -->
+ 
+    <!-- begin #modal-dialog-add-email -->
+    <div class="modal fade" id="modal-dialog-add-email">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Email</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <input type="email" id="email" class="form-control" placeholder="Enter email" />
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
+                        Close
+                    </a>
+                    <button type="button" class="btn btn-success btn-sm" onclick="addEmail()">
+                        <i class="fa fa-plus"></i>
+                        Add Email
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end #modal-dialog-add-email -->
+
+    <!-- begin modal-dialog-update-email -->
+    <div class="modal fade" id="modal-dialog-update-email">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Email</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="email" id="email-update" class="form-control" placeholder="    Enter email" />
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
+                        Close
+                    </a>
+                    <button type="button" class="btn btn-success btn-sm" onclick="updateEmail()">
+                       <i class="fa fa-plus"></i>
+                       Update Email
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end modal-dialog-update-email -->
+<!-- end #content -->
+
+</div>
+<!-- end #container -->
 </body>
 
 
 
-<!-- ================== BEGIN BASE JS ================== -->
-<?php echo $this->Html->script("../plugins/jquery/jquery-migrate-1.1.0.min.js")?>
-<?php echo $this->Html->script("../plugins/bootstrap/js/bootstrap.min.js")?>
-    <!--[if lt IE 9]>
-        <script src="assets/crossbrowserjs/html5shiv.js"></script>
-        <script src="assets/crossbrowserjs/respond.min.js"></script>
-        <script src="assets/crossbrowserjs/excanvas.min.js"></script>
-    <![endif]-->
-    <?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-cookie/jquery.cookie.js")?>
-    <!-- ================== END BASE JS ================== -->
+<!-- Include Base JS -->
+<?php echo $this->element('base_js');?>
+
 
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
 <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
 <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-<?php echo $this->Html->script("table-manage-responsive.demo.min.js")?>
-<!-- <script src="assets/js/apps.min.js"></script> -->
+<?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/extensions/Select/js/dataTables.select.min.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+<?php echo $this->Html->script("table-manage-select.demo.min.js")?>
+<?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
+<?php echo $this->Html->script("../plugins/js-cookie/js.cookie.js")?>
 <?php echo $this->Html->script("apps.min.js")?>
 <!-- ================== END PAGE LEVEL JS ================== -->
-    
-    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
-
-        <!-- datatable scripts -->
-            <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
-            <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
-            <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-            <?php echo $this->Html->script("table-manage-default.demo.min.js")?>
-        <!-- -->
-    <?php $this->Html->script("/apps.min.js")?>
-    <?php $this->Html->script("button.js")?>
-    <!-- ================== END PAGE LEVEL JS ================== -->
     
     <script>
         $(document).ready(function() {
             App.init();
-            TableManageDefault.init();
-            $('#data-table').DataTable();
+            TableManageTableSelect.init();
+            $('#data-table-select').DataTable();
         });
 
         function confirmDelete($contact_email_id) {
@@ -189,8 +181,6 @@
                             url: targeturl,              
                             data: {'contact_email_id' : $contact_email_id},
                             success:function(query)  {
-                            // $("#divLoading").removeClass('show');
-                            // $('#state').append(result);
                                 window.location = redirectURL;
                             },
                             error:function(xhr, ajaxOptions, thrownError) {
@@ -201,6 +191,55 @@
                 });
         }
 
-    </script>
+        function addEmail() {
+            var $email = $('#email').val();
+            var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactEmails","action"=>"add"]); ?>';
+            var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactEmails","action"=>"index"]); ?>';
+            $.ajax({
+                            type:'post',
+                            url: targeturl,              
+                            data: {'email' : $email},
+                            success:function(query)  {
+                                window.location = redirectURL;
+                            },
+                            error:function(xhr, ajaxOptions, thrownError) {
+                                swal("Error", thrownError, "error");
+                            }
+                        });
+        }
 
+        var $emailID; // global variable for selected email
+
+        $('#modal-dialog-update-email').on('show.bs.modal', function(e) {
+
+            //get data-id attribute of the clicked element
+            $emailID = $(e.relatedTarget).data('email-id');
+            var $email = $(e.relatedTarget).data('email');
+
+            //populate the textbox
+            $("#email-update").val($email);
+        });
+
+        function updateEmail() {
+            $email = $("#email-update").val();
+
+            var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactEmails","action"=>"edit"]); ?>';
+            var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactEmails","action"=>"index"]); ?>';
+            $.ajax({
+                            type:'post',
+                            url: targeturl,              
+                            data: {'contact_email_id' : $emailID,
+                                    'email' : $email },
+                            success:function(query)  {
+                            // $("#divLoading").removeClass('show');
+                            // $('#state').append(result);
+                                window.location = redirectURL;
+                            },
+                            error:function(xhr, ajaxOptions, thrownError) {
+                                swal("Error", thrownError, "error");
+                            }
+                        });
+        }
+
+    </script>
 </html>

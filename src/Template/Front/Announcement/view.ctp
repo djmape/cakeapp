@@ -1,93 +1,127 @@
-<!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
-<!--[if !IE]><!-->
-<html lang="en">
-<!--<![endif]-->
-<head>
-	<meta charset="utf-8" />
-	<title>PUPQC | <?= h($row->announcement_title) ?></title>
-	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
-	<meta content="" name="description" />
-	<meta content="" name="author" />
-	
 
-    
-    <!-- ================== BEGIN BASE CSS STYLE ================== -->
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <?php echo $this->Html->css("../plugins/jquery-ui/themes/base/minified/jquery-ui.min.css")?>
-    <!-- <link href="assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" /> -->
-    <?php echo $this->Html->css("bootstrap.min.css")?>
-    <!-- <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" /> -->
-    <?php echo $this->Html->css("../plugins/font-awesome/css/font-awesome.min.css"); ?>
-    <!-- <link href="assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" /> -->
-    <?php echo $this->Html->css("animate.min.css")?>
-    <!-- <link href="assets/css/animate.min.css" rel="stylesheet" /> -->
-    <?php echo $this->Html->css("style.min.css")?>
-    <!--  <link href="assets/css/style.min.css" rel="stylesheet" /> -->
-    <?php echo $this->Html->css("style-responsive.min.css")?>
-    <!--  <link href="assets/css/style-responsive.min.css" rel="stylesheet" /> -->
-    <?php echo $this->Html->css("theme/default.css")?>
-    <!-- ================== END BASE CSS STYLE ================== -->
+        <?php echo $this->element('NavBar');?>
+        <?php echo $this->Html->css("front.css")?>
 
-    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
-    <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css")?>
-    <!-- <link href="assets/plugins/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet"/> -->
-    <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css")?>
-    <!-- <link href="assets/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css" rel="stylesheet"/> -->
-    <?php echo $this->Html->css("../plugins/bootstrap-wizard/css/bwizard.min.css")?>
-    <!-- ================== END PAGE LEVEL STYLE ================== -->
-    
-    <!-- ================== BEGIN BASE JS ================== -->
-    <?php echo $this->Html->script("../plugins/pace/pace.min.js")?>
-    <!-- <script src="assets/plugins/pace/pace.min.js"></script> -->
-    <!-- ================== END BASE JS ================== -->
-
-    <style type="text/css">
-        body {
-            background-color: white;
-        }
-
-        #content {
-            background-color: white;
-        }
-        .container {
-            background-color: #fff;
-        }
-        .btn a {
-            color: #fff;
-        }
-        a {
-            color: #7e0e09;
-        }
-
-        a:hover {
-            color: #7e0e09;
-            text-decoration: underline;
-        }
-    </style>
-
-</head>
-<body>
-	<!-- begin #page-loader -->
-
-	<!-- end #page-loader -->
-
-	<!-- begin #page-container -->
-
-	
-    <?php echo $this->element('NavBar');?>
-
-	<!-- begin #content -->
-	<div id="content" class="content">
-		
-		<div class="row">
-			<div class="col-md-12">
-
-    			<h1 class="page-header" style="color: #7e0e09;">
-            			<?= $row->announcement_title ?>
-    			</h1>
-					<p style="font-size: 14px"><?= $row->announcement_body ?></p>
-					<p><small>Last Updated: <?= $row->announcement_modified->format(DATE_RFC850) ?></small></p>
+	    <!-- begin #content -->
+	    <div id="content" class="content">
+    		<div class="post-container">
+			    <div class="col-md-12">
+                    <h1 class="page-header" style="color: #7e0e09;">
+            		  <?= $announcement->announcement_title ?>
+                    </h1>
+				    <p style="font-size: 14px">
+                        <?= $announcement->announcement_body ?>
+                    </p>
+				    <p>
+                        <small>
+                            Last Updated: <?= $announcement->announcement_modified->format(DATE_RFC850) ?>
+                        </small>
+                    </p>
+                    <hr>
+                    <i class="fa fa-thumbs-up fa-fw fa-sm m-r-3">
+                        <p id="likes-count"><?= ' ' . $reactions->post_likes_count ?></p>
+                    </i>
+                    <i class="fa fa-thumbs-down fa-fw fa-sm m-r-3">
+                        <p id="dislikes-count"><?= ' ' . $reactions->post_dislikes_count ?></p>
+                    </i>
+                    <hr>
+                    <div class="">
+                        <div id="post-reactions">
+                            <a href="javascript:;" class="m-r-15 post-reaction btnReaction"  data-reaction="Like" id="btnLike">
+                                <i class="fa fa-thumbs-up fa-fw fa-lg m-r-3"></i>
+                                Like
+                            </a>
+                            <a href="javascript:;" class="m-r-15 post-reaction btnReaction"  data-reaction="Dislike" id="btnDislike">
+                                <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
+                            </a>
+                        </div>
+                        <hr>
+                        <div style="">    
+                            <div class="user" style="overflow: hidden; float: left">
+                                <?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array());
+                                ?>
+                            </div>
+                            <div class="input" style="margin-left: 7%">
+                                <form action="">
+                                    <div class="input-group">
+                                        <input id="txtComment" type="text" class="form-control rounded-corner" placeholder="Write a comment..." />
+                                        <span class="input-group-btn p-l-10">
+                                            <button id="submit-comment" class="btn btn-maroon f-s-12 rounded-corner" type="button">
+                                                Comment
+                                            </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                        <div id="comments-area">
+                            <?php foreach ($postCommentContents as $postCommentContent): ?>
+                            <div class="comment-box">
+                                <div class="user" style="overflow: hidden; float: left">
+                                    <?php echo $this->Html->image("../webroot/img/upload/".$postCommentContent->post_comment->user->user_profile->user_profile_photo, array()); ?>
+                                </div>
+                                <div class="comment" style="padding-left: 10%">
+                                    <p><?= $postCommentContent->post_comment_content ?></p>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="comment-box">
+                            <div class="user" style="overflow: hidden; float: left">
+                                <?php echo $this->Html->image("../webroot/img/upload/unknown-user.png", array()); ?>
+                            </div>
+                            <div class="comment" style="padding-left: 10%">
+                                <p>Qwe rtyu iop. Asdfgh jkl; zxc vbnm.</p>
+                                <!--
+                                <div id="post-reactions">
+                                    <a href="javascript:;" class="m-r-15 post-reaction">
+                                        <i class="fa fa-thumbs-up fa-fw fa-lg m-r-3"></i>
+                                            Like
+                                    </a>
+                                    <a href="javascript:;" class="m-r-15 post-reaction">
+                                        <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
+                                    </a>
+                                    <hr>
+                                
+                                <div style="">    
+                                    <div class="user" style="overflow: hidden; float: left">
+                                    <?php
+                                        if ($login_status == true ) {
+                                            if ($user_type == 'Employee') {
+                                                echo $this->Html->image("../webroot/img/upload/".$user->user_employee_photo, array());
+                                            }
+                                            else if ($user_type = 'Student') {
+                                                echo $this->Html->image("../webroot/img/upload/".$user->user_student_photo, array());
+                                            }
+                                            else if ($user_type == 'Alumni') {
+                                                echo $this->Html->image("../webroot/img/upload/".$user->user_alumni_photo, array());
+                                            }
+                                        }
+                                        else {
+                                            echo $this->Html->image("../webroot/img/upload/unknown-user.png", array());
+                                        }
+                                    ?>
+                                    </div>
+                                    <div class="input" style="margin-left: 7%">
+                                        <form action="">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control rounded-corner" placeholder="Write a comment..." />
+                                                <span class="input-group-btn p-l-10">
+                                                    <button class="btn btn-maroon f-s-12 rounded-corner" type="button">
+                                                    Comment
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end timeline single post -->
 			</div>
 		</div>
 	</div>
@@ -107,58 +141,152 @@
     <?php echo $this->element('footer');?>
 </footer>
 
-<!-- ================== BEGIN BASE JS ================== -->
-<!-- <script src="assets/plugins/jquery/jquery-1.9.1.min.js"></script> -->
-<?php echo $this->Html->script("../plugins/jquery/jquery-1.9.1.min.js")?>
-<!-- <script src="assets/plugins/jquery/jquery-migrate-1.1.0.min.js"></script> -->
-<?php echo $this->Html->script("../plugins/jquery/jquery-migrate-1.1.0.min.js")?>
-<!-- <script src="assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js"></script> -->
-<?php echo $this->Html->script("../plugins/jquery-ui/ui/minified/jquery-ui.min.js")?>
-<!-- <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script> -->
-<?php echo $this->Html->script("../plugins/bootstrap/js/bootstrap.min.js")?>
-    <!--[if lt IE 9]>
-        <script src="assets/crossbrowserjs/html5shiv.js"></script>
-        <script src="assets/crossbrowserjs/respond.min.js"></script>
-        <script src="assets/crossbrowserjs/excanvas.min.js"></script>
-    <![endif]-->
-    <!-- <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script> -->
-    <?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
-    <!-- <script src="assets/plugins/jquery-cookie/jquery.cookie.js"></script> -->
-    <?php echo $this->Html->script("../plugins/jquery-cookie/jquery.cookie.js")?>
-    <!-- ================== END BASE JS ================== -->
+
+
+<!-- Include Base JS -->
+<?php echo $this->element('base_js');?>
+
 
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
-<!-- <script src="assets/plugins/DataTables/media/js/jquery.dataTables.js"></script> -->
 <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
-<!-- <script src="assets/plugins/DataTables/media/js/dataTables.bootstrap.min.js"></script> -->
 <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
-<!-- <script src="assets/plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js"></script> -->
 <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-<!-- <script src="assets/js/table-manage-responsive.demo.min.js"></script> -->
-<?php echo $this->Html->script("table-manage-responsive.demo.min.js")?>
-<!-- <script src="assets/js/apps.min.js"></script> -->
+<?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/extensions/Select/js/dataTables.select.min.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+<?php echo $this->Html->script("table-manage-select.demo.min.js")?>
+<?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
+<?php echo $this->Html->script("../plugins/js-cookie/js.cookie.js")?>
 <?php echo $this->Html->script("apps.min.js")?>
 <!-- ================== END PAGE LEVEL JS ================== -->
-    
-    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
-    <!-- <script src="assets/js/apps.min.js"></script> -->
-    <?php $this->Html->script("/apps.min.js")?>
-    <!-- ================== END PAGE LEVEL JS ================== -->
 	
 	<script>
 		$(document).ready(function() {
 			App.init();
+            currentReaction();
 		});
-	</script>
-	
-	<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-		ga('create', 'UA-53034621-1', 'auto');
-		ga('send', 'pageview');
+        $currentReaction = '';
+        $activeReaction = '';
+
+        function currentReaction() {
+            $currentReaction = '<?php echo $currentReaction ?>';
+            if ($currentReaction == 'Like') {
+                $('#btnLike').css("color", "#7e0e09");
+                $('#btnDislike').css("color", "gray");
+            }
+            else if ($currentReaction == 'Dislike') {
+                $('#btnDislike').css("color", "#7e0e09");
+                $('#btnLike').css("color", "gray");
+                $activeReaction = 'Dislike';
+            }
+            $('#current-react').html('Current is ' + $currentReaction);
+        }
+		
+        $('.btnReaction').click(function(){
+            $reaction = $(this).data("reaction");
+            $('#clicked-react').html('I clicked ' + $reaction);
+            if ($currentReaction == $reaction) {
+                $reaction = 'Cancel';
+            }
+            $url = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "front","controller"=>"Announcement","action"=>"savePostReactions"]); ?>';
+
+            $.ajax({        
+            type:"POST",
+            //the function u wanna call
+            url: $url,                
+            data:{'reaction':$reaction,
+                  'announcement_id': <?php echo $announcement_id ?>},               
+            success:function(data)
+            {
+                if ($activeReaction == 'Like') {
+                    $('#btnLike').css("color", "#7e0e09");
+                    $('#btnDislike').css("color", "gray");
+                    $currentReaction = 'Like';
+                }
+                else if ($activeReaction == 'Dislike') {
+                    $('#btnDislike').css("color", "#7e0e09");
+                    $('#btnLike').css("color", "gray");
+                    $currentReaction = 'Dislike';
+                }
+                else {
+                    $('#btnLike').css("color", "gray");
+                    $('#btnDislike').css("color", "gray");
+                    $currentReaction = '';
+                }
+            },
+            error:function(xhr, ajaxOptions, thrownError) {
+                swal("Error", thrownError, "error");
+            }
+        });
+        }); 
+
+        $('#btnLike').click(function(){
+            $likes = parseInt($('#likes-count').text());
+            $dislikes = parseInt($('#dislikes-count').text());
+            if ($activeReaction == 'Like') {
+                $activeReaction = '';
+                $likes -= 1;
+                $('#likes-count').html($likes);
+            }
+            else if ($activeReaction == 'Dislike') {
+                $activeReaction = 'Like';
+                $likes += 1;
+                $dislikes -= 1;
+                $('#likes-count').html($likes);
+                $('#dislikes-count').html($dislikes);
+            }
+            else {
+                $activeReaction = 'Like';
+                $likes += 1;
+                $('#likes-count').html($likes);
+            }
+
+        });
+
+        $('#btnDislike').click(function(){
+            $likes = parseInt($('#likes-count').text());
+            $dislikes = parseInt($('#dislikes-count').text());
+
+            if ($activeReaction == 'Dislike') {
+                $activeReaction = '';
+                $dislikes -= 1;
+                $('#dislikes-count').html($dislikes);
+            }
+            else if ($activeReaction == 'Like') {
+                $activeReaction = 'Dislike';
+                $dislikes += 1;
+                $likes -= 1;
+                $('#dislikes-count').html($dislikes);
+                $('#likes-count').html($likes);
+            }
+            else {
+                $activeReaction = 'Dislike';
+                $dislikes += 1;
+                $('#dislikes-count').html($dislikes);
+            }
+
+        });
+        
+        $('#submit-comment').click(function(){
+            $comment = $('#txtComment').val();
+            $url = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "front","controller"=>"Announcement","action"=>"savePostComment"]); ?>';
+
+            $.ajax({        
+            type:"POST",
+            url: $url,                
+            data:{'comment':$comment,
+                  'announcement_id': <?php echo $announcement_id ?>},               
+            success:function(data)
+            {
+                $('<div class="comment-box"><div class="user" style="overflow: hidden; float: left"><?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array()); ?></div><div class="comment" style="padding-left: 10%"><p>' + $comment + '</p></div></div>').prependTo('#comments-area');
+            },
+            error:function(xhr, ajaxOptions, thrownError) {
+                swal("Error", thrownError + $reaction, "error");
+            }
+        });
+        }); 
 
 	</script>
 </html>

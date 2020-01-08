@@ -9,7 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Users Model
  *
+ * @property \App\Model\Table\UserTypesTable|\Cake\ORM\Association\BelongsTo $UserTypes
  * @property \App\Model\Table\ArticlesTable|\Cake\ORM\Association\HasMany $Articles
+ * @property \App\Model\Table\UserAdministratorsTable|\Cake\ORM\Association\HasMany $UserAdministrators
  *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
@@ -40,8 +42,40 @@ class UsersTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->belongsTo('UserTypes', [
+            'foreignKey' => 'user_type_id',
+            'joinType' => 'INNER'
+        ]);
         $this->hasMany('Articles', [
             'foreignKey' => 'user_id'
+        ]);
+        $this->hasMany('UserAdministrators', [
+            'className' => 'admin',
+            'foreignKey' => 'user_id'
+        ]);
+        $this->hasMany('UserEmployees', [
+            'className' => 'user_employee',
+            'foreignKey' => 'user_id'
+        ]);
+        $this->hasMany('UserStudents', [
+            'className' => 'user_student',
+            'foreignKey' => 'user_id'
+        ]);
+        $this->hasMany('UserAlumni', [
+            'className' => 'user_alumni',
+            'foreignKey' => 'user_id'
+        ]);
+        $this->hasMany('UserAlumni', [
+            'className' => 'user_profile',
+            'foreignKey' => 'user_profile_user_id'
+        ]);
+        $this->hasOne('UserProfiles', [
+            'foreignKey' => 'user_profile_user_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->hasMany('Posts', [
+            'className' => 'post',
+            'foreignKey' => 'post_user_id'
         ]);
     }
 
@@ -60,13 +94,31 @@ class UsersTable extends Table
         $validator
             ->email('email')
             ->requirePresence('email', 'create')
-            ->allowEmptyString('email', false);
+            ->allowEmptyString('email', false)
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
             ->scalar('password')
             ->maxLength('password', 255)
             ->requirePresence('password', 'create')
             ->allowEmptyString('password', false);
+
+        $validator
+            ->scalar('user_photo')
+            ->maxLength('user_photo', 1000)
+            ->allowEmptyString('user_photo');
+
+        $validator
+            ->integer('active')
+            ->requirePresence('active', 'create')
+            ->allowEmptyString('active', false);
+
+        $validator
+            ->scalar('username')
+            ->maxLength('username', 200)
+            ->requirePresence('username', 'create')
+            ->allowEmptyString('username', false)
+            ->add('username', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         return $validator;
     }
@@ -81,6 +133,8 @@ class UsersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->isUnique(['username']));
+        $rules->add($rules->existsIn(['user_type_id'], 'UserTypes'));
 
         return $rules;
     }
