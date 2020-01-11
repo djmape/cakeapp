@@ -133,13 +133,11 @@ class AppController extends Controller
         $this->set('profile',$getProfile);
 
         $user_type = $this->Users->find('all')->contain(["UserTypes"])->where(['Users.id' => $this->Auth->user('id')])->first();
-            $this->log($user_type->user_type->user_type_name,'debug');
 
         if ($user_type->user_type->user_type_name == 'Administrator') {
             $this->loadModel("User_Administrators");
             $user =  $this->User_Administrators->find('all')->contain(['Users'])->where(['Users.id' => $this->Auth->user('id')]);
             $this->set('user', $user->first());
-            $this->log($user->first(),'debug');
         }
         else {
             $this->userHeader();

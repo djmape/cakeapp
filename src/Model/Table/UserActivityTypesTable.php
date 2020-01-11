@@ -33,6 +33,10 @@ class UserActivityTypesTable extends Table
         $this->setTable('user_activity_types');
         $this->setDisplayField('user_activity_type_id');
         $this->setPrimaryKey('user_activity_type_id');
+
+        $this->hasMany('UserActivities', [
+            'foreignKey' => 'user_activity_activity_type_id'
+        ]);
     }
 
     /**

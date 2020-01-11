@@ -9,9 +9,9 @@ use Cake\Validation\Validator;
 /**
  * UserActivities Model
  *
- * @property \App\Model\Table\UserActivityTypesTable|\Cake\ORM\Association\BelongsTo $UserActivityTypes
- * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
- * @property |\Cake\ORM\Association\BelongsTo $Posts
+ * @property |\Cake\ORM\Association\BelongsTo $UserActivityActivityTypes
+ * @property |\Cake\ORM\Association\BelongsTo $UserActivityUsers
+ * @property |\Cake\ORM\Association\BelongsTo $UserActivityPosts
  *
  * @method \App\Model\Entity\UserActivity get($primaryKey, $options = [])
  * @method \App\Model\Entity\UserActivity newEntity($data = null, array $options = [])
@@ -61,6 +61,10 @@ class UserActivitiesTable extends Table
         $this->hasOne('UserPostReactions', [
             'foreignKey' => 'user_post_reactions_activity_id'
         ]);
+
+        $this->hasOne('ForumActivities', [
+            'foreignKey' => 'forum_activity_activity_id'
+        ]);
     }
 
     /**
@@ -81,8 +85,7 @@ class UserActivitiesTable extends Table
 
         $validator
             ->integer('user_activity_reference_no')
-            ->requirePresence('user_activity_reference_no', 'create')
-            ->allowEmptyString('user_activity_reference_no', false);
+            ->allowEmptyString('user_activity_reference_no');
 
         return $validator;
     }

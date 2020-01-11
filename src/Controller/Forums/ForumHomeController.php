@@ -14,7 +14,7 @@ use App\Form\EmailForm;
  *
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ForumsController extends AppController
+class ForumHomeController extends AppController
 {
     public function initialize()
     {
@@ -28,7 +28,7 @@ class ForumsController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function forumHome()
+    public function index()
     {   
         $this->header();
         $this->title('PUPQC | Forum Home');
@@ -42,6 +42,13 @@ class ForumsController extends AppController
         $this->loadModel('ForumCategoryDetails');
         $forumCategories = $this->paginate($this->ForumCategories->find('all')->contain('ForumCategoryDetails')->where(['ForumCategories.forum_category_active' => 1]));
         $this->set(compact('forumCategories'));
+
+
+        $this->loadModel('ForumTopics');
+        $this->loadModel('ForumTopicDetails');
+        $forumTopics = $this->paginate($this->ForumTopics->find('all')->contain(['ForumTopicDetails','ForumCategories','Users'])->where(['ForumTopics.forum_topic_active' => 1]));
+        $this->log($forumTopics->first(),'debug');
+        $this->set(compact('forumTopics'));
     }
 
     public function forumCategories()
@@ -150,7 +157,7 @@ class ForumsController extends AppController
 
     public function isAuthorized($user) {
 
-    if (in_array($this->request->action, ['forumHome', 'forumCategories','forumTopics','forumDiscussions','forumReplies','register','adminAll','adminAdd','adminEdit','adminDelete','employeesAll','employeeAdd','employeeEdit','studentsAll','studentAdd','studentEdit','alumniAll','alumniAdd','alumniEdit','deleteUser','logout'])) {
+    if (in_array($this->request->action, ['index', 'forumCategories','forumTopics','forumDiscussions','forumReplies','register','adminAll','adminAdd','adminEdit','adminDelete','employeesAll','employeeAdd','employeeEdit','studentsAll','studentAdd','studentEdit','alumniAll','alumniAdd','alumniEdit','deleteUser','logout'])) {
         return true;
     }
 

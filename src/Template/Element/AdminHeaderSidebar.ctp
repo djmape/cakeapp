@@ -182,6 +182,7 @@
 						</ul>
 					</li>
 					<!-- end Student section -->
+
               		<!-- begin Users section -->
 					<li class="has-sub <?php if ($expand == 'users') echo 'active expand'?>">
 						<a href="javascript:;">
@@ -191,7 +192,7 @@
 					    </a>
 						<ul class="sub-menu">
               				<!-- Administrator -->
-              				<li class="<?php if ($active == 'user-admins') echo 'active'?>">
+              				<li class="<?php if ($active == 'users-admin') echo 'active'?>">
                     			<?php echo $this->Html->link('Administrator',array('prefix' => "admin", 'controller' => 'Users','action'=>'adminAll')) ?>
                     		</li>
               				<!-- Employees -->
@@ -205,6 +206,22 @@
               				<!-- Alumni -->
               				<li class="<?php if ($active == 'user-alumni') echo 'active'?>">
                     			<?php echo $this->Html->link('Alumni',array('prefix' => "admin", 'controller' => 'Users','action'=>'alumniAll')) ?>
+                    		</li>
+						</ul>
+					</li>
+					<!-- end Users section -->
+
+              		<!-- begin Forum section -->
+					<li class="has-sub <?php if ($expand == 'forums') echo 'active expand'?>">
+						<a href="javascript:;">
+					        <b class="caret"></b>
+						    <i class="fas fa-users"></i>
+						    <span>Forum</span>
+					    </a>
+						<ul class="sub-menu">
+              				<!-- Categories -->
+              				<li class="<?php if ($active == 'forumCategories') echo 'active'?>">
+                    			<?php echo $this->Html->link('Categories',array('prefix' => "admin", 'controller' => 'Forums','action'=>'forumCategories')) ?>
                     		</li>
 						</ul>
 					</li>

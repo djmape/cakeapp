@@ -118,6 +118,8 @@ Router::scope('/', function ($routes) {
 
     // Connect the conventions based default routes.
     $routes->fallbacks();
+
+    
 });
 
 
@@ -138,4 +140,20 @@ Router::prefix('Front', function ($routes) {
     $routes->fallbacks(DashedRoute::class);
     $routes->connect('/abouts/handbook', ['controller' => 'Abouts', 'action' => 'view']);
     //$routes->connect('/abouts/contacts', ['controller' => 'Abouts', 'action' => 'add']);
+
 });
+
+Router::prefix('Forums', function ($routes) {
+    // All routes here will be prefixed with `/admin`
+    // And have the prefix => admin route element added.
+    $routes->fallbacks(DashedRoute::class);
+    $routes->connect('/forum-categories/', ['controller' => 'ForumCategories', 'action' => 'forumCategoriesIndex']);
+    $routes->connect('/forum-categories-all/', ['controller' => 'ForumCategories', 'action' => 'forumCategoriesAll']);
+    $routes->connect('/category/*', ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex']);
+    $routes->connect('/topic/*', ['controller' => 'ForumTopics', 'action' => 'forumTopicsAll']);
+    $routes->connect('/discussion/*', ['controller' => 'ForumDiscussions', 'action' => 'forumDiscussionsIndex']);
+
+
+    
+});
+

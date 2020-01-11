@@ -1,21 +1,21 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\UserActivitiesTable;
+use App\Model\Table\ForumDiscussionActivitiesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\UserActivitiesTable Test Case
+ * App\Model\Table\ForumDiscussionActivitiesTable Test Case
  */
-class UserActivitiesTableTest extends TestCase
+class ForumDiscussionActivitiesTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\UserActivitiesTable
+     * @var \App\Model\Table\ForumDiscussionActivitiesTable
      */
-    public $UserActivities;
+    public $ForumDiscussionActivities;
 
     /**
      * Fixtures
@@ -23,10 +23,9 @@ class UserActivitiesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.UserActivities',
-        'app.UserActivityActivityTypes',
-        'app.UserActivityUsers',
-        'app.UserActivityPosts'
+        'app.ForumDiscussionActivities',
+        'app.ForumDiscussionActivityForumActivities',
+        'app.ForumDiscussionActivityForumDiscussions'
     ];
 
     /**
@@ -37,8 +36,8 @@ class UserActivitiesTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('UserActivities') ? [] : ['className' => UserActivitiesTable::class];
-        $this->UserActivities = TableRegistry::getTableLocator()->get('UserActivities', $config);
+        $config = TableRegistry::getTableLocator()->exists('ForumDiscussionActivities') ? [] : ['className' => ForumDiscussionActivitiesTable::class];
+        $this->ForumDiscussionActivities = TableRegistry::getTableLocator()->get('ForumDiscussionActivities', $config);
     }
 
     /**
@@ -48,7 +47,7 @@ class UserActivitiesTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->UserActivities);
+        unset($this->ForumDiscussionActivities);
 
         parent::tearDown();
     }

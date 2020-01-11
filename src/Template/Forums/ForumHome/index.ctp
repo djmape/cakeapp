@@ -45,28 +45,47 @@
                             </th>
                         </thead>
                         <tbody>
+                            <?php foreach ($forumCategories as $i => $forumCategory): ?>
                             <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">Category Title</td>
-                                <td class="f-s-600 text-inverse">175 topics</td>
-                                <td class="f-s-600 text-inverse">459 discussion</td>
-                                <td class="f-s-600 text-inverse">5,452 replies</td>
+                                <td class="f-s-600 text-inverse">
+                                    <?= $this->Html->link($forumCategory->forum_category_name, ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex', strtolower(str_replace(' ', '-', $forumCategory->forum_category_name))],['escape' => false]) ?>
+                                </td>
+                                <td class="f-s-600 text-inverse">
+                                    <?php 
+                                        if ($forumCategory->forum_category_detail->forum_category_topics_count != 0) {
+                                            echo $forumCategory->forum_category_detail->forum_category_topics_count . ' topics'  ;
+                                        }
+                                        else {
+                                            echo $forumCategory->forum_category_detail->forum_category_topics_count . ' topic' ;
+                                        }
+                                    ?>
+                                </td>
+                                <td class="f-s-600 text-inverse">
+                                    <?php 
+                                        if ($forumCategory->forum_category_detail->forum_category_discussions_count != 0) {
+                                            echo $forumCategory->forum_category_detail->forum_category_discussions_count . ' discussions'  ;
+                                        }
+                                        else {
+                                            echo $forumCategory->forum_category_detail->forum_category_discussions_count . ' discussion' ;
+                                        }
+                                    ?>
+                                </td>
+                                <td class="f-s-600 text-inverse">
+                                    <?php 
+                                        if ($forumCategory->forum_category_detail->forum_category_replies_count != 0) {
+                                            echo $forumCategory->forum_category_detail->forum_category_replies_count . ' replies'  ;
+                                        }
+                                        else {
+                                            echo $forumCategory->forum_category_detail->forum_category_replies_count . ' reply' ;
+                                        }
+                                    ?>
+                                </td>
                             </tr>
-                            <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">Category Title</td>
-                                <td class="f-s-600 text-inverse">162 topics</td>
-                                <td class="f-s-600 text-inverse">459 discussion</td>
-                                <td class="f-s-600 text-inverse">5,452 replies</td>
-                            </tr>
-                            <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">Category Title</td>
-                                <td class="f-s-600 text-inverse">231 topics</td>
-                                <td class="f-s-600 text-inverse">459 discussion</td>
-                                <td class="f-s-600 text-inverse">5,452 replies</td>
-                            </tr>
+                            <?php endforeach; ?>
                         </tbody>
             </table> 
             <div class="pull-right">
-                <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'Forums', 'action' => 'forumCategories'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
+                <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'ForumCategories', 'action' => 'forumCategoriesIndex'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
             </div>
             </div> 
             <!-- end Categories -->
@@ -77,7 +96,7 @@
             <table id="data-table-default" class="table table-bordered">
                         <thead>
                             <th style="width: 80%">
-                                Category Name
+                                Topic Name
                             </th>
                             </th>
                             <th style="width: 10%">
@@ -88,21 +107,44 @@
                             </th>
                         </thead>
                         <tbody>
+                            <?php
+                                $forum_topic_count = 1;
+                                foreach ($forumTopics as $i => $forumTopic): 
+                                    if ($forum_topic_count > 5) {
+                                        break;
+                                    }
+                            ?>
                             <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">Category Title</td>
-                                <td class="f-s-600 text-inverse">217 discussion</td>
-                                <td class="f-s-600 text-inverse">5,452 replies</td>
+                                <td class="f-s-600 text-inverse">
+                                    <?= $this->Html->link($forumTopic->forum_topic_name, ['controller' => 'ForumDiscussions', 'action' => 'forumDiscussionsIndex', str_replace(' ', '-', $forumTopic->forum_category->forum_category_name), str_replace(' ', '-', $forumTopic->forum_topic_name)]) ?>
+                                    in 
+                                    <?= $this->Html->link($forumTopic->forum_category->forum_category_name, ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex', strtolower(str_replace(' ', '-', $forumTopic->forum_category->forum_category_name))],['escape' => false]) ?>
+                                    <br>
+                                    by
+                                    <?= $forumTopic->user->username ?> 
+                                </td>
+                                <td class="f-s-600 text-inverse" style="width: 10%">
+                                    <?php 
+                                        if ($forumTopic->forum_topic_detail->forum_topic_detail_discussions_count != 0) {
+                                            echo $forumTopic->forum_topic_detail->forum_topic_detail_discussions_count . ' discussions'  ;
+                                        }
+                                        else {
+                                            echo $forumTopic->forum_topic_detail->forum_topic_detail_discussions_count . ' discussion' ;
+                                        }
+                                    ?>
+                                </td>
+                                <td class="f-s-600 text-inverse" style="width: 10%">
+                                    <?php 
+                                        if ($forumTopic->forum_topic_detail->forum_topic_detail_replies_count != 0) {
+                                            echo $forumTopic->forum_topic_detail->forum_topic_detail_replies_count . ' replies'  ;
+                                        }
+                                        else {
+                                            echo $forumTopic->forum_topic_detail->forum_topic_detail_replies_count . ' reply' ;
+                                        }
+                                    ?>
+                                </td>
                             </tr>
-                            <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">Category Title</td>
-                                <td class="f-s-600 text-inverse">469 discussion</td>
-                                <td class="f-s-600 text-inverse">8,720 replies</td>
-                            </tr>
-                            <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">Category Title</td>
-                                <td class="f-s-600 text-inverse">192 discussion</td>
-                                <td class="f-s-600 text-inverse">737 replies</td>
-                            </tr>
+                            <?php $forum_topic_count++; endforeach; ?>
                         </tbody>
             </table> 
             <div class="pull-right">

@@ -32,17 +32,38 @@
         <div id="content" class="content forum-content">
             <!-- begin Categories -->
             <div class="categories-table">
-            <?php foreach ($forumCategories as $i => $forumCategory): ?>
             <div class="row category-header">
-                <?php echo $this->Html->image("../webroot/img/upload/".$forumCategory->forum_category_icon, array('class' => 'center-block','style' => '')); ?>
-                <h3> <?= $forumCategory->forum_category_name ?> </h3>
+                
+                <h3> All Categories </h3>
             </div>
-              
-            <table id="" class="table table-bordered data-table-select">
+            <table id="data-table-select" class="table table-bordered ">
+                <thead>
+                <tr>
+                    <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 10%;">
+                        #
+                    </th>
+                    <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 60%;">
+                        Photo
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 10%;">
+                        Email
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 10%;">
+                        Name
+                    </th>
+                    <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 10%;">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
                         <tbody>
+                            <?php foreach ($forumCategories as $i => $forumCategory): ?>
                             <tr class="odd gradeX">
+                                <td>
+                                    <?php echo $this->Html->image("../webroot/img/upload/".$forumCategory->forum_category_icon, array('class' => 'center-block','style' => 'width: 50px')); ?>
+                                </td>
                                 <td class="f-s-600 text-inverse" style="width: 70%">
-                                    <?= $forumCategory->forum_category_name ?>
+                                    <?= $this->Html->link($forumCategory->forum_category_name, ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex', strtolower(str_replace(' ', '-', $forumCategory->forum_category_name))],['escape' => false]) ?>
                                 </td>
                                 <td class="f-s-600 text-inverse" style="width: 10%">
                                     <?php 
@@ -75,14 +96,12 @@
                                     ?>
                                 </td>
                             </tr>
+                            <?php endforeach; ?>
                         </tbody>
                             
             </table> 
             </div> 
-            <div class="pull-right">
-                <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'Forums', 'action' => 'forumTopics'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
-            </div>
-            <?php endforeach; ?>
+            
             <!-- end Categories -->
 
         </div>
@@ -102,11 +121,7 @@
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
 <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
 <?php echo $this->Html->script("../plugins/DataTables/extensions/Select/js/dataTables.select.min.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
 <?php echo $this->Html->script("table-manage-select.demo.min.js")?>
 <?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
 <?php echo $this->Html->script("../plugins/js-cookie/js.cookie.js")?>
@@ -117,6 +132,9 @@
 
     $(document).ready(function() {
         App.init();
+        $('#data-table-select').DataTable();
+        $(".dataTables_paginate").addClass("pull-right");
+        $("#data-table-select_filter").addClass("pull-right");
     });
 
     </script>

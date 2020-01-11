@@ -14,7 +14,7 @@ use App\Form\EmailForm;
  *
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ForumsController extends AppController
+class ForumCategoriesController extends AppController
 {
     public function initialize()
     {
@@ -28,15 +28,36 @@ class ForumsController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
-    public function forumHome()
+
+    public function forumCategoriesIndex()
     {   
         $this->header();
-        $this->title('PUPQC | Forum Home');
+        $forum_categories_count;
+        $this->title('PUPQC Forum | Categories');
 
-        $this->loadModel('Posts');
-        $this->loadModel('Announcements');
-        $this->loadModel('Users');
-        $this->loadModel('UserProfiles');
+        $this->loadModel('ForumCategories');
+        $this->loadModel('ForumTopics');
+        $forumCategories = $this->paginate($this->ForumCategories->find('all')->contain(['ForumTopics.ForumTopicDetails','ForumTopics.Users','ForumCategoryDetails']));
+
+        if ($forumCategories->count() == 0) {
+            $forum_categories_count = 0;
+        }
+        else {
+            $forum_categories_count = $forumCategories->count();
+        }
+
+        
+        $this->set('forumCategories', $forumCategories);
+        $this->set(compact('forumCategories'));
+        $this->set('forum_categories_count', $forum_categories_count);
+    }
+
+
+    public function forumCategoriesAll()
+    {   
+        $this->header();
+        $this->title('PUPQC | All Categories');
+
 
         $this->loadModel('ForumCategories');
         $this->loadModel('ForumCategoryDetails');
@@ -44,31 +65,22 @@ class ForumsController extends AppController
         $this->set(compact('forumCategories'));
     }
 
-    public function forumCategories()
+    public function forumTopicsIndex($forum_category_name)
     {   
         $this->header();
-        $this->title('PUPQC | Forum Categories');
+        $this->title('PUPQC Forum | Topics');
+        $this->loadModel('ForumCategories');
+        $forumCategory = $this->ForumCategories->find('all')->where(['ForumCategories.forum_category_name' => str_replace('-', ' ', $forum_category_name)])->first();
+
+        $forum_category_id = $forumCategory->forum_category_id;
 
         $this->loadModel('ForumCategories');
-        $this->loadModel('ForumCategoryDetails');
-        $forumCategories = $this->paginate($this->ForumCategories->find('all')->contain('ForumCategoryDetails')->where(['ForumCategories.forum_category_active' => 1]));
-        $this->set(compact('forumCategories'));
-    }
+        $this->loadModel('ForumTopics');
+        $forumTopics = $this->paginate($this->ForumTopics->find('all')->contain(['ForumTopicDetails','ForumCategories','Users'])->where(['ForumCategories.forum_category_id' => $forum_category_id]));
 
-    public function forumTopics()
-    {   
-        $this->header();
-        $this->title('PUPQC | Forum Topics');
-
-        $this->loadModel('Posts');
-        $this->loadModel('Announcements');
-        $this->loadModel('Users');
-        $this->loadModel('UserProfiles');
-
-        $paginate = ['sortWhitelist' => 'Posts.post_modified'];
-        $posts = $this->paginate($this->Posts->find('all')->contain(['Users.UserProfiles','Announcements'])->where(['Posts.post_active' => 1]));
-        $this->log($posts->first(),'debug');
-        $this->set(compact('posts'));
+        $this->set('forumTopics', $forumTopics);
+        $this->set(compact('forumTopics'));
+        $this->set('forumCategory', $forumCategory);
     }
 
     public function forumDiscussions()
@@ -150,7 +162,7 @@ class ForumsController extends AppController
 
     public function isAuthorized($user) {
 
-    if (in_array($this->request->action, ['forumHome', 'forumCategories','forumTopics','forumDiscussions','forumReplies','register','adminAll','adminAdd','adminEdit','adminDelete','employeesAll','employeeAdd','employeeEdit','studentsAll','studentAdd','studentEdit','alumniAll','alumniAdd','alumniEdit','deleteUser','logout'])) {
+    if (in_array($this->request->action, ['forumCategoriesIndex','forumCategoriesAll','forumTopicsIndex','forumReplies','register','adminAll','adminAdd','adminEdit','adminDelete','employeesAll','employeeAdd','employeeEdit','studentsAll','studentAdd','studentEdit','alumniAll','alumniAdd','alumniEdit','deleteUser','logout'])) {
         return true;
     }
 

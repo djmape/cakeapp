@@ -10,11 +10,12 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $user_activity_timestamp
  * @property int $user_activity_activity_type_id
  * @property int $user_activity_user_id
- * @property int $user_activity_reference_no
+ * @property int|null $user_activity_reference_no
  * @property int|null $user_activity_post_id
  *
- * @property \App\Model\Entity\UserActivityType $user_activity_type
- * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\UserActivityActivityType $user_activity_activity_type
+ * @property \App\Model\Entity\UserActivityUser $user_activity_user
+ * @property \App\Model\Entity\UserActivityPost $user_activity_post
  */
 class UserActivity extends Entity
 {
@@ -33,7 +34,8 @@ class UserActivity extends Entity
         'user_activity_user_id' => true,
         'user_activity_reference_no' => true,
         'user_activity_post_id' => true,
-        'user_activity_type' => true,
-        'user' => true
+        'user_activity_activity_type' => true,
+        'user_activity_user' => true,
+        'user_activity_post' => true
     ];
 }

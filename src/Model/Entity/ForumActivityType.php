@@ -4,14 +4,12 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * UserActivityType Entity
+ * ForumActivityType Entity
  *
- * @property int $user_activity_type_id
- * @property string $user_activity_type_name
- *
- * @property \App\Model\Entity\ForumActivity $forum_activity
+ * @property int $forum_activity_type_id
+ * @property string $forum_activity_type_name
  */
-class UserActivityType extends Entity
+class ForumActivityType extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -23,7 +21,6 @@ class UserActivityType extends Entity
      * @var array
      */
     protected $_accessible = [
-        'user_activity_type_name' => true,
-        'forum_activity' => true
+        'forum_activity_type_name' => true
     ];
 }

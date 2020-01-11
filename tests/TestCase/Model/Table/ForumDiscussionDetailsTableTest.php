@@ -1,21 +1,21 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\UserActivityTypesTable;
+use App\Model\Table\ForumDiscussionDetailsTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\UserActivityTypesTable Test Case
+ * App\Model\Table\ForumDiscussionDetailsTable Test Case
  */
-class UserActivityTypesTableTest extends TestCase
+class ForumDiscussionDetailsTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\UserActivityTypesTable
+     * @var \App\Model\Table\ForumDiscussionDetailsTable
      */
-    public $UserActivityTypes;
+    public $ForumDiscussionDetails;
 
     /**
      * Fixtures
@@ -23,8 +23,8 @@ class UserActivityTypesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.UserActivityTypes',
-        'app.ForumActivities'
+        'app.ForumDiscussionDetails',
+        'app.ForumDiscussions'
     ];
 
     /**
@@ -35,8 +35,8 @@ class UserActivityTypesTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('UserActivityTypes') ? [] : ['className' => UserActivityTypesTable::class];
-        $this->UserActivityTypes = TableRegistry::getTableLocator()->get('UserActivityTypes', $config);
+        $config = TableRegistry::getTableLocator()->exists('ForumDiscussionDetails') ? [] : ['className' => ForumDiscussionDetailsTable::class];
+        $this->ForumDiscussionDetails = TableRegistry::getTableLocator()->get('ForumDiscussionDetails', $config);
     }
 
     /**
@@ -46,7 +46,7 @@ class UserActivityTypesTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->UserActivityTypes);
+        unset($this->ForumDiscussionDetails);
 
         parent::tearDown();
     }
@@ -67,6 +67,16 @@ class UserActivityTypesTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     */
+    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
