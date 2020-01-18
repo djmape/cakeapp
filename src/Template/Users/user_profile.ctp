@@ -60,32 +60,70 @@
                             <li>
                                 <?php
                                     if ($userActivity->user_activity_activity_type_id == 1) {
-                                        if ($userActivity->user_post_activity->user_post_activity_type_id == 2) {
+                                        if ($userActivity->user_post_activities[0]->user_post_activity_type_id == 2) {
                                             # comment
                                             echo 'You commented in';
                                 ?>
-                                    <?= $userActivity->post_comment->post_comment_content->post_comment_content ?>
+                                    <?= $userActivity->post_comments[0]->post_comment_content->post_comment_content ?>
                                 <?php
                                         }
-                                        else if ($userActivity->user_post_activity->user_post_activity_type_id == 3) {
+                                        else if ($userActivity->user_post_activities[0]->user_post_activity_type_id == 3) {
                                             # reaction
-                                            if ($userActivity->user_post_reaction->user_post_reaction_like == 1) {
+                                            if ($userActivity->user_post_reactions[0]->user_post_reaction_like == 1) {
                                                 echo 'You liked';
                                             }
-                                            else if ($userActivity->user_post_reaction->user_post_reaction_dislike == 1) {
+                                            else if ($userActivity->user_post_reactions[0]->user_post_reaction_dislike == 1) {
                                                 echo 'You disliked';
                                             }
                                         }
                                     }
+                                    else if ($userActivity->user_activity_activity_type_id == 2) {
+                                        # category
+                                        if ($userActivity->forum_activities[0]->forum_activity_type_id == 1 ) {
+                                            echo 'You created category ';
+                                        }
+                                        # topic
+                                        else if ($userActivity->forum_activities[0]->forum_activity_type_id == 2 ) {
+                                            echo 'You created topic ';
+                                    ?>
+                                        <?= $this->Html->link($userActivity->forum_activities[0]->forum_topic_activities[0]->forum_topic->forum_topic_name, ['prefix' => 'forums','controller' => 'ForumDiscussions', 'action' => 'forumDiscussionsIndex', str_replace(' ', '-', $userActivity->forum_activities[0]->forum_topic_activities[0]->forum_topic->forum_category->forum_category_name), str_replace(' ', '-', $userActivity->forum_activities[0]->forum_topic_activities[0]->forum_topic->forum_topic_name)]) ?>
+                                        in 
+                                        <?= $this->Html->link($userActivity->forum_activities[0]->forum_topic_activities[0]->forum_topic->forum_category->forum_category_name , ['prefix' => 'forums','controller' => 'ForumCategories', 'action' => 'forumTopicsIndex', strtolower(str_replace(' ', '-', $userActivity->forum_activities[0]->forum_topic_activities[0]->forum_topic->forum_category->forum_category_name))],['escape' => false]) ?>
+
+                                    <?php
+                                        }
+                                        # discussion
+                                        else if ($userActivity->forum_activities[0]->forum_activity_type_id == 3 ) {
+                                            echo 'You started a discussion ';
+                                    ?>
+
+                                        <?= $this->Html->link($userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_discussion_title, ['prefix' => 'forums','controller' => 'ForumDiscussions', 'action' => 'forumReplies',str_replace(' ', '-',$userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-',$userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_topic->forum_topic_name) , str_replace(' ', '-',$userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_discussion_title) ]) ?>
+                                         in 
+                                        <?= $this->Html->link($userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_topic->forum_category->forum_category_name , ['prefix' => 'forums','controller' => 'ForumCategories', 'action' => 'forumTopicsIndex', strtolower(str_replace(' ', '-', $userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_topic->forum_category->forum_category_name))],['escape' => false]) ?>
+                                        /
+                                        <?= $this->Html->link($userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_topic->forum_topic_name, ['prefix' => 'forums','controller' => 'ForumDiscussions', 'action' => 'forumDiscussionsIndex', str_replace(' ', '-', $userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-', $userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_topic->forum_topic_name)]) ?>
+
+                                    <?php
+                                        }
+                                        # reply
+                                        else if ($userActivity->forum_activities[0]->forum_activity_type_id == 4 ) {
+                                            echo 'You added a reply <i>' . $userActivity->forum_activities[0]->forum_reply_activities[0]->forum_reply->forum_reply_detail->forum_reply_detail_content . '</i>';
+                                    ?>
+                                    <?php
+                                        }
+                                        else if ($userActivity->forum_activities[0]->forum_activity_type_id == 1 ) {
+                                            echo 'You created reaction ';
+                                        }
+                                    }
                                 ?>
-                                <hr>
                                 <?php
                                     if ($userActivity->user_activity_activity_type_id == 1) {
-                                        if ($userActivity->post->post_post_type_id == 1) {
+                                        if ($userActivity->user_post_activities[0]->post->post_post_type_id == 1) {
                                             # announcement
                                 ?>
-                                    <?= $this->Html->link($userActivity->post->announcement->announcement_title, ['prefix' => 'front','controller' => 'Announcement', 'action' => 'view', $userActivity->post->announcement->announcement_id]) ?>
-                                    <?= substr($userActivity->post->announcement->announcement_body,0,255)?>
+                                <hr>
+                                    <?= $this->Html->link($userActivity->user_post_activities[0]->post->announcement->announcement_title, ['prefix' => 'front','controller' => 'Announcement', 'action' => 'view', $userActivity->user_post_activities[0]->post->announcement->announcement_id]) ?>
+                                    <?= substr($userActivity->user_post_activities[0]->post->announcement->announcement_body,0,255)?>
                                 <?php
                                         }
                                         else if ($userActivity->user_post_activity->post_post_type_id == 1) {
@@ -99,11 +137,28 @@
                                             }
                                         }
                                     }
+                                    else if ($userActivity->user_activity_activity_type_id == 2) {
+                                        if ($userActivity->forum_activities[0]->forum_activity_type_id == 1 ) {
+                                    ?>
+
+                                    <?php 
+                                        }
+                                        else if ($userActivity->forum_activities[0]->forum_activity_type_id == 4 ) {
+                                        # reply
+                                    ?>
+                                        in
+                                        <?= $this->Html->link($userActivity->forum_activities[0]->forum_reply_activities[0]->forum_reply->forum_discussion->forum_discussion_title, ['prefix' => 'forums','controller' => 'ForumDiscussions', 'action' => 'forumReplies',str_replace(' ', '-',$userActivity->forum_activities[0]->forum_reply_activities[0]->forum_reply->forum_discussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-',$userActivity->forum_activities[0]->forum_reply_activities[0]->forum_reply->forum_discussion->forum_topic->forum_topic_name) , str_replace(' ', '-',$userActivity->forum_activities[0]->forum_reply_activities[0]->forum_reply->forum_discussion->forum_discussion_title) ]) ?>
+
+                                        <?= $userActivity->forum_activities[0]->forum_reply_activities[0]->forum_reply->forum_discussion->forum_discussion_detail->forum_discussion_content ?>
+
+                                    <?php
+                                        }
+                                        else if ($userActivity->forum_activities[0]->forum_activity_type_id == 1 ) {
+                                            echo 'You created reaction ';
+                                        }
+                                    }
                                 ?>
                             </li>
-                            <hr>
-                        </ul>
-                        <ul class="profile-single-activity">
                         </ul>
                         <?php endforeach; ?>
                     </div>

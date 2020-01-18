@@ -37,11 +37,11 @@ class ForumDiscussionActivitiesTable extends Table
         $this->setDisplayField('forum_discussion_activity_id');
         $this->setPrimaryKey('forum_discussion_activity_id');
 
-        $this->belongsTo('ForumDiscussionActivityForumActivities', [
+        $this->belongsTo('ForumActivities', [
             'foreignKey' => 'forum_discussion_activity_forum_activity_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('ForumDiscussionActivityForumDiscussions', [
+        $this->belongsTo('ForumDiscussions', [
             'foreignKey' => 'forum_discussion_activity_forum_discussion_id',
             'joinType' => 'INNER'
         ]);
@@ -71,8 +71,8 @@ class ForumDiscussionActivitiesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['forum_discussion_activity_forum_activity_id'], 'ForumDiscussionActivityForumActivities'));
-        $rules->add($rules->existsIn(['forum_discussion_activity_forum_discussion_id'], 'ForumDiscussionActivityForumDiscussions'));
+        $rules->add($rules->existsIn(['forum_discussion_activity_forum_activity_id'], 'ForumActivities'));
+        $rules->add($rules->existsIn(['forum_discussion_activity_forum_discussion_id'], 'ForumDiscussions'));
 
         return $rules;
     }

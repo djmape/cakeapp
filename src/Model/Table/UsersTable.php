@@ -50,24 +50,16 @@ class UsersTable extends Table
             'foreignKey' => 'user_id'
         ]);
         $this->hasMany('UserAdministrators', [
-            'className' => 'admin',
             'foreignKey' => 'user_id'
         ]);
         $this->hasMany('UserEmployees', [
-            'className' => 'user_employee',
             'foreignKey' => 'user_id'
         ]);
         $this->hasMany('UserStudents', [
-            'className' => 'user_student',
             'foreignKey' => 'user_id'
         ]);
         $this->hasMany('UserAlumni', [
-            'className' => 'user_alumni',
             'foreignKey' => 'user_id'
-        ]);
-        $this->hasMany('UserAlumni', [
-            'className' => 'user_profile',
-            'foreignKey' => 'user_profile_user_id'
         ]);
         $this->hasOne('UserProfiles', [
             'foreignKey' => 'user_profile_user_id',
@@ -76,6 +68,10 @@ class UsersTable extends Table
         $this->hasMany('Posts', [
             'className' => 'post',
             'foreignKey' => 'post_user_id'
+        ]);
+        $this->hasOne('UserForumActivityCounts', [
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER'
         ]);
     }
 

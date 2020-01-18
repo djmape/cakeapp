@@ -68,7 +68,7 @@
                     </tbody>
                 </table> 
                 <div class="category-more-topic">
-                    <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more from '.  $forumTopic->forum_topic_name , ['controller' => 'ForumTopics', 'action' => 'forumDiscussionsIndex' , 'category_name' => strtolower(str_replace(' ', '-', $forumCategory->forum_category_name)) , 'topic_name' => strtolower(str_replace(' ', '-', $forumTopic->forum_topic_name)) ],['escape' => false]) ?>
+                    <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more from '.  $forumTopic->forum_topic_name , ['controller' => 'ForumDiscussions', 'action' => 'forumDiscussionsIndex' , str_replace(' ', '-', $forumCategory->forum_category_name) ,  str_replace(' ', '-', $forumTopic->forum_topic_name) ],['escape' => false]) ?>
                 </div>
             <?php $topic_counter++; endforeach; ?>
             <!-- end Categories -->

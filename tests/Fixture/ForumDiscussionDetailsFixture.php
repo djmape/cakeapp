@@ -18,6 +18,7 @@ class ForumDiscussionDetailsFixture extends TestFixture
         'forum_discussion_detail_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'forum_discussion_detail_replies_count' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => '0', 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'forum_discussion_detail_discussion_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'forum_discussion_content' => ['type' => 'text', 'length' => null, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null],
         '_indexes' => [
             'fk_forum_discussion_detail_discussion_id' => ['type' => 'index', 'columns' => ['forum_discussion_detail_discussion_id'], 'length' => []],
         ],
@@ -42,7 +43,8 @@ class ForumDiscussionDetailsFixture extends TestFixture
             [
                 'forum_discussion_detail_id' => 1,
                 'forum_discussion_detail_replies_count' => 1,
-                'forum_discussion_detail_discussion_id' => 1
+                'forum_discussion_detail_discussion_id' => 1,
+                'forum_discussion_content' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.'
             ],
         ];
         parent::init();

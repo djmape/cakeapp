@@ -79,6 +79,7 @@ class ForumTopicsController extends AppController
         $this->loadModel('ForumTopicActivities');
         $this->loadModel('ForumTopicDetails');
         $this->loadModel('ForumCategoryDetails');
+        $this->loadModel('UserForumActivityCounts');
 
         $currentUser = $this->Auth->user('id');
 
@@ -87,6 +88,7 @@ class ForumTopicsController extends AppController
         $forumTopic= $this->ForumTopics->newEntity();
         $forumTopicActivity = $this->ForumTopicActivities->newEntity();
         $forumTopicDetail = $this->ForumTopicDetails->newEntity();
+        $forumUserActivityCount = $this->UserForumActivityCounts->newEntity();
 
         # begin post/put
         if ($this->request->is(['post','put'])) {
@@ -143,12 +145,47 @@ class ForumTopicsController extends AppController
 
                                 if ($forumCategoryDetailsTable->save($forumCategoryDetail)) {
                                     
-                                    $this->Flash->success('Topic Added!', [
-                                        'params' => [
-                                            'saves' => 'Topic Added!'
-                                        ]
-                                    ]);
-                                    return $this->redirect(['controller' => 'ForumCategories','action' => 'forumTopicsIndex', $forum_category_id]);
+                                    $checkIfUserHasEntry = $this->UserForumActivityCounts->find('all')->where(['UserForumActivityCounts.user_id' => $currentUser]);
+
+                                    if ($checkIfUserHasEntry->isEmpty()) {
+
+                                        $forumUserActivityCount->user_id = $currentUser;
+                                        $forumUserActivityCount->user_forum_activity_topics_count = 1;
+
+                                        if ($this->UserForumActivityCounts->save($forumUserActivityCount)) {
+                                            $this->Flash->success('Reply Added!', [
+                                                'params' => [
+                                                    'saves' => 'Reply Added!'
+                                                ]
+                                            ]);
+                                                
+                                            return $this->redirect(['controller' => 'ForumDiscussions','action' => 'forumReplies', $forum_category_name, $forum_topic_name , $forum_discussion_title]);
+                                        }
+                                    }
+                                    else {
+
+                                        $getUserForumActivityCountID = $this->UserForumActivityCounts->find('all')->where(['UserForumActivityCounts.user_id' => $currentUser])->first()->user_forum_activity_count_id;
+
+                                        $forumActivityCountsTable = TableRegistry::get('UserForumActivityCounts');
+
+                                        $forumActivityCountsTable = TableRegistry::getTableLocator()->get('UserForumActivityCounts');
+                                        $forumActivityCount = $forumActivityCountsTable->get($getUserForumActivityCountID);
+
+                                        $forumActivityCount->user_forum_activity_topics_count += 1;
+
+                                        if ($forumActivityCountsTable->save($forumActivityCount)) {
+
+                                            $this->Flash->success('Topic Added!', [
+                                                'params' => [
+                                                    'saves' => 'Topic Added!'
+                                                ]
+                                            ]);
+                                            return $this->redirect(['controller' => 'ForumCategories','action' => 'forumTopicsIndex', $forum_category_id]);
+                                        }
+                                        else {
+
+                                        }
+                                    }
                                 }
                                 # end save to ForumCategoryDetails
                             }

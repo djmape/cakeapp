@@ -50,20 +50,24 @@ class UserActivitiesTable extends Table
             'foreignKey' => 'user_activity_post_id'
         ]);
 
-        $this->hasOne('UserPostActivities', [
+        $this->hasMany('UserPostActivities', [
             'foreignKey' => 'user_post_activities_user_activity_id'
         ]);
 
-        $this->hasOne('PostComments', [
+        $this->hasMany('PostComments', [
             'foreignKey' => 'post_comment_activity_id'
         ]);
 
-        $this->hasOne('UserPostReactions', [
+        $this->hasMany('UserPostReactions', [
             'foreignKey' => 'user_post_reactions_activity_id'
         ]);
 
-        $this->hasOne('ForumActivities', [
+        $this->hasMany('ForumActivities', [
             'foreignKey' => 'forum_activity_activity_id'
+        ]);
+
+        $this->hasMany('ForumCategoryActivities', [
+            'foreignKey' => 'forum_category_activity_forum_activity_id'
         ]);
     }
 

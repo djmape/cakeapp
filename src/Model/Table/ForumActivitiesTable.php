@@ -50,6 +50,21 @@ class ForumActivitiesTable extends Table
             'foreignKey' => 'forum_activity_activity_id',
             'joinType' => 'INNER'
         ]);
+
+        $this->hasMany('ForumTopicActivities', [
+            'foreignKey' => 'forum_topic_activity_forum_activity_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->hasMany('ForumDiscussionActivities', [
+            'foreignKey' => 'forum_discussion_activity_forum_activity_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->hasMany('ForumReplyActivities', [
+            'foreignKey' => 'forum_reply_activity_forum_activity_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

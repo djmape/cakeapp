@@ -71,10 +71,10 @@
                         ?>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<?php echo $this->Html->link('View Profile',array('controller' => 'Users','action'=>'userProfile'),array('class'=>'dropdown-item')) ?>
-						<?php echo $this->Html->link('Settings',array('controller' => 'Users','action'=>'userSettingsProfile'),array('class'=>'dropdown-item')) ?>
+						<?php echo $this->Html->link('View Profile',array('prefix' => false,'controller' => 'Users','action'=>'userProfile'),array('class'=>'dropdown-item')) ?>
+						<?php echo $this->Html->link('Settings',array('prefix' => false,'controller' => 'Users','action'=>'userSettingsProfile'),array('class'=>'dropdown-item')) ?>
 						<div class="dropdown-divider"></div>
-						<?php echo $this->Html->link('Log Out',array('controller' => 'Users','action'=>'logout'),array('escape' => false,'class'=>'dropdown-item')) ?>
+						<?php echo $this->Html->link('Log Out',array('prefix' => false,'controller' => 'Users','action'=>'logout'),array('escape' => false,'class'=>'dropdown-item')) ?>
 					</div>
 				</li>
 			</ul>

@@ -58,6 +58,14 @@ class PostsTable extends Table
         $this->hasMany('UserPostReactions', [
             'foreignKey' => 'user_post_reaction_post_id'
         ]);
+
+        $this->hasMany('UserActivities', [
+            'foreignKey' => 'user_activity_post_id'
+        ]);
+
+        $this->hasMany('UserPostActivities', [
+            'foreignKey' => 'user_post_activity_post_id'
+        ]);
     }
 
     /**

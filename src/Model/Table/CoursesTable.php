@@ -40,6 +40,14 @@ class CoursesTable extends Table
             'foreignKey' => 'organization_id',
             'joinType' => 'INNER'
         ]);
+
+        $this->hasMany('UserAlumni', [
+            'foreignKey' => 'course_id'
+        ]);
+
+        $this->hasMany('UserStudents', [
+            'foreignKey' => 'course_id'
+        ]);
     }
 
     /**

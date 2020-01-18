@@ -48,20 +48,13 @@ class UsersController extends AppController
         $user_id = $this->Auth->user('id');
 
         $this->header();
-        $this->loadModel('User_Profiles');
-        $this->loadModel('Posts');
         $this->loadModel('UserActivities');
-        $this->loadModel('UserPostActivities');
-        $this->loadModel('UserPostReactions');
-        $this->loadModel('PostComments');
-        $this->loadModel('PostCommentContents');
-        $this->loadModel('Announcements');
 
         $getProfile = $this->User_Profiles->find('all')->where(['User_Profiles.user_profile_user_id' => $user_id])->first();
         $this->set('profile',$getProfile);
 
-        $userActivities = $this->paginate($this->UserActivities->find('all')->contain(['UserPostActivities','UserPostReactions','PostComments.PostCommentContents','Posts.Announcements'])->where(['UserActivities.user_activity_user_id' => $user_id]));
-        $this->log($userActivities->last(),'debug');
+        $userActivities = $this->paginate($this->UserActivities->find('all')->contain(['UserPostActivities.Posts.Announcements','UserPostReactions','PostComments.PostCommentContents','ForumCategoryActivities.ForumCategories','ForumActivities.ForumTopicActivities.ForumTopics','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumReplyDetails','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumTopics.ForumCategories','ForumActivities.ForumTopicActivities.ForumTopics.ForumCategories','ForumCategoryActivities.ForumCategories','ForumActivities.ForumReplyActivities.ForumReplies.ForumReplyDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumTopics','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumTopics.ForumCategories'])->where(['UserActivities.user_activity_user_id' => $user_id]));
+        $this->log($userActivities,'debug');
         $this->set(compact('userActivities'));
     }
 

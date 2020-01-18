@@ -1,3 +1,6 @@
+#content {
+	background-color: #f0f1f5;
+}
 a, a:active, a:focus, a:hover  {
 	color: #7e0e09;
 }
@@ -33,6 +36,7 @@ h3 {
 
 #data-table-select {
 	margin: 2% 0 2%!important;
+	background-color: white;
 }
 
 .row.category-header {
@@ -63,4 +67,7 @@ h3 {
 
 #category-header-icon {
 	height: 50px;
+}
+
+#discussion-form {
 }

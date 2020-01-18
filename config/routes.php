@@ -152,6 +152,9 @@ Router::prefix('Forums', function ($routes) {
     $routes->connect('/category/*', ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex']);
     $routes->connect('/topic/*', ['controller' => 'ForumTopics', 'action' => 'forumTopicsAll']);
     $routes->connect('/discussion/*', ['controller' => 'ForumDiscussions', 'action' => 'forumDiscussionsIndex']);
+    $routes->connect('/discussion/add/*', ['controller' => 'ForumDiscussions', 'action' => 'forumAddDiscussion']);
+    $routes->connect('/view/*', ['controller' => 'ForumDiscussions', 'action' => 'forumReplies']);
+    $routes->connect('/reply/*', ['controller' => 'ForumDiscussions', 'action' => 'forumAddReply']);
 
 
     

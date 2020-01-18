@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * @property int $forum_discussion_detail_id
  * @property int|null $forum_discussion_detail_replies_count
  * @property int $forum_discussion_detail_discussion_id
+ * @property string|null $forum_discussion_content
  *
  * @property \App\Model\Entity\ForumDiscussion $forum_discussion
  */
@@ -26,6 +27,7 @@ class ForumDiscussionDetail extends Entity
     protected $_accessible = [
         'forum_discussion_detail_replies_count' => true,
         'forum_discussion_detail_discussion_id' => true,
+        'forum_discussion_content' => true,
         'forum_discussion' => true
     ];
 }

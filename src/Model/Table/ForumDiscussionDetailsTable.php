@@ -58,6 +58,10 @@ class ForumDiscussionDetailsTable extends Table
             ->integer('forum_discussion_detail_replies_count')
             ->allowEmptyString('forum_discussion_detail_replies_count');
 
+        $validator
+            ->scalar('forum_discussion_content')
+            ->allowEmptyString('forum_discussion_content');
+
         return $validator;
     }
 
