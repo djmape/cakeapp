@@ -29,7 +29,7 @@ class EmployeesFixture extends TestFixture
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['employee_id'], 'length' => []],
-            'employee_position_key' => ['type' => 'foreign', 'columns' => ['employee_position_id'], 'references' => ['employee_positions', 'employee_position_id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
+            'employee_position_key' => ['type' => 'foreign', 'columns' => ['employee_position_id'], 'references' => ['employee_position_names', 'employee_position_id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',

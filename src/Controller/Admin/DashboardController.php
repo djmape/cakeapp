@@ -17,9 +17,7 @@ class DashboardController extends AppController
 
     public function index()
     {   
-        $this->loadModel("Users");
-        $user =  $this->Users->find('all')->where(['Users.id' => $this->Auth->user('id')]);
-        $this->set('user', $user->first());
+        
     }
 
     public function isAuthorized($user)

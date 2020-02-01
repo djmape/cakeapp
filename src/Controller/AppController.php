@@ -75,10 +75,12 @@ class AppController extends Controller
             'authError' => 'Incorrect!'
             ,
             'loginAction' => [
+                'prefix' => false,
                 'controller' => 'Users',
                 'action' => 'login'
             ],
             'loginRedirect' => [
+                'prefix' => false,
                 'controller' => 'Users', 
                 'action' => 'index'
             ],
@@ -99,6 +101,14 @@ class AppController extends Controller
             $this->Auth->allow (['index', 'view', 'display']) ;
         }
 
+        $this->set('login_status', false);
+
+        
+
+        $this->userSettings(false);
+    }
+
+    public function checkLoginStatus() {
         if ($this->Auth->user()) {
             $this->set('login_status', true);
             $this->header();
@@ -106,8 +116,6 @@ class AppController extends Controller
         else {
             $this->set('login_status', false);
         }
-
-        $this->userSettings(false);
     }
 
     public function isAuthorized($user)
@@ -133,15 +141,7 @@ class AppController extends Controller
         $this->set('profile',$getProfile);
 
         $user_type = $this->Users->find('all')->contain(["UserTypes"])->where(['Users.id' => $this->Auth->user('id')])->first();
-
-        if ($user_type->user_type->user_type_name == 'Administrator') {
-            $this->loadModel("User_Administrators");
-            $user =  $this->User_Administrators->find('all')->contain(['Users'])->where(['Users.id' => $this->Auth->user('id')]);
-            $this->set('user', $user->first());
-        }
-        else {
-            $this->userHeader();
-        }
+        $this->userHeader();
     }
 
     public function navBar($active) {
@@ -207,14 +207,12 @@ class AppController extends Controller
             $event_start_date = $event_start_date->format('Y-m-d');
             $event_start_time = $event_start_time->format('h:i A');
             $event_start_date_time = strtotime("$event_start_date $event_start_time");
-            $this->log($event_start_date_time ,'debug');
 
             $event_end_date = $event->event_end_date;
             $event_end_time = $event->event_end_time;
             $event_end_date = $event_end_date->format('Y-m-d');
             $event_end_time = $event_end_time->format('h:i A');
             $event_end_date_time = strtotime("$event_end_date $event_end_time");
-            $this->log($event_end_date_time ,'debug');
 
             // if event is less that now()
             if( $event_start_date_time >= $date_time_now ) {
@@ -223,11 +221,9 @@ class AppController extends Controller
             }
             //
             else if( $event_start_date_time <= $date_time_now AND $event_end_date_time > $date_time_now) {
-                $this->log('Ongoing','debug');
                 $event_status = 'Ongoing';
             }
             else if( $event_start_date_time < $date_time_now AND $event_end_date_time < $date_time_now) {
-                $this->log('Past','debug');
                 $event_status = 'Past';
             }
             else {
@@ -262,7 +258,19 @@ class AppController extends Controller
 
         $user_type = $this->Users->find('all')->contain(["UserTypes"])->where(['Users.id' => $this->Auth->user('id')])->first();
 
-        if ($user_type->user_type->user_type_name == 'Employee') {
+        if ($user_type->user_type->user_type_name == 'Administrator') {
+
+            $this->loadModel("User_Administrators");
+
+            $user = $this->User_Administrators->find('all')->contain(['Users'])->where(['User_Administrators.user_id' => $this->Auth->user('id')]);
+
+            $this->set('user',$user->first());
+            $this->set('user_type','Administrator');
+
+            $fullname = $user->first()->admin_lastname . ', ' . $user->first()->admin_lastname . ' ' .substr($user->first()->admin_middlename,0 ,1) . '.';
+            $this->title('PUPQC Web Portal | ' . $fullname);
+        }
+        else if ($user_type->user_type->user_type_name == 'Employee') {
 
             $this->loadModel("User_Employees");
             $this->loadModel("EmployeePositionNames");

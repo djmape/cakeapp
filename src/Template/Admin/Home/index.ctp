@@ -1,54 +1,27 @@
-<html>
-<head>
-    <!-- ================== BEGIN BASE CSS STYLE ================== -->
-    <title> Admin Panel | Home Images </title>
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <!-- ================== END BASE CSS STYLE ================== -->
+        <!-- src/Template/Admin/ContactEmails/index.ctp --> 
 
-    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
-    <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/bootstrap-wizard/css/bwizard.min.css")?>
-    <?php echo $this->Html->css("../plugins/isotope/isotope.css")?> 
-    <?php echo $this->Html->css("../plugins/lightbox/css/lightbox.css")?>
-    <?php echo $this->Html->css("../plugins/jquery-file-upload/css/jquery.fileupload.css")?>
-    <?php echo $this->Html->css("../plugins/jquery-file-upload/css/jquery.fileupload-ui.css")?>
-    <!-- ================== END PAGE LEVEL STYLE ================== -->
-    
-    <!-- ================== BEGIN BASE JS ================== -->
-    <?php echo $this->Html->script("../plugins/pace/pace.min.js")?>
-    <!-- ================== END BASE JS ================== -->
+        <!-- begin include -->
+        <?php echo $this->element('AdminHeaderSideBar');?>
+        <?php echo $this->Html->css("admin.css"); ?> 
+        <?php echo $this->Flash->render(); ?>
 
-    <!-- ================== Sweet Alert ================== -->
-    <?php echo $this->Html->css("../plugins/sweetalert/dist/sweetalert.css")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert.min.js")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert-dev.js")?>
+        <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
+        <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
+        <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css"); ?> 
+        <!-- end include -->
 
-
-    <!-- Include custom.css -->
-    <?php echo $this->Html->css("custom/admin.css")?>
-
-
-</head>
-
-
-<body onload="startTime()">
-
-    <?php echo $this->element('AdminSideBar');?>
-    <?php echo $this->Flash->render(); ?>
-
-    <div id="content" class="content">
-    <?php echo $this->element('AdminHeader');?>
-            	<!--
-        <div class="widget widget-stats bg-yellow">
-             begin Server Time Widget 
-                        <div class="stats-icon"><i class="fa fa-calendar" style="color: #7e0e09"></i></div>
-                        <div class="stats-info">
-                            <h4>SERVER TIME</h4>
-                            <div id="calendar-clock" style="font-size: 24px"></div>    
-                        </div>
-                    </div>
-                -->
+        <!-- begin #content -->
+        <div id="content" class="content">
+            <!-- begin breadcrumb -->
+            <ol class="breadcrumb pull-right">
+                <li class="breadcrumb-item">
+                    Emails
+                </li>
+            </ol>
+            <!-- end breadcrumb -->
+            <!-- begin page-header -->
+            <h1 class="page-header">Emails</h1>
+            <!-- end page-header -->
 
          <!-- begin row -->
         <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
@@ -183,26 +156,37 @@
 </body>
 
 
+
+
+
+<!-- Include Base JS -->
+<?php echo $this->element('base_js');?>
+
+
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
 <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
 <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-<?php echo $this->Html->script("table-manage-responsive.demo.min.js")?>
-<!-- <script src="assets/js/apps.min.js"></script> -->
-<!-- ================== END PAGE LEVEL JS ================== -->
+<?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/extensions/Select/js/dataTables.select.min.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+<?php echo $this->Html->script("table-manage-select.demo.min.js")?>
+<?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
+<?php echo $this->Html->script("../plugins/js-cookie/js.cookie.js")?>
+<?php echo $this->Html->script("apps.min.js")?>
     
-    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
-    <?php $this->Html->script("/apps.min.js")?>
-    <?php $this->Html->script("button.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-audio.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-image.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-process.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-ui.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-validate.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-video.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.iframe-transport.js")?>
-    <!-- ================== END PAGE LEVEL JS ================== -->
+<?php $this->Html->script("/apps.min.js")?>
+<?php $this->Html->script("button.js")?>
+<?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload.js")?>
+<?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-audio.js")?>
+<?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-image.js")?>
+<?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-process.js")?>
+<?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-ui.js")?>
+<?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-validate.js")?>
+<?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-video.js")?>
+<?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.iframe-transport.js")?>
+<!-- ================== END PAGE LEVEL JS ================== -->
     
     <script>
         $(document).ready(function() {

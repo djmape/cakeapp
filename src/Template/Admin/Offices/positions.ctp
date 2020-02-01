@@ -1,178 +1,125 @@
-<html>
-<head>
-    <!-- ================== BEGIN BASE CSS STYLE ================== -->
-    <title> Admin Panel | Office Positions </title>
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <?php echo $this->Html->css("../plugins/jquery-ui/themes/base/minified/jquery-ui.min.css")?>
-    <?php echo $this->Html->css("bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/font-awesome/css/font-awesome.min.css"); ?>
-    <?php echo $this->Html->css("animate.min.css")?>
-    <?php echo $this->Html->css("style.min.css")?>
-    <?php echo $this->Html->css("style-responsive.min.css")?>
-    <?php echo $this->Html->css("theme/default.css")?>
-    <!-- ================== END BASE CSS STYLE ================== -->
+<!-- src/Template/Admin/Offices/positions.ctp --> 
 
-    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
-    <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/bootstrap-wizard/css/bwizard.min.css")?>
-    <?php echo $this->Html->css("../plugins/isotope/isotope.css")?> 
-    <?php echo $this->Html->css("../plugins/lightbox/css/lightbox.css")?>
-    <?php echo $this->Html->css("../plugins/sweetalert/dist/sweetalert.css")?>
-    <!-- ================== END PAGE LEVEL STYLE ================== -->
-    
-    <!-- ================== BEGIN BASE JS ================== -->
-    <?php echo $this->Html->script("../plugins/pace/pace.min.js")?>
-    <!-- ================== END BASE JS ================== -->
+            <!-- begin include -->
+            <?php echo $this->element('AdminHeaderSideBar');?>
+            <?php echo $this->Html->css("admin.css"); ?> 
+            <?php echo $this->Flash->render(); ?>
 
-    <!-- ================== Sweet Alert ================== -->
-    <?php echo $this->Html->css("../plugins/sweetalert/dist/sweetalert.css")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert.min.js")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert-dev.js")?>
+            <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
+            <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
+            <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css"); ?> 
+            <!-- end include -->
 
-    <!-- Include custom.css -->
-    <?php echo $this->Html->css("custom/admin.css")?>
-    
-</head>
+            <!-- begin #content -->
+            <div id="content" class="content">
 
+                <!-- begin breadcrumb -->
+                <ol class="breadcrumb pull-right">
+                <li class="breadcrumb-item">
+                    <?php echo $this->Html->link('Offices',['prefix' => "admin", 'controller' => 'Offices','action'=>'index']) ?>
+                </li>
+                <li class="breadcrumb-item active">
+                    <?= $offices->office_name ?>
+                </li>
+                </ol>
+                <!-- end breadcrumb -->
 
-<body>
-    <?php echo $this->element('AdminSideBar');?>
-    <?php echo $this->Flash->render(); ?>
-    <div id="content" class="content">
-        <?php echo $this->element('AdminHeader');?>
+                <!-- begin page-header -->
+                <h1 class="page-header"><?= $offices->office_name ?></h1>
+                <!-- end page-header -->
+
+                <!-- begin Add Officer button -->
+                <?= $this->Html->link('<i class="fa fa-add"></i> Add Officer', ['action' => 'addPosition', $offices->office_id],['escape' => false, 'class' => 'btn btn-yellow btn-sm add-button' ]) ?>
+                <!-- end Add Officer button -->
             
-         <!-- begin row -->
-        <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
-            <div class="row">
-                <!-- begin col-12 -->
-                <div class="col-md-12 ui-sortable">
-                    <!-- begin panel -->
-                    <div class="panel panel-inverse">
-                        <div class="panel-heading">
-                            <h5>
-                                <i class="fa fa-user"></i>
-                                <b> All Office Positions</b>
-                            </h5>
-                        </div>
-                        <div class="panel-body">
-                            <button type="button" class="btn btn-yellow btn-sm row m-b-15" style="margin-left: 0.5%">
-                                <i class="fa fa-plus">
-                                </i>
-                                <?= $this->Html->link('Add Employee', ['action' => 'addPosition', $offices->office_id]) ?>
-                            </button>
-                            <div id="data-table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <table id="data-table" class="table table-striped table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="data-table_info">
-                                            <thead>
-                                    <tr role="row">
-                                        <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 5%;">
-                                            #
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 45%px;">
-                                            Employee Name
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 45%px;">
-                                            Position
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 16%;">
-                                            Actions
-                                        </th>
-                                    </tr>
-                                            </thead>
-                                        <tbody>
-                                <?php foreach ($office_employees as $i => $office_employee): ?>
-                                    <tr>
-                                        <td>
-                                            <?= $i + 1?>
-                                        </td>
-                                        <td>
-                                            <b>
-                                                <?= $office_employee->employee->employee_lastname,', ',$office_employee->employee->employee_firstname,' ',substr($office_employee->employee->employee_middlename,0,1),'.' ?>
-                                            </b>
-                                        </td>
-                                        <td>
-                                            <?= $office_employee->office_position->office_position_name ?>
-                                        </td>
-                                        <td>
-                                            <div class="pull-right center-block">
-                                                <button type="button" class="btn btn-info btn-sm">
-                                                    <i class="fa fa-edit">
-                                                    </i>
-                                                    <?= $this->Html->link('Edit', ['action' => 'editOfficePosition', $office_employee->office_employees_id, $offices->office_id, $office_employee->employee->employee_id]) ?>
-                                                </button>
-                                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $office_employee->office_employees_id ?> )">
-                                                    <i class="fa fa-trash">
-                                                    </i>
-                                                    Delete
-                                                </button>
-                                            </div>                                                 
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                                </tbody>
-                            <!-- end table -->
-                            </table>
-                        <!-- end col-sm-12 -->
-                        </div>
-                    <!-- end row -->
-                    </div>
-                <!-- end data-table_wrapper -->
-                </div>
-                <!-- panel-body -->
-                </div>
-        <!-- end panel -->
+                <!-- begin data-table -->
+
+                <table id="data-table-select" class="table table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="data-table_info">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 5%;">
+                                #
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 45%px;">
+                                Employee Name
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 45%px;">
+                                Position
+                            </th>
+                            <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 10%;">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                            foreach ($office_employees as $i => $office_employee):
+                        ?>
+                                <tr>
+                                    <td>
+                                    </td>
+                                <td>
+                                    <b>
+                                        <?= $office_employee->employee->employee_lastname,', ',$office_employee->employee->employee_firstname,' ',substr($office_employee->employee->employee_middlename,0,1),'.' ?>
+                                    </b>
+                                </td>
+                                <td>
+                                    <?= $office_employee->office_position->office_position_name ?>
+                                </td>
+                                <td>
+                                    <div class="pull-right center-block">                              
+                                        <?= $this->Html->link('<i class="fa fa-edit"></i>', ['action' => 'editOfficePosition', $office_employee->office_employees_id, $offices->office_id, $office_employee->employee->employee_id],[ 'class' => 'btn btn-yellow btn-sm', 'title' => 'Edit ' . $office_employee->employee->employee_lastname . ', ' . $office_employee->employee->employee_firstname . ' ' . substr($office_employee->employee->employee_middlename,0,1) . '.', 'escape' => false  ]) ?>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $office_employee->office_employees_id ?> )">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>      
+                                </td>
+                            </tr>
+                        <?php
+                            endforeach;
+                        ?>
+                    </tbody>
+                </table>
+                <!-- end table -->
+            </div>
+            <!-- end #content -->
         </div>
-    <!-- end col-md-12 ui-sortable -->
-    </div>
-    <!-- end row -->
-</div>
-</div>
-</div>
-
-</body>
+        <!-- end container -->
+    </body>
 
 
 
-<!-- ================== BEGIN BASE JS ================== -->
-<?php echo $this->Html->script("../plugins/jquery/jquery-migrate-1.1.0.min.js")?>
-<?php echo $this->Html->script("../plugins/bootstrap/js/bootstrap.min.js")?>
-    <!--[if lt IE 9]>
-        <script src="assets/crossbrowserjs/html5shiv.js"></script>
-        <script src="assets/crossbrowserjs/respond.min.js"></script>
-        <script src="assets/crossbrowserjs/excanvas.min.js"></script>
-    <![endif]-->
-    <?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-cookie/jquery.cookie.js")?>
-    <!-- ================== END BASE JS ================== -->
+<!-- Include Base JS -->
+    <?php echo $this->element('base_js');?>
 
-<!-- ================== BEGIN PAGE LEVEL JS ================== -->
-<?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-<?php echo $this->Html->script("table-manage-responsive.demo.min.js")?>
-<!-- <script src="assets/js/apps.min.js"></script> -->
-<?php echo $this->Html->script("apps.min.js")?>
-<!-- ================== END PAGE LEVEL JS ================== -->
-    
+
     <!-- ================== BEGIN PAGE LEVEL JS ================== -->
-
-        <!-- datatable scripts -->
-            <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
-            <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
-            <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-            <?php echo $this->Html->script("table-manage-default.demo.min.js")?>
-        <!-- -->
-    <?php $this->Html->script("/apps.min.js")?>
-    <?php $this->Html->script("button.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/extensions/Select/js/dataTables.select.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+    <?php echo $this->Html->script("table-manage-select.demo.min.js")?>
+    <?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
+    <?php echo $this->Html->script("../plugins/js-cookie/js.cookie.js")?>
+    <?php echo $this->Html->script("apps.min.js")?>
     <!-- ================== END PAGE LEVEL JS ================== -->
     
     <script>
         $(document).ready(function() {
             App.init();
-            TableManageDefault.init();
-            $('#data-table').DataTable();
+            TableManageTableSelect.init();
+            $data_table = $('#data-table-select').DataTable();
+ 
+            $data_table.on( 'order.dt search.dt', function () {
+            $data_table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+                } );
+             } ).draw();
+            $(".dataTables_paginate").addClass("pull-right");
+            $("#data-table-select_filter").addClass("pull-right");
         });
 
         function confirmDelete($office_employees_id) {

@@ -49,6 +49,10 @@ class ForumTopicsTable extends Table
         $this->hasOne('ForumTopicDetails', [
             'foreignKey' => 'forum_topic_detail_topic_id'
         ]);
+
+        $this->hasMany('ForumDiscussions', [
+            'foreignKey' => 'forum_discussion_topic_id'
+        ]);
     }
 
     /**

@@ -21,9 +21,6 @@
                 <?= $this->Html->link($discussion->forum_topic->forum_category->forum_category_name , ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex', strtolower(str_replace(' ', '-', $discussion->forum_topic->forum_category->forum_category_name))],['escape' => false])?>
             </li>
             <li class="breadcrumb-item">
-                <?= $this->Html->link('Topics' , ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex', strtolower(str_replace(' ', '-', $discussion->forum_topic->forum_category->forum_category_name))],['escape' => false])?>
-            </li>
-            <li class="breadcrumb-item">
                 <?= $this->Html->link($discussion->forum_topic->forum_topic_name , ['controller' => 'ForumDiscussions', 'action' => 'forumDiscussionsIndex', str_replace(' ', '-', $discussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-', $discussion->forum_topic->forum_topic_name)],['escape' => false])?>
             </li>
             <li class="breadcrumb-item active">

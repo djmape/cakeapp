@@ -19,8 +19,7 @@ class ForumTopicsController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->adminSideBarHasSub('users');
-        $this->navBar('');
+        $this->checkLoginStatus();
     }
     
     /**
@@ -80,6 +79,7 @@ class ForumTopicsController extends AppController
         $this->loadModel('ForumTopicDetails');
         $this->loadModel('ForumCategoryDetails');
         $this->loadModel('UserForumActivityCounts');
+        $this->loadModel('ForumTopicHistory');
 
         $currentUser = $this->Auth->user('id');
 
@@ -89,6 +89,7 @@ class ForumTopicsController extends AppController
         $forumTopicActivity = $this->ForumTopicActivities->newEntity();
         $forumTopicDetail = $this->ForumTopicDetails->newEntity();
         $forumUserActivityCount = $this->UserForumActivityCounts->newEntity();
+        $forumTopicHistory = $this->UserActivities->newEntity();   
 
         # begin post/put
         if ($this->request->is(['post','put'])) {
@@ -145,6 +146,8 @@ class ForumTopicsController extends AppController
 
                                 if ($forumCategoryDetailsTable->save($forumCategoryDetail)) {
                                     
+                                    # begin save UserForumActivityCounts 
+
                                     $checkIfUserHasEntry = $this->UserForumActivityCounts->find('all')->where(['UserForumActivityCounts.user_id' => $currentUser]);
 
                                     if ($checkIfUserHasEntry->isEmpty()) {
@@ -153,13 +156,27 @@ class ForumTopicsController extends AppController
                                         $forumUserActivityCount->user_forum_activity_topics_count = 1;
 
                                         if ($this->UserForumActivityCounts->save($forumUserActivityCount)) {
-                                            $this->Flash->success('Reply Added!', [
-                                                'params' => [
-                                                    'saves' => 'Reply Added!'
-                                                ]
-                                            ]);
-                                                
-                                            return $this->redirect(['controller' => 'ForumDiscussions','action' => 'forumReplies', $forum_category_name, $forum_topic_name , $forum_discussion_title]);
+
+                                            # begin save ForumTopicHistory 
+
+                                            $forumTopicHistory->forum_topic_history_topic_name = $forum_topic_name;
+                                            $forumTopicHistory->forum_topic_id = $forumTopicID->forum_topic_id;
+
+                                            if ($this->ForumTopicHistory->save($forumTopicHistory)) {
+                                                $this->Flash->success('Topic Added!', [
+                                                    'params' => [
+                                                        'saves' => 'Topic Added!'
+                                                    ]
+                                                ]);
+                                                return $this->redirect(['controller' => 'ForumCategories','action' => 'forumTopicsIndex', $forum_category_id]);
+                                            }
+                                            else {
+                                                $this->log($forumTopicHistory->errors(),'debug');
+                                            }
+                                            # end save ForumTopicHistory
+                                        }
+                                        else {
+                                            $this->log($forumUserActivityCount->errors(),'debug');
                                         }
                                     }
                                     else {
@@ -175,15 +192,26 @@ class ForumTopicsController extends AppController
 
                                         if ($forumActivityCountsTable->save($forumActivityCount)) {
 
-                                            $this->Flash->success('Topic Added!', [
-                                                'params' => [
-                                                    'saves' => 'Topic Added!'
-                                                ]
-                                            ]);
-                                            return $this->redirect(['controller' => 'ForumCategories','action' => 'forumTopicsIndex', $forum_category_id]);
+                                            # begin save ForumTopicHistory 
+
+                                            $forumTopicHistory->forum_topic_history_topic_name = $forum_topic_name;
+                                            $forumTopicHistory->forum_topic_id = $forumTopicID->forum_topic_id;
+
+                                            if ($this->ForumTopicHistory->save($forumTopicHistory)) {
+                                                $this->Flash->success('Topic Added!', [
+                                                    'params' => [
+                                                        'saves' => 'Topic Added!'
+                                                    ]
+                                                ]);
+                                                return $this->redirect(['controller' => 'ForumCategories','action' => 'forumTopicsIndex', $forum_category_id]);
+                                            }
+                                            else {
+                                                $this->log($forumTopicHistory->errors(),'debug');
+                                             }
+                                            # end save ForumTopicHistory
                                         }
                                         else {
-
+                                            $this->log($forumActivityCount->errors(),'debug');
                                         }
                                     }
                                 }
@@ -202,36 +230,185 @@ class ForumTopicsController extends AppController
         # end post/put
     }
 
-    public function forumTopics()
+    public function forumEditTopic()
     {   
-        $this->header();
-        $this->title('PUPQC | Forum Topics');
+        $this->layout = false;
+        $this->autoRender = false;
 
-        $this->loadModel('Posts');
-        $this->loadModel('Announcements');
-        $this->loadModel('Users');
-        $this->loadModel('UserProfiles');
+        $this->loadModel('UserActivities');
+        $this->loadModel('ForumActivities');
+        $this->loadModel('ForumTopics');
+        $this->loadModel('ForumTopicHistory');
 
-        $paginate = ['sortWhitelist' => 'Posts.post_modified'];
-        $posts = $this->paginate($this->Posts->find('all')->contain(['Users.UserProfiles','Announcements'])->where(['Posts.post_active' => 1]));
-        $this->log($posts->first(),'debug');
-        $this->set(compact('posts'));
+        $userActivity = $this->UserActivities->newEntity();
+        $forumActivity = $this->ForumActivities->newEntity();
+        $forumTopicHistory = $this->ForumTopicHistory->newEntity();   
+
+        $currentUser = $this->Auth->user('id');
+
+        if ($this->request->is(['post', 'put'])) {
+
+            # begin save UserActivities
+
+            $userActivity->user_activity_activity_type_id = 2; # forum
+            $userActivity->user_activity_user_id = $currentUser;
+
+            if ($activityID = $this->UserActivities->save($userActivity)) {
+
+                # begin save ForumActivities 
+
+                $forumActivity->forum_activity_type_id = 7; # edit topic
+                $forumActivity->forum_activity_user_id = $currentUser;
+                $forumActivity->forum_activity_activity_id = $activityID->user_activity_id;
+
+                if ($forumID = $this->ForumActivities->save($forumActivity)) {
+
+                    # begin update ForumTopics
+                    $topic_id = $this->request->data['topic_id'];
+                    $forumTopicTable = TableRegistry::get('ForumTopics');
+                    $forumTopicTable = TableRegistry::getTableLocator()->get('ForumTopics');
+                    $forumTopic = $forumTopicTable->get($topic_id);
+
+                    $forumTopic->forum_topic_modified = date("Y-m-d H:i:s");
+                    $forumTopic->forum_topic_name = $this->request->data['topic'];
+
+                    if ($forumTopicTable->save($forumTopic)) {
+
+                        # begin save ForumTopicHistory 
+
+                        $forumTopicHistory->forum_topic_history_topic_name = $this->request->data['topic'];
+                        $forumTopicHistory->forum_topic_id = $topic_id;
+
+                        if ($this->ForumTopicHistory->save($forumTopicHistory)) {
+                            return $this->redirect(['controller' => 'ForumCategories','action' => 'forumTopicsIndex', $this->request->data['forum_category_name']]);
+                        }
+                        else {
+                            $this->log($forumTopicHistory->errors(),'debug');
+                        }
+                        # end save ForumTopicHistory 
+                    }
+                    else {
+                        $this->log($forumTopic->errors(),'debug');
+                    }
+                    # end update ForumTopics
+                }
+                else {
+                    $this->log($forumActivity->errors(),'debug');
+                }
+                # end save ForumActivities
+            }
+            else {
+                $this->log($userActivity->errors(),'debug');
+            }
+            # end save UserActivities
+        }
     }
 
-    public function forumDiscussions()
+    public function forumDeleteTopic()
     {   
-        $this->header();
-        $this->title('PUPQC | Forum Discussions');
+        $this->layout = false;
+        $this->autoRender = false;
 
-        $this->loadModel('Posts');
-        $this->loadModel('Announcements');
-        $this->loadModel('Users');
-        $this->loadModel('UserProfiles');
+        $this->loadModel('UserActivities');
+        $this->loadModel('ForumActivities');
+        $this->loadModel('ForumCategories');
+        $this->loadModel('ForumCategoryDetails');
+        $this->loadModel('ForumTopics');
+        $this->loadModel('UserForumActivityCounts');
 
-        $paginate = ['sortWhitelist' => 'Posts.post_modified'];
-        $posts = $this->paginate($this->Posts->find('all')->contain(['Users.UserProfiles','Announcements'])->where(['Posts.post_active' => 1]));
-        $this->log($posts->first(),'debug');
-        $this->set(compact('posts'));
+        $userActivity = $this->UserActivities->newEntity();
+        $forumActivity = $this->ForumActivities->newEntity();
+
+        $currentUser = $this->Auth->user('id');
+        $forum_topic_id = $this->request->data['forum_topic_id'];
+        $forum_category_name = $this->request->data['forum_category_name'];
+
+        # begin post put
+
+        if ($this->request->is(['post', 'put'])) {
+
+            # begin save UserActivities
+
+            $userActivity->user_activity_activity_type_id = 2;  # forum
+            $userActivity->user_activity_user_id = $currentUser;
+
+            if ($activityID = $this->UserActivities->save($userActivity)) {
+
+                # begin save ForumActivities 
+
+                $forumActivity->forum_activity_type_id = 11; # delete topic
+                $forumActivity->forum_activity_user_id = $currentUser;
+                $forumActivity->forum_activity_activity_id = $activityID->user_activity_id;
+
+                if ($forumID = $this->ForumActivities->save($forumActivity)) {
+
+                    # begin update ForumReplies
+
+                    $forumTopicTable = TableRegistry::get('ForumTopics');
+                    $forumTopicTable = TableRegistry::getTableLocator()->get('ForumTopics');
+                    $forumTopic = $forumTopicTable->get($forum_topic_id);
+
+                    $forumTopic->forum_topic_modified = date("Y-m-d H:i:s");
+                    $forumTopic->forum_topic_active = 0;
+
+                    if ($forumTopicTable->save($forumTopic)) {
+
+                        # begin update ForumCategoryDetails 
+
+                        $getCategoryID = $this->ForumCategories->find('all')->where(['ForumCategories.forum_category_name' => str_replace('-', ' ', $forum_category_name)])->first()->forum_category_id;
+
+                        $getForumCategoryDetailID = $this->ForumCategoryDetails->find('all')->where(['ForumCategoryDetails.forum_category_detail_category_id' => $getCategoryID])->first()->forum_category_detail_id;
+                                    
+                        $forumCategoryDetailsTable = TableRegistry::get('ForumCategoryDetails');
+
+                        $forumCategoryDetailsTable = TableRegistry::getTableLocator()->get('ForumCategoryDetails');
+                        $forumCategoryDetail = $forumCategoryDetailsTable->get($getForumCategoryDetailID);
+
+                        $forumCategoryDetail->forum_category_topics_count -= 1;
+
+                        if ($forumCategoryDetailsTable->save($forumCategoryDetail)) {
+
+                            # begin update UserForumActivityCounts
+
+                            $getUserForumActivityCountID = $this->UserForumActivityCounts->find('all')->where(['UserForumActivityCounts.user_id' => $currentUser])->first()->user_forum_activity_count_id;
+
+                            $forumActivityCountsTable = TableRegistry::get('UserForumActivityCounts');
+
+                            $forumActivityCountsTable = TableRegistry::getTableLocator()->get('UserForumActivityCounts');
+                            $forumActivityCount = $forumActivityCountsTable->get($getUserForumActivityCountID);
+
+                            $forumActivityCount->user_forum_activity_topics_count -= 1;
+
+                            if ($forumActivityCountsTable->save($forumActivityCount)) {
+
+                                # delete complete
+
+                            }
+                            else {
+                                $this->log($forumActivityCount->errors(),'debug');
+                            }
+                            # end update UserForumActivityCounts
+                        }
+                        else {
+                            $this->log($forumCategoryDetail->errors(),'debug');
+                        }
+                        # end update ForumCategoryDetails
+                    }
+                    else {
+                        $this->log($forumTopic->errors(),'debug');
+                    }
+                    # end update ForumReplies
+                }
+                else {
+                    $this->log($forumActivity->errors(),'debug');
+                }
+                # end save ForumActivities 
+            }
+            else {
+                $this->log($userActivity->errors(),'debug');
+            }
+            # end save UserActivities
+        }
     }
 
     public function forumReplies()
@@ -297,7 +474,7 @@ class ForumTopicsController extends AppController
 
     public function isAuthorized($user) {
 
-    if (in_array($this->request->action, ['forumTopicsIndex', 'addForumTopic','forumTopicsAll','forumDiscussions','forumReplies','register','adminAll','adminAdd','adminEdit','adminDelete','employeesAll','employeeAdd','employeeEdit','studentsAll','studentAdd','studentEdit','alumniAll','alumniAdd','alumniEdit','deleteUser','logout'])) {
+    if (in_array($this->request->action, ['forumTopicsIndex', 'addForumTopic','forumTopicsAll','forumEditTopic','forumDeleteTopic','register','adminAll','adminAdd','adminEdit','adminDelete','employeesAll','employeeAdd','employeeEdit','studentsAll','studentAdd','studentEdit','alumniAll','alumniAdd','alumniEdit','deleteUser','logout'])) {
         return true;
     }
 

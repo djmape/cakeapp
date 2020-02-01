@@ -58,7 +58,7 @@
 			<ul class="navbar-nav navbar-right">
 				<li class="dropdown navbar-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-						<span class="d-none d-md-inline">Hi, <?= $user->user->email ?></span>
+						<span class="d-none d-md-inline">Hi, <?= $user->user->username?></span>
 						<?php echo $this->Html->image("../webroot/img/upload/".$user->admin_photo, array()); ?>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
@@ -113,7 +113,7 @@
                     			<?php echo $this->Html->link('Emails',array('prefix' => "admin", 'controller' => 'ContactEmails','action'=>'index')) ?>
                     		</li>
                     		<!-- Contact -->
-                  			<li>
+                  			<li class="<?php if ($active == 'contact_number') echo 'active'?>">
                     			<?php echo $this->Html->link('Contact Number',array('prefix' => "admin", 'controller' => 'ContactNumbers','action'=>'index')) ?>
                     		</li>
               				<!-- Home -->
@@ -134,17 +134,13 @@
                     			<?php echo $this->Html->link('Announcements',array('prefix' => "admin", 'controller' => 'Announcements','action'=>'index')) ?>
                     		</li>
               				<!-- Events -->
-						    <li>
+						    <li class="<?php if ($active == 'events') echo 'active'?>">
                     			<?php echo $this->Html->link('Events',array('prefix' => "admin", 'controller' => 'Events','action'=>'index')) ?>
-                    		</li>
-                    		<!-- News & Updates -->
-                  			<li>
-                    			<?php echo $this->Html->link('News & Updates',array('prefix' => "admin", 'controller' => 'ContactNumbers','action'=>'index')) ?>
                     		</li>
 						</ul>
 					</li>
               		<!-- Employees -->
-					<li class="has-sub">
+					<li class="has-sub <?php if ($expand == 'employees') echo 'active expand'?>">
 						<a href="javascript:;">
 					        <b class="caret"></b>
 						    <i class="fas fa-user"></i>
@@ -152,11 +148,11 @@
 					    </a>
 						<ul class="sub-menu">
               				<!-- Employees -->
-              				<li>
+              				<li class="<?php if ($active == 'employees') echo 'active'?>">
                     			<?php echo $this->Html->link('Employees',array('prefix' => "admin", 'controller' => 'Employees','action'=>'index')) ?>
                     		</li>
               				<!-- Offices -->
-						    <li>
+						    <li class="<?php if ($active == 'offices') echo 'active'?>">
                     			<?php echo $this->Html->link('Offices',array('prefix' => "admin", 'controller' => 'Offices','action'=>'index')) ?>
                     		</li>
 						</ul>
@@ -164,7 +160,7 @@
 					<!-- end Employee section -->
 
               		<!-- begin Student section -->
-					<li class="has-sub">
+					<li class="has-sub <?php if ($expand == 'students') echo 'active expand'?>">
 						<a href="javascript:;">
 					        <b class="caret"></b>
 						    <i class="fas fa-graduation-cap"></i>
@@ -172,11 +168,11 @@
 					    </a>
 						<ul class="sub-menu">
               				<!-- Courses -->
-              				<li>
+              				<li class="<?php if ($active == 'courses') echo 'active'?>">
                     			<?php echo $this->Html->link('Courses',array('prefix' => "admin", 'controller' => 'Courses','action'=>'index')) ?>
                     		</li>
               				<!-- Organizations -->
-						    <li>
+						    <li class="<?php if ($active == 'organizations') echo 'active'?>">
 						    	<?php echo $this->Html->link('Organizations',array('prefix' => "admin", 'controller' => 'Organizations','action'=>'index')) ?>
 						    </li>
 						</ul>
@@ -242,8 +238,6 @@
 			
 		</div>
 		<!-- end #sidebar -->
-		
-		
 		
 		
 		<!-- begin scroll to top btn -->

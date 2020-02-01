@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Employees Model
  *
- * @property \App\Model\Table\EmployeePositionsTable|\Cake\ORM\Association\BelongsTo $EmployeePositions
+ * @property |\Cake\ORM\Association\BelongsTo $EmployeePositionNames
  *
  * @method \App\Model\Entity\Employee get($primaryKey, $options = [])
  * @method \App\Model\Entity\Employee newEntity($data = null, array $options = [])
@@ -28,11 +28,6 @@ class EmployeesTable extends Table
      * @param array $config The configuration for the Table.
      * @return void
      */
-
-    var $virtualFields = array(
-        'name' => "CONCAT(Employees.employee_lastname, ', ', Employees.employee_firstname)"
-    );
-
     public function initialize(array $config)
     {
         parent::initialize($config);
@@ -41,7 +36,7 @@ class EmployeesTable extends Table
         $this->setDisplayField('employee_id');
         $this->setPrimaryKey('employee_id');
 
-        $this->belongsTo('EmployeePositions', [
+        $this->belongsTo('EmployeePositionNames', [
             'foreignKey' => 'employee_position_id',
             'joinType' => 'INNER'
         ]);
@@ -115,7 +110,7 @@ class EmployeesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['employee_position_id'], 'EmployeePositions'));
+        $rules->add($rules->existsIn(['employee_position_id'], 'EmployeePositionNames'));
 
         return $rules;
     }

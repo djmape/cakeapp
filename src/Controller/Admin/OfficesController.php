@@ -25,13 +25,13 @@ class OfficesController extends AppController
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
         $this->sideBar();
-        $this->adminSideBarHasSub('offices');
-        $this->adminSideBar('');
+        $this->adminSideBarHasSub('employees');
+        $this->adminHeaderSideBar('offices');
     }
 
     public function index()
     {
-        $this->adminSideBar('all');
+        $this->title('Admin | Offices');
         $offices = $this->Paginator->paginate($this->Offices->find('all')->where(['Offices.active' => 1])->order([
         'Offices.priority' => 'ASC'
         ]));
@@ -61,7 +61,7 @@ class OfficesController extends AppController
 
     public function add()
     {
-        $this->adminSideBar('add');
+        $this->title('Admin | Add Office');
         $offices = $this->Offices->newEntity();
         if ($this->request->is('post')) {
 
@@ -113,7 +113,7 @@ class OfficesController extends AppController
     
     public function edit($office_id)
     {
-        $this->adminSideBar('New Office');
+        $this->title('Admin | Edit Office');
         $office = $this->Offices->find('all')->where(['Offices.office_id'=>$office_id]);
 
         $row = $office->first();
@@ -205,28 +205,10 @@ class OfficesController extends AppController
         }
     }
 
-    public function tags()
-    {
-        // The 'pass' key is provided by CakePHP and contains all
-        // the passed URL path segments in the request.
-        $tags = $this->request->getParam('pass');
-
-        // Use the ArticlesTable to find tagged articles.
-        $articles = $this->Articles->find('tagged', [
-            'tags' => $tags
-        ]);
-
-        // Pass variables into the view template context.
-        $this->set([
-            'articles' => $articles,
-            'tags' => $tags
-        ]);
-    }
-
 
     public function positions($office_id)
     {
-        $this->adminSideBar('New Office');
+        $this->title('Admin | View Office');
         $offices = $this->Offices->find('all', 
                    array('conditions'=>array('Offices.office_id'=>$office_id)));
         $offices = $offices->first();
@@ -246,7 +228,7 @@ class OfficesController extends AppController
         $office_officers_positions_count = 1;
         $employee_count = 1;
 
-        $this->adminSideBar('New Office');
+        $this->title('Admin | Add Officer');
         $this->loadModel('OfficeEmployees');
 
         $offices = $this->Offices->find('all', 
@@ -333,7 +315,7 @@ class OfficesController extends AppController
     {   
         $office_officers_positions_count = 1;
 
-        $this->adminSideBar('New Office');
+        $this->title('Admin | Edit Officer');
         $this->loadModel('OfficeEmployees');
 
         $offices = $this->Offices->find('all', 

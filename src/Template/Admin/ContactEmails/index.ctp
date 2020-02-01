@@ -1,138 +1,134 @@
 <!-- src/Template/Admin/ContactEmails/index.ctp --> 
 
-    <!-- begin include -->
-    <?php echo $this->element('AdminHeaderSideBar');?>
-    <?php echo $this->Flash->render(); ?>
+        <!-- begin include -->
+        <?php echo $this->element('AdminHeaderSideBar');?>
+        <?php echo $this->Html->css("admin.css"); ?> 
+        <?php echo $this->Flash->render(); ?>
 
-    <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
-    <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
-    <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css"); ?> 
+        <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
+        <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
+        <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css"); ?> 
+        <!-- end include -->
 
-    <!-- end include -->
+        <!-- begin #content -->
+        <div id="content" class="content">
+            <!-- begin breadcrumb -->
+            <ol class="breadcrumb pull-right">
+                <li class="breadcrumb-item">
+                    Emails
+                </li>
+            </ol>
+            <!-- end breadcrumb -->
+            <!-- begin page-header -->
+            <h1 class="page-header">Emails</h1>
+            <!-- end page-header -->
 
-    <!-- begin #content -->
-    <div id="content" class="content">
-        <!-- begin breadcrumb -->
-        <ol class="breadcrumb pull-right">
-            <li class="breadcrumb-item">
-                <a href="javascript:;">
-                    Home
+            <!-- begin Add Email button -->
+            <div style="margin-bottom: 2%">
+                <a href="#modal-dialog-add-email" class="btn btn-yellow btn-sm" data-toggle="modal">
+                    <i class="fa fa-plus"></i>
+                    Add Email
                 </a>
-            </li>
-            <li class="breadcrumb-item active">
-                <?php echo $this->Html->link('Emails',['prefix' => "admin", 'controller' => 'ContactEmails','action'=>'index']) ?>
-            </li>
-        </ol>
-        <!-- end breadcrumb -->
-        <!-- begin page-header -->
-        <h1 class="page-header">Emails</h1>
-        <!-- end page-header -->
-        <!-- begin Add Email button -->
-        <div style="margin-bottom: 2%">
-            <a href="#modal-dialog-add-email" class="btn btn-yellow btn-sm" data-toggle="modal">
-                <i class="fa fa-plus"></i>
-                Add Email
-            </a>
-        </div>
-        <!-- begin table -->
-        <table id="data-table-select" class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 5%;">
-                    #
-                    </th>
-                    <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 77%;">
-                        Email
-                    </th>
-                    <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 18%;">
-                        Actions
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($emails as $i => $email): ?>
-                <tr class="odd gradeX" data-email-id="<?= $email->contact_email_id ?>">
-                    <td>
-                        <?= $i + 1?>
-                    </td>
-                    <td>
-                        <b> <?= $email->contact_email ?> </b>
-                    </td>
-                    <td>
-                        <div class="center-block">
-                            <button type="button" class="openUpdateEmailModal btn btn-info btn-sm" href="#modal-dialog-update-email"  data-toggle="modal" data-email-id="<?php echo $email->contact_email_id ?>" data-email = "<?php echo $email->contact_email ?>">
-                                <i class="fa fa-edit"></i>
-                                Edit
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $email->contact_email_id ?> )">
-                                <i class="fa fa-trash"></i>
-                                Remove
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <!-- end table -->
-    </div>
-    <!-- end #content -->
+            </div>
+            <!-- end Add Email button -->
 
-    <!-- begin modals -->
+            <!-- begin table -->
+            <table id="data-table-select" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 5%;">
+                            #
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 80%;">
+                            Email
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 15%;">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($emails as $i => $email): ?>
+                        <tr class="odd gradeX" data-email-id="<?= $email->contact_email_id ?>">
+                            <td>
+                                <?= $i + 1?>
+                            </td>
+                            <td>
+                                <b> <?= $email->contact_email ?> </b>
+                            </td>
+                            <td>
+                                <div class="row email-actions">
+                                    <button type="button" class="openUpdateEmailModal btn btn-yellow btn-sm" href="#modal-dialog-update-email"  data-toggle="modal" data-email-id="<?php echo $email->contact_email_id ?>" data-email = "<?php echo $email->contact_email ?>" title="Edit <?php echo $email->contact_email ?>">
+                                   <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $email->contact_email_id ?> )"  title="Delete <?php echo $email->contact_email ?>">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <!-- end table -->
+        </div>
+        <!-- end #content -->
+
+        <!-- begin modals -->
  
-    <!-- begin #modal-dialog-add-email -->
-    <div class="modal fade" id="modal-dialog-add-email">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Email</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <input type="email" id="email" class="form-control" placeholder="Enter email" />
-                </div>
-                <div class="modal-footer">
-                    <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
-                        Close
-                    </a>
-                    <button type="button" class="btn btn-success btn-sm" onclick="addEmail()">
-                        <i class="fa fa-plus"></i>
-                        Add Email
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end #modal-dialog-add-email -->
-
-    <!-- begin modal-dialog-update-email -->
-    <div class="modal fade" id="modal-dialog-update-email">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Update Email</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="email" id="email-update" class="form-control" placeholder="    Enter email" />
-                </div>
-                <div class="modal-footer">
-                    <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
-                        Close
-                    </a>
-                    <button type="button" class="btn btn-success btn-sm" onclick="updateEmail()">
-                       <i class="fa fa-plus"></i>
-                       Update Email
-                    </button>
+        <!-- begin #modal-dialog-add-email -->
+        <div class="modal fade" id="modal-dialog-add-email">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Email</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="email" id="email" class="form-control" placeholder="Enter email" />
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
+                            Close
+                        </a>
+                        <button type="button" class="btn btn-success btn-sm" onclick="addEmail()">
+                            <i class="fa fa-plus"></i>
+                            Add Email
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- end modal-dialog-update-email -->
-<!-- end #content -->
+        <!-- end #modal-dialog-add-email -->
 
-</div>
-<!-- end #container -->
+        <!-- begin modal-dialog-update-email -->
+        <div class="modal fade" id="modal-dialog-update-email">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Update Email</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="email" id="email-update" class="form-control" placeholder="    Enter email" />
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
+                            Close
+                        </a>
+                        <button type="button" class="btn btn-success btn-sm" onclick="updateEmail()">
+                            <i class="fa fa-plus"></i>
+                            Update Email
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end modal-dialog-update-email -->
+
+        <!-- end modals -->
+    </div>
+    <!-- end #container -->
 </body>
 
 

@@ -25,8 +25,8 @@ class ContactNumbersController extends AppController
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash');
         $this->sideBar();
-        $this->adminSideBarHasSub('contacts');
-        $this->adminSideBar('numbers');
+        $this->adminSideBarHasSub('site-info');
+        $this->adminHeaderSidebar('contact_number');
     }
 
     public function index()
@@ -62,8 +62,9 @@ class ContactNumbersController extends AppController
         $this->set('number', $number);
     }
 
-    public function edit($contact_number_id)
+    public function edit()
     {
+        $contact_number_id = $this->request->data['contact_number_id'];
         $numbers = $this->ContactNumbers->find('all', 
                    array('conditions'=>array('ContactNumbers.contact_number_id'=>$contact_number_id)));
 
@@ -92,7 +93,6 @@ class ContactNumbersController extends AppController
                 $this->Flash->error(__('Unable to add your article.'));
             }            
         }
-
     }
 
     public function delete()

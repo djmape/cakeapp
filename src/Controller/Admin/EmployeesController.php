@@ -24,13 +24,14 @@ class EmployeesController extends AppController
         $this->loadComponent('Flash'); // Include the FlashComponent
         $this->sideBar();
         $this->adminSideBarHasSub('employees');
-        $this->adminHeaderSidebar('employees');
+        $this->adminHeaderSideBar('employees');
     }
 
     public function index()
     {
-        $employees = $this->Employees->find('all')->contain(['EmployeePositions' => ['sort' => ['EmployeePositions.employee_position_priority' => 'DESC']]])->innerJoinWith('EmployeePositions')->order([
-        'EmployeePositions.employee_position_priority' => 'ASC'
+        $this->title('Admin | Employees');
+        $employees = $this->Employees->find('all')->contain(['EmployeePositionNames' => ['sort' => ['EmployeePositionNames.employee_position_priority' => 'DESC']]])->innerJoinWith('EmployeePositionNames')->order([
+        'EmployeePositionNames.employee_position_priority' => 'ASC'
         ])->where(['Employees.active' => 1]);
         $employees = $this->paginate($employees);
         $this->set(compact('employees'));
@@ -38,9 +39,11 @@ class EmployeesController extends AppController
 
     public function add()
     {
-        $this->loadModel('EmployeePositions');
-        $employee_positions =  $this->EmployeePositions->find('list', ['keyField' => 'employee_position_id', 'valueField' => 'employee_position_name'])->where(['EmployeePositions.active' => 1])->order([
-        'EmployeePositions.employee_position_priority' => 'ASC'
+        $this->title('Admin | Add Employees');
+
+        $this->loadModel('EmployeePositionNames');
+        $employee_positions =  $this->EmployeePositionNames->find('list', ['keyField' => 'employee_position_id', 'valueField' => 'employee_position_name'])->where(['EmployeePositionNames.active' => 1])->order([
+        'EmployeePositionNames.employee_position_priority' => 'ASC'
         ]);
         $this->set('employee_positions', $employee_positions);
 
@@ -105,14 +108,15 @@ class EmployeesController extends AppController
     
     public function edit($employee_id)
     {
-        $this->adminSideBar('All Courses');
-        $this->loadModel('EmployeePositions');
+        $this->title('Admin | Edit Employee');
+
+        $this->loadModel('EmployeePositionNames');
         $employee = $this->Employees->find('all', 
                    array('conditions'=>array('Employees.employee_id'=>$employee_id)));
-        $employee_positions =  $this->EmployeePositions->find('list', ['keyField' => 'employee_position_id', 'valueField' => 'employee_position_name'])->where(['EmployeePositions.active' => 1])->order([
-        'EmployeePositions.employee_position_priority' => 'ASC'
+        $employee_positions =  $this->EmployeePositionNames->find('list', ['keyField' => 'employee_position_id', 'valueField' => 'employee_position_name'])->where(['EmployeePositionNames.active' => 1])->order([
+        'EmployeePositionNames.employee_position_priority' => 'ASC'
         ]);
-        $employee_name = $this->Employees->find('all')->where(['Employees.employee_id'=>$employee_id])->contain(['EmployeePositions']);
+        $employee_name = $this->Employees->find('all')->where(['Employees.employee_id'=>$employee_id])->contain(['EmployeePositionNames']);
 
         $row = $employee->first();
         $employee_name = $employee_name->first();

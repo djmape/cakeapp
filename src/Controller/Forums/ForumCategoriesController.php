@@ -19,8 +19,7 @@ class ForumCategoriesController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->adminSideBarHasSub('users');
-        $this->navBar('');
+        $this->checkLoginStatus();
     }
     
     /**
@@ -72,12 +71,16 @@ class ForumCategoriesController extends AppController
         $this->loadModel('ForumCategories');
         $forumCategory = $this->ForumCategories->find('all')->where(['ForumCategories.forum_category_name' => str_replace('-', ' ', $forum_category_name)])->first();
 
+        $currentUser = $this->Auth->user('id');
         $forum_category_id = $forumCategory->forum_category_id;
 
         $this->loadModel('ForumCategories');
         $this->loadModel('ForumTopics');
-        $forumTopics = $this->paginate($this->ForumTopics->find('all')->contain(['ForumTopicDetails','ForumCategories','Users'])->where(['ForumCategories.forum_category_id' => $forum_category_id]));
+        $this->loadModel('ForumDiscussions');
 
+        $forumTopics = $this->paginate($this->ForumTopics->find('all')->contain(['ForumTopicDetails','ForumCategories','Users','ForumDiscussions.Users'])->where(['ForumCategories.forum_category_id' => $forum_category_id,'ForumTopics.forum_topic_active' => 1]));
+
+        $this->set('currentUser', $currentUser);
         $this->set('forumTopics', $forumTopics);
         $this->set(compact('forumTopics'));
         $this->set('forumCategory', $forumCategory);

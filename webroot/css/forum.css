@@ -37,6 +37,7 @@ h3 {
 #data-table-select {
 	margin: 2% 0 2%!important;
 	background-color: white;
+	padding: 10%;
 }
 
 .row.category-header {
@@ -71,3 +72,30 @@ h3 {
 
 #discussion-form {
 }
+
+#topic-action-buttons {
+
+}
+
+#forum-topic-name {
+	margin-right: 1%;
+}
+
+.discussion-actions {
+
+}
+
+.discussion-title {
+	margin-right: 1%;
+}
+
+td #reply-discussion-content {
+	background-color: #f7f7f7;
+	margin: 1% 0 1% 2%;
+	padding: 1%;
+}
+
+a .active-reply-reaction {
+	color : #7e0e09;
+}
+

@@ -18,6 +18,7 @@ class HomeController extends AppController
         $margin = 'false';
         $this->set('margin', $margin);
         $this->navBar(' ');
+        $this->checkLoginStatus();
     }
 
     public function announcement()

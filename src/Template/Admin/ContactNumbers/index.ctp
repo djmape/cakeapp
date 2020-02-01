@@ -1,206 +1,241 @@
-<html>
-<head>
-    <!-- ================== BEGIN BASE CSS STYLE ================== -->
-    <title> Admin Panel | All Contact Numbers </title>
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <?php echo $this->Html->css("../plugins/jquery-ui/themes/base/minified/jquery-ui.min.css")?>
-    <?php echo $this->Html->css("bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/font-awesome/css/font-awesome.min.css"); ?>
-    <?php echo $this->Html->css("animate.min.css")?>
-    <?php echo $this->Html->css("style.min.css")?>
-    <?php echo $this->Html->css("style-responsive.min.css")?>
-    <?php echo $this->Html->css("theme/default.css")?>
-    <!-- ================== END BASE CSS STYLE ================== -->
+src/Template/Admin/ContactNumbers/index.ctp
 
-    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
-    <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/bootstrap-wizard/css/bwizard.min.css")?>
-    <?php echo $this->Html->css("../plugins/isotope/isotope.css")?> 
-    <?php echo $this->Html->css("../plugins/lightbox/css/lightbox.css")?>
-    <?php echo $this->Html->css("../plugins/sweetalert/dist/sweetalert.css")?>
-    <!-- ================== END PAGE LEVEL STYLE ================== -->
-    
-    <!-- ================== BEGIN BASE JS ================== -->
-    <?php echo $this->Html->script("../plugins/pace/pace.min.js")?>
-    <!-- ================== END BASE JS ================== -->
+        <!-- begin include -->
+        <?php echo $this->element('AdminHeaderSideBar');?>
+        <?php echo $this->Html->css("admin.css"); ?> 
+        <?php echo $this->Flash->render(); ?>
 
-    <!-- ================== Sweet Alert ================== -->
-    <?php echo $this->Html->css("../plugins/sweetalert/dist/sweetalert.css")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert.min.js")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert-dev.js")?>
+        <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
+        <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
+        <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css"); ?> 
+        <!-- end include -->
 
-    <!-- Include custom.css -->
-    <?php echo $this->Html->css("custom/admin.css")?>
-    
-</head>
+        <!-- begin #content -->
+        <div id="content" class="content">
+            <!-- begin breadcrumb -->
+            <ol class="breadcrumb pull-right">
+                <li class="breadcrumb-item">
+                    Contact Numbers
+                </li>
+            </ol>
+        <!-- end breadcrumb -->
+        <!-- begin page-header -->
+        <h1 class="page-header">Contact Numbers</h1>
+        <!-- end page-header -->  
+            <!-- begin Add Email button -->
+            <div style="margin-bottom: 2%">
+                <a href="#modal-dialog-add-number" class="btn btn-yellow btn-sm" data-toggle="modal">
+                    <i class="fa fa-plus"></i>
+                    Add Contact Number
+                </a>
+            </div>
+            <!-- end Add Email button -->
+            <!-- begin table -->
+            <table id="data-table-select" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 5%;">
+                            #
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 80%;">
+                            Email
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 15%;">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($numbers as $i => $number): ?>
+                        <tr class="odd gradeX" data-number-id="<?= $number->contact_number_id ?>">
+                            <td>
+                                <?= $i + 1?>
+                            </td>
+                            <td>
+                                <?= $number->contact_number ?>
+                            </td>
+                            <td>
+                                <div class="row email-actions">
 
-
-<body>
-
-    <?php echo $this->element('AdminSideBar');?>
-    <?php echo $this->Flash->render(); ?>
-    <div id="content" class="content">
-        <?php echo $this->element('AdminHeader');?>
-            
-         <!-- begin row -->
-        <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
-            <div class="row">
-                <!-- begin col-12 -->
-                <div class="col-md-12 ui-sortable">
-                    <!-- begin panel -->
-                    <div class="panel panel-inverse">
-                        <div class="panel-heading">
-                            <h5>
-                                <i class="fa fa-phone"></i>
-                                <b> All Contact Numbers</b>
-                            </h5>
-                        </div>
-                        <div class="panel-body">
-                            <button type="button" class="btn btn-yellow btn-sm row m-b-15" style="margin-left: 0.5%">
-                                <i class="fa fa-plus">
-                                </i>
-                                <?= $this->Html->link('Add Contact Number', ['action' => 'add']) ?>
-                            </button>
-                            <div id="data-table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <table id="data-table" class="table table-striped table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="data-table_info">
-                                            <thead>
-                                    <tr role="row">
-                                        <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 5%;">
-                                            #
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 75%;">
-                                            Contact Number
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 16%;">
-                                            Actions
-                                        </th>
-                                    </tr>
-                                            </thead>
-                                        <tbody>
-                                    <?php foreach ($numbers as $i => $number): ?>
-                                    <tr>
-                                        <td>
-                                            <?= $i + 1?>
-                                        </td>
-                                        <td>
-                                            <b>
-                                                <?= $number->contact_number ?>
-                                            </b>
-                                        </td>
-                                        <td>
-                                            <div class="pull-right center-block">
-                                                <button type="button" class="btn btn-info btn-sm">
-                                                    <i class="fa fa-edit">
-                                                    </i>
-                                                    <?= $this->Html->link('Edit', ['action' => 'edit', $number->contact_number_id])?>
-                                                </button>
-                                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $number->contact_number_id ?> )">
-                                                    <i class="fa fa-trash">
-                                                    </i>
-                                                    Remove
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            <!-- end table -->
-                            </table>
-                        <!-- end col-sm-12 -->
-                        </div>
-                    <!-- end row -->
-                    </div>
-                <!-- end data-table_wrapper -->
-                </div>
-                <!-- panel-body -->
-                </div>
-        <!-- end panel -->
+                                    <button type="button" class="btn btn-yellow btn-sm" href="#modal-dialog-update-number"  data-toggle="modal" data-number-id="<?php echo $number->contact_number_id ?>" data-number = "<?php echo $number->contact_number ?>" title="Edit <?php echo $number->contact_number ?>">
+                                   <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $number->contact_number_id ?> )"  title="Delete <?php echo $number->contact_number ?>">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <!-- end table -->
         </div>
-    <!-- end col-md-12 ui-sortable -->
-    </div>
-    <!-- end row -->
-</div>
-</div>
-</div>
+        <!-- end #content -->
 
+        <!-- begin modals --> 
+        <!-- begin #modal-dialog-add-number -->
+        <div class="modal fade" id="modal-dialog-add-number">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Contact Number</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="number-add" id="number-add" class="form-control" placeholder="Enter contact number" />
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
+                            Close
+                        </a>
+                        <button type="button" class="btn btn-yellow btn-sm" onclick="addNumber()">
+                            <i class="fa fa-plus"></i>
+                            Add Contact Number
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end #modal-dialog-add-number -->
+
+        <!-- begin modal-dialog-update-number -->
+        <div class="modal fade" id="modal-dialog-update-number">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Update Contact Number</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input id="number-update" class="form-control" placeholder="    Enter email" />
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
+                            Close
+                        </a>
+                        <button type="button" class="btn btn-yellow btn-sm" onclick="updateNumber()">
+                            <i class="fa fa-plus"></i>
+                            Update Contact Number
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end modal-dialog-update-number -->
+        <!-- end modals -->
+
+    </div>
+    <!-- end container -->
 </body>
 
 
+<!-- Include Base JS -->
+<?php echo $this->element('base_js');?>
 
-<!-- ================== BEGIN BASE JS ================== -->
-<?php echo $this->Html->script("../plugins/jquery/jquery-migrate-1.1.0.min.js")?>
-<?php echo $this->Html->script("../plugins/bootstrap/js/bootstrap.min.js")?>
-    <!--[if lt IE 9]>
-        <script src="assets/crossbrowserjs/html5shiv.js"></script>
-        <script src="assets/crossbrowserjs/respond.min.js"></script>
-        <script src="assets/crossbrowserjs/excanvas.min.js"></script>
-    <![endif]-->
-    <?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-cookie/jquery.cookie.js")?>
-    <!-- ================== END BASE JS ================== -->
 
 <!-- ================== BEGIN PAGE LEVEL JS ================== -->
 <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
 <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
 <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-<?php echo $this->Html->script("table-manage-responsive.demo.min.js")?>
-<!-- <script src="assets/js/apps.min.js"></script> -->
+<?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/extensions/Select/js/dataTables.select.min.js")?>
+<?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+<?php echo $this->Html->script("table-manage-select.demo.min.js")?>
+<?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
+<?php echo $this->Html->script("../plugins/js-cookie/js.cookie.js")?>
 <?php echo $this->Html->script("apps.min.js")?>
 <!-- ================== END PAGE LEVEL JS ================== -->
     
-    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+<script>
+    $(document).ready(function() {
+        App.init();
+        TableManageTableSelect.init();
+        $('#data-table-select').DataTable();
+    });
 
-        <!-- datatable scripts -->
-            <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
-            <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
-            <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-            <?php echo $this->Html->script("table-manage-default.demo.min.js")?>
-        <!-- -->
-    <?php $this->Html->script("/apps.min.js")?>
-    <?php $this->Html->script("button.js")?>
-    <!-- ================== END PAGE LEVEL JS ================== -->
-    
-    <script>
-        $(document).ready(function() {
-            App.init();
-            TableManageDefault.init();
-            $('#data-table').DataTable();
-        });
-
-        function confirmDelete($contact_number_id) {
-            var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"delete"]); ?>';
-            var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"index"]); ?>';
-            swal({
-                title: "Are you sure?",
-                text: "You want to remove contact number?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#ff5b57',
-                confirmButtonClass: "btn btn-info",
-                confirmButtonText: "Remove",
-                cancelButtonText: "Cancel"
-            },  function(isConfirm) {
-                    if (isConfirm) {
-                        $.ajax({
-                            type:'post',
-                            url: targeturl,              
-                            data: {'contact_number_id' : $contact_number_id},
-                            success:function(query)  {
-                            // $("#divLoading").removeClass('show');
-                            // $('#state').append(result);
-                                window.location = redirectURL;
-                            },
-                            error:function(xhr, ajaxOptions, thrownError) {
-                                swal("Error", thrownError, "error");
-                            }
-                        });
+    function confirmDelete($contact_number_id) {
+        var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"delete"]); ?>';
+        var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"index"]); ?>';
+        swal({
+            title: "Are you sure?",
+            text: "You want to remove contact number?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#ff5b57',
+            confirmButtonClass: "btn btn-info",
+            confirmButtonText: "Remove",
+            cancelButtonText: "Cancel"
+        },  
+        function(isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    type:'post',
+                    url: targeturl,              
+                    data: {
+                        'contact_number_id' : $contact_number_id
+                    },
+                    success:function(query)  {
+                        window.location = redirectURL;
+                    },
+                    error:function(xhr, ajaxOptions, thrownError) {
+                        swal("Error", thrownError, "error");
                     }
                 });
-        }
+            }
+        });
+    }
 
+    function addNumber() {
+        var $contact_number = $('#number-add').val();
+        var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"add"]); ?>';
+        var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"index"]); ?>';
+        $.ajax({
+            type:'post',
+            url: targeturl, 
+            data: {
+                'contact_number' : $contact_number
+            },
+            success:function(query)  {
+                window.location = redirectURL;
+            },
+            error:function(xhr, ajaxOptions, thrownError) {
+                swal("Error", thrownError, "error");
+            }
+        });
+    }
+
+    var $numberID; // global variable for selected number
+
+    $('#modal-dialog-update-number').on('show.bs.modal', function(e) {
+        //get data-id attribute of the clicked element
+        $numberID = $(e.relatedTarget).data('number-id');
+        var $number = $(e.relatedTarget).data('number');
+
+        //populate the textbox
+        $("#number-update").val($number);
+    });
+
+
+    function updateNumber() {
+        $contact_number = $("#number-update").val();
+        var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"edit"]); ?>';
+        var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"index"]); ?>';
+        $.ajax({
+            type:'post',
+            url: targeturl, 
+            data: {
+                'contact_number_id' : $numberID,
+                'contact_number' : $contact_number 
+            },
+            success:function(query)  {
+                window.location = redirectURL;
+            },
+            error:function(xhr, ajaxOptions, thrownError) {
+                swal("Error", thrownError, "error");
+            }
+        });
+    }
     </script>
-
 </html>

@@ -25,7 +25,9 @@ class ForumRepliesTableTest extends TestCase
     public $fixtures = [
         'app.ForumReplies',
         'app.Users',
-        'app.ForumReplyActivities'
+        'app.ForumDiscussions',
+        'app.ForumReplyActivities',
+        'app.ForumReplyDetails'
     ];
 
     /**

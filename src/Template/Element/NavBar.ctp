@@ -57,6 +57,9 @@
                         </li>
                     </ul>
                 </li>
+                <li class="<?php if ($active == 'forum') echo 'active'?>">
+                    <?php echo $this->Html->link('Forum',['controller' => 'Forums','action'=>'forumHome']) ?>
+                </li>
             </ul>
             <!-- end top-menu nav -->
         </div>

@@ -21,12 +21,15 @@ class ForumRepliesFixture extends TestFixture
         'forum_reply_active' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => '1', 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'forum_reply_created_by_user_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'forum_discussion_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'forum_parent_reply_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         '_indexes' => [
             'fk_forum_reply_created_by_user_id' => ['type' => 'index', 'columns' => ['forum_reply_created_by_user_id'], 'length' => []],
             'fk_forum_reply_discussion_id' => ['type' => 'index', 'columns' => ['forum_discussion_id'], 'length' => []],
+            'fk_forum_parent_reply_id' => ['type' => 'index', 'columns' => ['forum_parent_reply_id'], 'length' => []],
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['forum_reply_id'], 'length' => []],
+            'fk_forum_parent_reply_id' => ['type' => 'foreign', 'columns' => ['forum_parent_reply_id'], 'references' => ['forum_replies', 'forum_reply_id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
             'fk_forum_reply_discussion_id' => ['type' => 'foreign', 'columns' => ['forum_discussion_id'], 'references' => ['forum_discussions', 'forum_discussion_id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
@@ -45,11 +48,12 @@ class ForumRepliesFixture extends TestFixture
         $this->records = [
             [
                 'forum_reply_id' => 1,
-                'forum_reply_created' => 1579086857,
-                'forum_reply_updated' => 1579086857,
+                'forum_reply_created' => 1580202375,
+                'forum_reply_updated' => 1580202375,
                 'forum_reply_active' => 1,
                 'forum_reply_created_by_user_id' => 1,
-                'forum_discussion_id' => 1
+                'forum_discussion_id' => 1,
+                'forum_parent_reply_id' => 1
             ],
         ];
         parent::init();

@@ -1,5 +1,5 @@
 		<!-- Add Navbar Element -->
-    	<?php echo $this->element('NavBar');?>
+    	<?php echo $this->element('UserHeader');?>
   
     	<div id="content" class="content">
 

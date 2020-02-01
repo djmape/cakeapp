@@ -155,6 +155,8 @@ Router::prefix('Forums', function ($routes) {
     $routes->connect('/discussion/add/*', ['controller' => 'ForumDiscussions', 'action' => 'forumAddDiscussion']);
     $routes->connect('/view/*', ['controller' => 'ForumDiscussions', 'action' => 'forumReplies']);
     $routes->connect('/reply/*', ['controller' => 'ForumDiscussions', 'action' => 'forumAddReply']);
+    $routes->connect('/reply/edit/*', ['controller' => 'ForumDiscussions', 'action' => 'forumEditReply']);
+    $routes->connect('/discussion/edit/*', ['controller' => 'ForumDiscussions', 'action' => 'forumEditDiscussion']);
 
 
     

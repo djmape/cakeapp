@@ -58,7 +58,6 @@ class AnnouncementsController extends AppController
         if ($this->request->is('post')) {
             $announcement = $this->Announcements->patchEntity($announcement, $this->request->getData());
 
-
             $post->post_user_id = $currentUser;
             $post->post_post_type_id = 1;
             $post->post_active = 1;
@@ -112,11 +111,12 @@ class AnnouncementsController extends AppController
     
     public function edit($announcement_id)
     {
-        $this->adminSideBar('New Announcement');
         $announcement = $this->Announcements->find('all', 
                    array('conditions'=>array('Announcements.announcement_id'=>$announcement_id)));
-
         $row = $announcement->first();
+
+        $this->title('Edit Announcement | ' . $row->announcement_title);
+
         
         if ($this->request->is(['post', 'put'])) {
 

@@ -43,16 +43,17 @@
               	</div>
 			</div>
 			<!-- end navbar-header -->
-			
 			<?php 
 				if ($login_status == true ) {
 			?>
 			<!-- begin header-nav -->
 			<ul class="navbar-nav navbar-right">
+				<
 				<li class="dropdown navbar-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
 						<span class="d-none d-md-inline">
 							Hi, 
+
 							<?php
 								if ($user_type == 'Employee') {
         							echo $user->user_employee_lastname . ' ' . $user->user_employee_firstname . ' ' .substr($user->user_employee_middlename,0 ,1) . '.';
@@ -66,15 +67,15 @@
         					?>
 
 						</span>
-
-						<?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array());
-                        ?>
+                        <?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo);
+        					?>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<?php echo $this->Html->link('View Profile',array('prefix' => false,'controller' => 'Users','action'=>'userProfile'),array('class'=>'dropdown-item')) ?>
+						<?php echo $this->Html->link('View Profile',array('prefix' => false,'controller' => 'Users','action'=>'userProfile', $user->user->username ),array('class'=>'dropdown-item')) ?>
 						<?php echo $this->Html->link('Settings',array('prefix' => false,'controller' => 'Users','action'=>'userSettingsProfile'),array('class'=>'dropdown-item')) ?>
 						<div class="dropdown-divider"></div>
 						<?php echo $this->Html->link('Log Out',array('prefix' => false,'controller' => 'Users','action'=>'logout'),array('escape' => false,'class'=>'dropdown-item')) ?>
+
 					</div>
 				</li>
 			</ul>

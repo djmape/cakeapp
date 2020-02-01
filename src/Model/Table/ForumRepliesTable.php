@@ -10,7 +10,8 @@ use Cake\Validation\Validator;
  * ForumReplies Model
  *
  * @property |\Cake\ORM\Association\BelongsTo $ForumReplyCreatedByUsers
- * @property |\Cake\ORM\Association\BelongsTo $ForumDiscussions
+ * @property \App\Model\Table\ForumDiscussionsTable|\Cake\ORM\Association\BelongsTo $ForumDiscussions
+ * @property |\Cake\ORM\Association\BelongsTo $ForumReplies
  *
  * @method \App\Model\Entity\ForumReply get($primaryKey, $options = [])
  * @method \App\Model\Entity\ForumReply newEntity($data = null, array $options = [])
@@ -52,6 +53,21 @@ class ForumRepliesTable extends Table
         
         $this->hasOne('ForumReplyDetails', [
             'foreignKey' => 'forum_reply_detail_forum_reply_id'
+        ]);
+        
+        $this->hasMany('ForumChildReplies', [
+            'className' => 'ForumReplies',
+            'foreignKey' => 'forum_parent_reply_id'
+        ]);
+        
+        $this->belongsTo('ForumParentReplies', [
+            'className' => 'ForumReplies',
+            'foreignKey' => 'forum_parent_reply_id',
+            'joinType' => 'LEFT'
+        ]);
+        
+        $this->hasMany('UserForumReplyVotes', [
+            'foreignKey' => 'forum_reply_id'
         ]);
     }
 

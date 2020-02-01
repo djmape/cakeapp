@@ -148,7 +148,7 @@
                         </tbody>
             </table> 
             <div class="pull-right">
-                <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'Forums', 'action' => 'forumTopics'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
+                <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
             </div>
             </div>
             <!-- end Topics -->

@@ -17,6 +17,7 @@ class OrganizationsController extends AppController
         $this->Auth->allow(['index']);
         $this->navBar();
         $this->adminSideBar('organizations');
+        $this->checkLoginStatus();
     }
 
     public function index()

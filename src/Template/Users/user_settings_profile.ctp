@@ -1,6 +1,6 @@
 <!-- src/Template/Users/user_settings_profile.ctp -->
 
-<?php echo $this->element('UserHeader');?>
+<?php echo $this->element('NavBar');?>
 <?php echo $this->element('UserSettingsSidebar');?>
 <?php echo $this->Flash->render(); ?>
 

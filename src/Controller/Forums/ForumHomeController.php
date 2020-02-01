@@ -19,8 +19,7 @@ class ForumHomeController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->adminSideBarHasSub('users');
-        $this->navBar('');
+        $this->checkLoginStatus();
     }
     
     /**

@@ -8,15 +8,6 @@ use Cake\ORM\TableRegistry;
 
 class HomeController extends AppController
 {
-    #public $helpers = array('TinyMCE.TinyMCE');
-    
-    public function sideBar() {
-
-        $this->loadModel('Users');
-        $users =  $this->Users->find('all')->where(['Users.id' => $this->Auth->user('id')]);
-        $users = $users->first(); 
-        $this->set(compact('users', $users));
-    }
     
     public function initialize()
     {   
@@ -24,10 +15,9 @@ class HomeController extends AppController
 
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash');
-        $this->sideBar(); 
-        $this->adminSideBar('home');
-        $this->adminSideBarHasSub('');
         $this->updateEventStatus();
+        $this->adminHeaderSidebar('home');
+        $this->adminSideBarHasSub('site-info');
     }
 
     public function index()

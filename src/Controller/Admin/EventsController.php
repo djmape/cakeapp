@@ -10,30 +10,22 @@ use Cake\ORM\TableRegistry;
 
 class EventsController extends AppController
 {
-    public function sideBar() {
-
-        $this->loadModel('Users');
-        $users =  $this->Users->find('all')->where(['Users.id' => $this->Auth->user('id')]);
-        $users = $users->first(); 
-        $this->set(compact('users', $users));
-    }
-
     public function initialize()
     {
         parent::initialize();
 
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
-        $this->sideBar();
         $this->updateEventStatus();
-        $this->adminSideBarHasSub('events');
-        $this->adminSideBar('');
+        $this->adminSideBarHasSub('posts');
+        $this->adminHeaderSideBar('events');
     }
 
     public function index()
     {
+        $this->title('Admin | Events');
+
         $this->updateEventStatus();
-        $this->adminSideBar('all');
         $event = $this->Paginator->paginate($this->Events->find('all', array(
         'order'=>array('FIELD(Events.event_status,"Ongoing","Upcoming","Past") ASC')))->where(['Events.active' => 1]));
         $this->set(compact('event'));
@@ -41,7 +33,7 @@ class EventsController extends AppController
 
     public function add()
     {   
-        $this->adminSideBar('add');
+        $this->title('Admin | Add Event');
         $event = $this->Events->newEntity();
         if ($this->request->is('post')) {
 
@@ -105,12 +97,13 @@ class EventsController extends AppController
             $this->Flash->error(__('Unable to add your article.'));
         }
         // Get a list of tags.
-
+        $this->log($event,'debug');
         $this->set('event', $event);
     }
     
     public function edit($event_id)
     {
+        $this->title('Admin | Edit Event');
         $event = $this->Events->find('all', 
                    array('conditions'=>array('Events.event_id'=>$event_id)));
 

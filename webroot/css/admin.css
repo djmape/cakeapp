@@ -1,0 +1,46 @@
+.email-actions {
+	padding: 10%;
+	text-align: center;
+}
+
+.email-actions button {
+	margin: 2%;
+}
+
+.announcement-actions {
+	padding: 1%;
+	text-align: center;
+}
+
+.announcement-actions button {
+	margin: 2%;
+}
+
+#data-table-select {
+	background-color: white;
+}
+
+#data-table-select a {
+	color: #7e0e09;
+}
+
+.add-button {
+	margin: 1% 0 1%;
+}
+
+.breadcrumb-item.active {
+	color: #7e0e09;
+	font-weight: bold;
+}
+
+.form-group.pull-right {
+	margin-right: 0.5%;
+}
+
+.btn.btn-maroon {
+	background: #7e0e09;
+}
+
+.content {
+	padding-bottom: 10%;
+}

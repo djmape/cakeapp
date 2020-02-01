@@ -8,15 +8,6 @@ use Cake\ORM\TableRegistry;
 
 class CoursesController extends AppController
 {
-    public function sideBar() {
-
-        $this->loadModel('Users');
-        $users =  $this->Users->find('all')->where(['Users.id' => $this->Auth->user('id')]);
-        $users = $users->first(); 
-        $this->set(compact('users', $users));
-        $this->log($users->email,'debug');
-    }
-
     public function initialize()
     {
         parent::initialize();
@@ -24,31 +15,22 @@ class CoursesController extends AppController
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
         $this->Auth->allow(['tags']);
-        $this->sideBar();
-        $this->adminSideBarHasSub('courses');
-        $this->adminSideBar('');
+        $this->adminSideBarHasSub('students');
+        $this->adminHeaderSideBar('courses');
     }
 
     public function index()
     {
-        $this->adminSideBar('all');
+        $this->title('Admin | Courses');
         $courses = $this->Paginator->paginate($this->Courses->find('all')->where(['Courses.active' => 1]));
         $this->set(compact('courses'));
     }
-
-    public function view($slug = null)
-	{
-        $this->loadComponent('Paginator');
-        $this->loadModel('Articles');
-        $articles = $this->Paginator->paginate($this->Articles->find('all',array('order'=>array('Articles.created DESC')))->where(['Articles.status' => 1]));
-        $this->set(compact('articles'));
-	}
 
     public function add()
     {   
         $organizations_count = 1;
 
-        $this->adminSideBar('add');
+        $this->title('Admin | Add Course');
 
         $this->loadModel('Organizations');
         $organizations =  $this->Organizations->find('list', ['keyField' => 'organization_id', 'valueField' => 'organization_name'])->where(["Organizations.active"=>1]);
@@ -102,6 +84,7 @@ class CoursesController extends AppController
     {
         $organizations_count = 1;
 
+        $this->title('Admin | Edit Course'); 
         $this->loadModel('Organizations');
         $organizations =  $this->Organizations->find('list', ['keyField' => 'organization_id', 'valueField' => 'organization_name'])->where(["Organizations.active"=>1]);
         $this->set('organizations', $organizations);
@@ -217,12 +200,6 @@ class CoursesController extends AppController
         $this->loadComponent('Paginator');
         $articles = $this->Paginator->paginate($this->Articles->find()->where(['Articles.status' => 1]));
         $this->set(compact('articles'));
-    }
-
-    function navBar() {
-        $this->loadModel('Courses');
-        $course =  $this->Courses->find('all');
-        $this->set(compact('course', $course));
     }
 
 }

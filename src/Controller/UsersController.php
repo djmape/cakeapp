@@ -6,6 +6,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Mailer\Email;
 use App\Form\EmailForm;
+use Cake\Routing\Router;
 
 /**
  * Users Controller
@@ -19,8 +20,8 @@ class UsersController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->adminSideBarHasSub('users');
-        $this->navBar('');
+        $this->navBar('users');
+        $this->checkLoginStatus();
     }
     
     /**
@@ -43,9 +44,11 @@ class UsersController extends AppController
         $this->set(compact('posts'));
     }
 
-    public function userProfile()
+    public function userProfile($username)
     {   
-        $user_id = $this->Auth->user('id');
+        $this->loadModel('Users');
+        $currentUser = $this->Auth->user('id');
+        $user_id = $this->Users->find('all')->where(['Users.username' => $username])->first()->id;
 
         $this->header();
         $this->loadModel('UserActivities');
@@ -53,9 +56,18 @@ class UsersController extends AppController
         $getProfile = $this->User_Profiles->find('all')->where(['User_Profiles.user_profile_user_id' => $user_id])->first();
         $this->set('profile',$getProfile);
 
-        $userActivities = $this->paginate($this->UserActivities->find('all')->contain(['UserPostActivities.Posts.Announcements','UserPostReactions','PostComments.PostCommentContents','ForumCategoryActivities.ForumCategories','ForumActivities.ForumTopicActivities.ForumTopics','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumReplyDetails','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumTopics.ForumCategories','ForumActivities.ForumTopicActivities.ForumTopics.ForumCategories','ForumCategoryActivities.ForumCategories','ForumActivities.ForumReplyActivities.ForumReplies.ForumReplyDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumTopics','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumTopics.ForumCategories'])->where(['UserActivities.user_activity_user_id' => $user_id]));
+        $userActivities = $this->paginate($this->UserActivities->find('all')->contain(['UserPostActivities.Posts.Announcements','UserPostReactions','PostComments.PostCommentContents','ForumCategoryActivities.ForumCategories','ForumActivities.ForumTopicActivities.ForumTopics','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumReplyDetails','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumTopics.ForumCategories','ForumActivities.ForumTopicActivities.ForumTopics.ForumCategories','ForumCategoryActivities.ForumCategories','ForumActivities.ForumReplyActivities.ForumReplies.ForumReplyDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumTopics','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumTopics.ForumCategories','Users'])->where(['UserActivities.user_activity_user_id' => $user_id]));
         $this->log($userActivities,'debug');
         $this->set(compact('userActivities'));
+
+        if ($currentUser == $user_id) {
+            $this->set('pronoun', 'You');
+        }
+        else {
+            $this->set('pronoun', $userActivities->first()->user->username);
+        }
+
+        
     }
 
     public function userSettingsProfile()
@@ -274,14 +286,25 @@ class UsersController extends AppController
     }
 
     public function login()
-    {
+    {   
+        $this->log(Router::url( $this->referer(), true ),'debug');
+        $this->log(Router::url( $this->referer()),'debug');
         $this->set(compact('employees'));
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
-                return $this->redirect(array("controller" => "Users",
+
+                # check if user is admin. If admin redirect to admin panel, else to user's index page
+                $user_type = $this->Users->find('all')->where(['Users.id' => $this->Auth->user('id')])->first()->user_type_id;
+                if ($user_type == 1) {
+                    return $this->redirect(array("prefix" => "admin","controller" => "Dashboard",
                        "action" => "index"));
+                }
+                else {
+                    return $this->redirect(array("controller" => "Users",
+                       "action" => "index"));
+                }
             }
             else {
                 $this->Flash->logout('Your username or password is incorrect.');

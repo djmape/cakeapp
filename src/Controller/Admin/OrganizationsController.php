@@ -10,42 +10,26 @@ use Cake\ORM\TableRegistry;
 
 class OrganizationsController extends AppController
 {
-    public function sideBar() {
-
-        $this->loadModel('Users');
-        $users =  $this->Users->find('all')->where(['Users.id' => $this->Auth->user('id')]);
-        $users = $users->first(); 
-        $this->set(compact('users', $users));
-    }
-
     public function initialize()
     {
         parent::initialize();
 
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
-        $this->sideBar();
-        $this->adminSideBarHasSub('organizations');
-        $this->adminSideBar('');
+        $this->adminSideBarHasSub('students');
+        $this->adminHeaderSideBar('organizations');
     }
 
     public function index()
     {        
-        $this->adminSideBar('all');
+        $this->title('Admin | Organizations');
         $organizations = $this->Paginator->paginate($this->Organizations->find('all')->where(['Organizations.active' => 1]));
         $this->set(compact('organizations'));
     }
 
-    public function view($slug = null)
-	{
-        $this->loadComponent('Paginator');
-        $organizations = $this->Paginator->paginate($this->Organizations->find('all')->where(['Organizations.organization_status' => 1]));
-        $this->set(compact('organizations'));
-	}
-
     public function add()
     {   
-        $this->adminSideBar('add');
+        $this->title('Admin | Add Organization');
         $organization = $this->Organizations->newEntity();
         if ($this->request->is('post')) {
             if (!empty($this->request->data)) {
@@ -109,6 +93,8 @@ class OrganizationsController extends AppController
     
     public function edit($organization_id)
     {
+        $this->title('Admin | Edit Organization');
+
         $organization = $this->Organizations->find('all', 
                    array('conditions'=>array('Organizations.organization_id'=>$organization_id)));
 
@@ -206,10 +192,11 @@ class OrganizationsController extends AppController
 
     public function officers($organization_id)
     {   
-        $this->adminSideBar('organizations');
         $organization =  $this->Organizations->find('all')->where(['Organizations.organization_id' => $organization_id]);
         $organization = $organization->first();
         $this->set('organization',$organization);
+
+        $this->title('Admin | ' . $organization->organization_name);
 
         $this->loadModel('OrganizationOfficers');
         $organization_officers = $this->OrganizationOfficers->find('all')->contain(['OrganizationOfficersPositions' => ['sort' => ['OrganizationOfficersPositions.officers_position_priority' => 'DESC']],'Organizations'])->innerJoinWith('Organizations')->innerJoinWith('OrganizationOfficersPositions')->order([
@@ -223,7 +210,6 @@ class OrganizationsController extends AppController
     {
         $organization_officers_positions_count = 1;
 
-        $this->adminSideBar('All Organizations');
         $this->loadModel('OrganizationOfficers');
         $this->loadModel('OrganizationOfficersPositions');
         $organization_officers_positions =  $this->OrganizationOfficersPositions->find('list', ['keyField' => 'officers_position_id', 'valueField' => 'officers_position_name'])->notMatching("OrganizationOfficers", 
@@ -243,6 +229,7 @@ class OrganizationsController extends AppController
         $this->loadModel('Organizations');
         $organization =  $this->Organizations->find('all')->where(['Organizations.organization_id' => $organization_id]);
         $this->set('organization', $organization->first());
+        $this->title('Add Officer | ' . $organization->first()->organization_name);
 
         $organization_officer = $this->OrganizationOfficers->newEntity();
 
@@ -306,7 +293,6 @@ class OrganizationsController extends AppController
     {
         $organization_officers_positions_count = 1;
 
-        $this->adminSideBar('All Organizations');
         $this->loadModel('OrganizationOfficersPositions');
         $this->loadModel('OrganizationOfficers');
         $organization_officers_positions =  $this->OrganizationOfficersPositions->find('list', ['keyField' => 'officers_position_id', 'valueField' => 'officers_position_name'])->notMatching("OrganizationOfficers", 
@@ -327,6 +313,7 @@ class OrganizationsController extends AppController
         $this->loadModel('Organizations');
         $organizations =  $this->Organizations->find('all')->where(['Organizations.organization_id' => $organization_id]);
         $this->set('organizations', $organizations->first());
+        $this->title('Edit Officer | ' . $organizations->first()->organization_name);
 
         $organization_officer =  $this->OrganizationOfficers->find('all', 
                    array('conditions'=>array('OrganizationOfficers.organization_officer_id'=>$organization_officer_id)))->contain(['OrganizationOfficersPositions']);

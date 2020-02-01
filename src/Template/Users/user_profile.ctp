@@ -1,6 +1,6 @@
 <!-- src/Template/Users/user_profile.ctp -->
 
-<?php echo $this->element('UserHeader');?>
+<?php echo $this->element('NavBar');?>
         <?php echo $this->Html->css("front.css")?>
 
         <!-- begin #content -->
@@ -62,7 +62,7 @@
                                     if ($userActivity->user_activity_activity_type_id == 1) {
                                         if ($userActivity->user_post_activities[0]->user_post_activity_type_id == 2) {
                                             # comment
-                                            echo 'You commented in';
+                                            echo $pronoun . ' commented in';
                                 ?>
                                     <?= $userActivity->post_comments[0]->post_comment_content->post_comment_content ?>
                                 <?php
@@ -70,21 +70,21 @@
                                         else if ($userActivity->user_post_activities[0]->user_post_activity_type_id == 3) {
                                             # reaction
                                             if ($userActivity->user_post_reactions[0]->user_post_reaction_like == 1) {
-                                                echo 'You liked';
+                                                echo  $pronoun . ' liked';
                                             }
                                             else if ($userActivity->user_post_reactions[0]->user_post_reaction_dislike == 1) {
-                                                echo 'You disliked';
+                                                echo $pronoun . '  disliked';
                                             }
                                         }
                                     }
                                     else if ($userActivity->user_activity_activity_type_id == 2) {
                                         # category
                                         if ($userActivity->forum_activities[0]->forum_activity_type_id == 1 ) {
-                                            echo 'You created category ';
+                                            echo $pronoun . '  created category ';
                                         }
                                         # topic
                                         else if ($userActivity->forum_activities[0]->forum_activity_type_id == 2 ) {
-                                            echo 'You created topic ';
+                                            echo $pronoun . '  created topic ';
                                     ?>
                                         <?= $this->Html->link($userActivity->forum_activities[0]->forum_topic_activities[0]->forum_topic->forum_topic_name, ['prefix' => 'forums','controller' => 'ForumDiscussions', 'action' => 'forumDiscussionsIndex', str_replace(' ', '-', $userActivity->forum_activities[0]->forum_topic_activities[0]->forum_topic->forum_category->forum_category_name), str_replace(' ', '-', $userActivity->forum_activities[0]->forum_topic_activities[0]->forum_topic->forum_topic_name)]) ?>
                                         in 
@@ -94,7 +94,7 @@
                                         }
                                         # discussion
                                         else if ($userActivity->forum_activities[0]->forum_activity_type_id == 3 ) {
-                                            echo 'You started a discussion ';
+                                            echo $pronoun . '  started a discussion ';
                                     ?>
 
                                         <?= $this->Html->link($userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_discussion_title, ['prefix' => 'forums','controller' => 'ForumDiscussions', 'action' => 'forumReplies',str_replace(' ', '-',$userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-',$userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_topic->forum_topic_name) , str_replace(' ', '-',$userActivity->forum_activities[0]->forum_discussion_activities[0]->forum_discussion->forum_discussion_title) ]) ?>
@@ -107,12 +107,12 @@
                                         }
                                         # reply
                                         else if ($userActivity->forum_activities[0]->forum_activity_type_id == 4 ) {
-                                            echo 'You added a reply <i>' . $userActivity->forum_activities[0]->forum_reply_activities[0]->forum_reply->forum_reply_detail->forum_reply_detail_content . '</i>';
+                                            echo $pronoun . '  added a reply <i>' . $userActivity->forum_activities[0]->forum_reply_activities[0]->forum_reply->forum_reply_detail->forum_reply_detail_content . '</i>';
                                     ?>
                                     <?php
                                         }
                                         else if ($userActivity->forum_activities[0]->forum_activity_type_id == 1 ) {
-                                            echo 'You created reaction ';
+                                            echo $pronoun . '  created reaction ';
                                         }
                                     }
                                 ?>
@@ -130,10 +130,10 @@
                                             # reaction
                                             # for event no code yet
                                             if ($userActivity->user_post_activity->user_post_reactions->user_post_reaction_like == true) {
-                                                echo 'You liked';
+                                                echo $pronoun . '  liked';
                                             }
                                             else if ($userActivity->user_post_activity->user_post_reactions->user_post_reaction_dislike == true) {
-                                                echo 'You disliked';
+                                                echo $pronoun . '  disliked';
                                             }
                                         }
                                     }
@@ -154,7 +154,7 @@
                                     <?php
                                         }
                                         else if ($userActivity->forum_activities[0]->forum_activity_type_id == 1 ) {
-                                            echo 'You created reaction ';
+                                            echo $pronoun . '  created reaction ';
                                         }
                                     }
                                 ?>

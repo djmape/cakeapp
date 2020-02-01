@@ -64,10 +64,31 @@
                             <?php foreach ($forumDiscussions as $i => $forumDiscussion): ?>
                             <tr class="odd gradeX">
                                 <td class="f-s-600 text-inverse" style="width: 70%">
+                                    <div class="row">
+                                    <div class="discussion-title">
                                     <?= $this->Html->link($forumDiscussion->forum_discussion_title, ['controller' => 'ForumDiscussions', 'action' => 'forumReplies',str_replace(' ', '-',$forumDiscussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-',$forumDiscussion->forum_topic->forum_topic_name) , str_replace(' ', '-',$forumDiscussion->forum_discussion_title) ]) ?>
+                                    </div>
+                                    <div class="discussion-actions">
+                                    <?php
+                                        if ($forumDiscussion->forum_discussion_created_by_user_id == $currentUser) {
+                                    ?>
+                                        <?= $this->Html->link('<i class="fa fa-edit"></i>', ['controller' => 'ForumDiscussions', 'action' => 'forumEditDiscussion',str_replace(' ', '-',$forumDiscussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-',$forumDiscussion->forum_topic->forum_topic_name) , str_replace(' ', '-',$forumDiscussion->forum_discussion_title) ],['class' => 'btn btn-yellow btn-xs', 'title' => 'Edit', 'escape' => false]) ?>
+                                        
+                                            <button type="button" onclick="confirmDelete('<?php echo $forumTopic->forum_topic_id ?>')" class="btn btn-yellow btn-xs" id="btnDelete" title = "Delete">
+                                                <i class="fa fa-trash">
+                                                </i>
+                                            </button>
+                                    <?php
+                                        }
+                                        else {
+                                        }
+                                    ?>
+                                    </div>
+                                    </div>
                                     <br>
                                     by
                                     <?= $forumDiscussion->user->username ?> 
+                                    
                                 </td>
                                 <td class="f-s-600 text-inverse" style="width: 10%">
                                     <?php 
@@ -77,7 +98,7 @@
                                         else {
                                             echo $forumDiscussion->forum_discussion_detail->forum_discussion_detail_replies_count . ' reply' ;
                                         }
-                                    ?> -->
+                                    ?>
                                 </td>
                                 <td class="f-s-600 text-inverse" style="width: 10%">
 
