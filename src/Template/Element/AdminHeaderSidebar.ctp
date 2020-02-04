@@ -59,7 +59,8 @@
 				<li class="dropdown navbar-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
 						<span class="d-none d-md-inline">Hi, <?= $user->user->username?></span>
-						<?php echo $this->Html->image("../webroot/img/upload/".$user->admin_photo, array()); ?>
+						<?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo);
+        					?>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
 						<a href="javascript:;" class="dropdown-item">Edit Profile</a>

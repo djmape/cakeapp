@@ -23,8 +23,7 @@ class AnnouncementController extends AppController
     public function index()
     {
         $this->loadModel('Announcements');
-        $announcements = $this->Paginator->paginate($this->Announcements->find('all')->where(['Announcements.active' => 1]));
-        $this->set(compact('announcements'));
+        $this->set('announcements', $this->paginate($this->Announcements->find('all')->where(['Announcements.active' => 1])));
     }
 
     public function view($announcement_id)

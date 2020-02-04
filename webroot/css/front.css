@@ -256,3 +256,12 @@ li .user img {
 	border-radius: 50px;
 	margin-right: 2%
 }
+
+.home-announcements-events {
+	padding: 3%;
+	background-color: #ffffff;
+}
+
+.table-home-announcements>tbody>tr>td {
+	padding: 3%;
+}

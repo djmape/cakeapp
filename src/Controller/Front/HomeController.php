@@ -41,8 +41,8 @@ class HomeController extends AppController
         $this->set('margin', $margin);
 
         $this->loadModel('Announcements');
-        $announcements = $this->Announcements->find('all',array('order'=>'Announcements.announcement_modified DESC', 'limit' => 5))->where(['Announcements.active' => 1]);
-        $announcements = $this->Paginator->paginate($announcements);
+        $announcements = $this->Announcements->find('all',array('order'=>'Announcements.announcement_modified DESC', 'limit' => 5))->where(['Announcements.active' => 1])->limit(5);
+        $announcements = $this->paginate($announcements);
         $this->set(compact('announcements'));
 
         $this->loadModel('Events');

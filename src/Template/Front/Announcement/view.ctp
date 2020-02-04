@@ -36,10 +36,14 @@
                             </a>
                         </div>
                         <hr>
-                        <div style="">    
+                        <div style="">   
+                            <?php 
+                                    if ($login_status == true ) {
+                            ?> 
                             <div class="user" style="overflow: hidden; float: left">
-                                <?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array());
-                                ?>
+                                
+                                <?= $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array()); ?>
+                                    
                             </div>
                             <div class="input" style="margin-left: 7%">
                                 <form action="">
@@ -53,6 +57,18 @@
                                     </div>
                                 </form>
                             </div>
+                            <?php
+                                }
+                                else {
+                            ?>
+                                    <span class="input-group-btn p-l-10">
+                                        <button id="submit-comment" class="btn btn-maroon f-s-12 rounded-corner" type="button">
+                                            Login to comment
+                                        </button>
+                                    </span>
+                            <?php 
+                                }
+                            ?>
                         </div>
                         <hr>
                         <div id="comments-area">
@@ -277,10 +293,17 @@
             type:"POST",
             url: $url,                
             data:{'comment':$comment,
-                  'announcement_id': <?php echo $announcement_id ?>},               
+                  'announcement_id': <?php echo $announcement_id ?>
+            },               
             success:function(data)
             {
-                $('<div class="comment-box"><div class="user" style="overflow: hidden; float: left"><?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array()); ?></div><div class="comment" style="padding-left: 10%"><p>' + $comment + '</p></div></div>').prependTo('#comments-area');
+                <?php 
+                    if ($login_status == true ) {
+                ?>
+                        $('<div class="comment-box"><div class="user" style="overflow: hidden; float: left"><?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array()); ?></div><div class="comment" style="padding-left: 10%"><p>' + $comment + '</p></div></div>').prependTo('#comments-area');
+                <?php 
+                    }
+                ?>
             },
             error:function(xhr, ajaxOptions, thrownError) {
                 swal("Error", thrownError + $reaction, "error");

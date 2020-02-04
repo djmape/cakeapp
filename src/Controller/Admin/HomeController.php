@@ -18,10 +18,12 @@ class HomeController extends AppController
         $this->updateEventStatus();
         $this->adminHeaderSidebar('home');
         $this->adminSideBarHasSub('site-info');
+        $this->header();
     }
 
     public function index()
     {
+        $this->title('PUPQC Web Portal');
         $this->loadModel('HomeCarouselImgs');
         $home_carousel_img = $this->HomeCarouselImgs->newEntity();
 
@@ -70,6 +72,8 @@ class HomeController extends AppController
             }
             
         }
+
+        $this->log($home_carousel_imgs,'debug');
     }
 
 

@@ -39,7 +39,7 @@
 			<!-- begin navbar-header -->
 			<div class="navbar-header" style=" display: inline">				
               	<div class="image navbar-brand">                	
-                	<?php echo $this->Html->link('<div class="navbar-header" style=""><span>' . $this->Html->image('PUPlogo.png',array('style' => 'height: 50px')) . '</span> Polytechnic University of the Philippines <small> Quezon City </small><br></div>',array('controller'=>'Users','action'=>'index'),array('escape' => false,'class' => 'navbar-brand', 'style' => 'color:gray; width: 1000px')) ?>
+                	<?php echo $this->Html->link('<div class="navbar-header" style=""><span>' . $this->Html->image('PUPlogo.png',array('style' => 'height: 50px')) . '</span> Polytechnic University of the Philippines <small> Quezon City </small><br></div>',array('prefix' => 'front', 'controller'=>'Home','action'=>'index'),array('escape' => false,'class' => 'navbar-brand', 'style' => 'color:gray; width: 1000px')) ?>
               	</div>
 			</div>
 			<!-- end navbar-header -->

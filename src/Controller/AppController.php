@@ -257,6 +257,7 @@ class AppController extends Controller
         $this->loadModel("User_Types");
 
         $user_type = $this->Users->find('all')->contain(["UserTypes"])->where(['Users.id' => $this->Auth->user('id')])->first();
+            $this->log($user_type,'debug');
 
         if ($user_type->user_type->user_type_name == 'Administrator') {
 
