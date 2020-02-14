@@ -23,28 +23,30 @@ class EmployeePositionsController extends AppController
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
         $this->sideBar();
-        $this->adminSideBarHasSub('settings');
-        $this->adminSideBar('employees');
+        $this->adminSideBarHasSub('employees');
+        $this->adminHeaderSideBar('employees');
     }
 
     public function index()
     {   
-        $employee_positions = $this->Paginator->paginate($this->EmployeePositions->find('all')->order(['EmployeePositions.employee_position_priority' => 'ASC'
-        ])->where(['EmployeePositions.active' => 1]));
+        $this->loadModel('EmployeePositionNames');  
+        $employee_positions = $this->paginate($this->EmployeePositionNames->find('all')->order(['EmployeePositionNames.employee_position_priority' => 'ASC'
+        ])->where(['EmployeePositionNames.active' => 1]));
         $this->set(compact('employee_positions'));
     }
 
     public function add()
     {
+        $this->loadModel('EmployeePositionNames'); 
 
-        $employee_positions = $this->EmployeePositions->newEntity();
+        $employee_positions = $this->EmployeePositionNames->newEntity();
         if ($this->request->is('post')) {
 
             $employee_positions->employee_position_name = $this->request->getData('employee_position_name');
             $employee_positions->employee_position_priority = $this->request->getData('employee_position_priority');
             $employee_positions->active = 1;
 
-            if ($saved = $this->EmployeePositions->save($employee_positions)) {
+            if ($saved = $this->EmployeePositionNames->save($employee_positions)) {
                 $this->Flash->success('Employee Position Added!', [
                     'params' => [
                         'saves' => 'Employee Position Added!!'
@@ -59,18 +61,19 @@ class EmployeePositionsController extends AppController
     
     public function edit($employee_position_id)
     {
-        $employee_positions = $this->EmployeePositions->find('all', 
-                   array('conditions'=>array('EmployeePositions.employee_position_id'=>$employee_position_id)));
+        $this->loadModel('EmployeePositionNames'); 
+        $employee_positions = $this->EmployeePositionNames->find('all', 
+                   array('conditions'=>array('EmployeePositionNames.employee_position_id'=>$employee_position_id)));
         $row = $employee_positions->first();
 
         if ($this->request->is(['post', 'put'])) {
 
-            $employeePositionsTable = TableRegistry::get('EmployeePositions');
+            $employeePositionsTable = TableRegistry::get('EmployeePositionNames');
 
-            $employeePositionsTable = TableRegistry::getTableLocator()->get('EmployeePositions');
+            $employeePositionsTable = TableRegistry::getTableLocator()->get('EmployeePositionNames');
             $employee_positions = $employeePositionsTable->get($employee_position_id);
 
-            $this->EmployeePositions->patchEntity($employee_positions, $this->request->getData());
+            $this->EmployeePositionNames->patchEntity($employee_positions, $this->request->getData());
             
             if ($employeePositionsTable->save($employee_positions)) {
                 $this->Flash->success('Employee Position Updated!', [
@@ -91,6 +94,7 @@ class EmployeePositionsController extends AppController
 
     public function delete()
     {   
+        $this->loadModel('EmployeePositionNames');
         $this->log('Passed','debug');
         $this->layout = false;
         $this->autoRender = false;
@@ -100,14 +104,14 @@ class EmployeePositionsController extends AppController
             $this->log('Passed','debug');
             $employee_position_id = $this->request->getData('employee_position_id');
 
-            $employeePositionsTable = TableRegistry::get('EmployeePositions');
+            $employeePositionsTable = TableRegistry::get('EmployeePositionNames');
 
-            $employeePositionsTable = TableRegistry::getTableLocator()->get('EmployeePositions');
+            $employeePositionsTable = TableRegistry::getTableLocator()->get('EmployeePositionNames');
             $employeePosition = $employeePositionsTable->get($employee_position_id);
 
             $employeePosition->active = 0;
 
-            if ($saved = $this->EmployeePositions->save($employeePosition)) {
+            if ($saved = $this->EmployeePositionNames->save($employeePosition)) {
                 $this->Flash->success('Employee Position Deleted!', [
                     'params' => [
                         'saves' => 'Employee Position Deleted!!'

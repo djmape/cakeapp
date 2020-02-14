@@ -7,6 +7,8 @@ use Cake\Auth\DefaultPasswordHasher;
 use Cake\Mailer\Email;
 use App\Form\EmailForm;
 use Cake\ORM\Query;
+use Cake\I18n\Time;
+use Cake\Event\Event;
 
 /**
  * Users Controller
@@ -17,6 +19,12 @@ use Cake\ORM\Query;
  */
 class ForumDiscussionsController extends AppController
 {
+	public function beforeFilter(Event $event)
+    {
+       // allow all action
+        $this->Auth->allow(['forumDiscussionsIndex','forumReplies']);
+    }
+
     public function initialize()
     {
         parent::initialize();
@@ -501,6 +509,12 @@ class ForumDiscussionsController extends AppController
         $currentUser = $this->Auth->user('id');
 
         $discussion = $this->ForumDiscussions->find('all')->contain(['ForumDiscussionDetails','ForumTopics.ForumCategories','Users.UserProfiles','Users.UserTypes','Users.UserAdministrators','Users.UserEmployees.EmployeePositionNames','Users.UserStudents.Courses'=> function (Query $query) { return $query->limit(['UserStudents.user_id' => 'Users.id']);},'Users.UserAlumni.Courses','Users.UserForumActivityCounts'])->where(['ForumDiscussions.forum_discussion_title' => str_replace('-', ' ', $forum_discussion_title)])->first();
+
+        if ($discussion->forum_discussion_active == 0 || $discussion == '') {
+            return $this->redirect(['prefix' => 'front','controller' => 'home','action' => 'error404']);
+        }
+        else {
+
         $discussion_id = $discussion->forum_discussion_id;
 
         # get current user vote for discussion
@@ -540,13 +554,14 @@ class ForumDiscussionsController extends AppController
             }
             ])->leftJoinWith('ForumParentReplies')
             ->where(['ForumReplies.forum_discussion_id' => $discussion_id])
-            ->order(['ForumReplies.forum_reply_created' => 'ASC'])
+            ->order(['ForumReplies.forum_reply_created' => 'DESC'])
             );
         $this->set('discussion',$discussion);
         $this->set('replies',$replies);
         $this->set(compact('replies'));
         $this->set('currentUser',$currentUser);
         $this->log($replies,'debug');
+    }
     }
 
     public function forumAddReply($forum_category_name,$forum_topic_name,$forum_discussion_title) 
@@ -683,12 +698,41 @@ class ForumDiscussionsController extends AppController
 
                                                     if ($this->ForumReplyHistory->save($forumReplyHistory)) {
 
-                                                        $this->Flash->success('Reply Added!', [
-                                                            'params' => [
-                                                                'saves' => 'Reply Added!'
-                                                            ]
-                                                        ]);
-                                                        return $this->redirect(['controller' => 'ForumDiscussions','action' => 'forumReplies', $forum_category_name, $forum_topic_name , $forum_discussion_title]);
+                                                        # begin save UserNotifications
+
+                                                        $this->loadModel('UserNotifications');
+                                                        $user_notification = $this->UserNotifications->newEntity();
+
+                                                        $forum_discussion_user_id = $this->ForumDiscussions->find('all')->where(['ForumDiscussions.forum_discussion_id' => $getDiscussionID])->first()->forum_discussion_created_by_user_id;
+
+                                                        $user_notification->user_notification_receiver_user_id = $forum_discussion_user_id;
+
+                                                        if ($userNotification = $this->UserNotifications->save($user_notification)) {
+
+                                                            # begin save ForumNotifications
+
+                                                            $this->loadModel('ForumNotifications');
+
+                                                            $forum_notification = $this->ForumNotifications->newEntity();
+
+                                                            $forum_notification->user_notification_id = $userNotification->user_notification_id;
+                                                            $forum_notification->forum_notification_sender_user_id = $currentUser;
+                                                            $forum_notification->forum_notification_type_id = 1; # Discussion Reply
+                                                            $forum_notification->forum_notification_discussion_id = $$getDiscussionID;
+
+                                                            if ($this->ForumNotifications->save($forum_notification)) {
+
+                                                                return $this->redirect(['controller' => 'ForumDiscussions','action' => 'forumReplies', $forum_category_name, $forum_topic_name , $forum_discussion_title]);
+                                                            }
+                                                            else {
+                                                                $this->log($forum_notification->errors(),'debug');
+                                                            }
+                                                            # end save ForumNotifications
+                                                        }
+                                                        else {
+                                                            $this->log($user_notification->errors(),'debug');
+                                                        }
+                                                        # end save UserNotifications
                                                     }
                                                 }
 
@@ -711,16 +755,42 @@ class ForumDiscussionsController extends AppController
 
                                                     if ($this->ForumReplyHistory->save($forumReplyHistory)) {
 
-                                                        $this->Flash->success('Reply Added!', [
-                                                            'params' => [
-                                                                'saves' => 'Reply Added!'
-                                                            ]
-                                                        ]);
-                                                        return $this->redirect(['controller' => 'ForumDiscussions','action' => 'forumReplies', $forum_category_name, $forum_topic_name , $forum_discussion_title]);
+                                                        # begin save UserNotifications
 
+                                                        $this->loadModel('UserNotifications');
+                                                        $user_notification = $this->UserNotifications->newEntity();
+
+                                                        $forum_discussion_user_id = $this->ForumDiscussions->find('all')->where(['ForumDiscussions.forum_discussion_id' => $getDiscussionID])->first()->forum_discussion_created_by_user_id;
+
+                                                        $user_notification->user_notification_receiver_user_id = $forum_discussion_user_id;
+
+                                                        if ($userNotification = $this->UserNotifications->save($user_notification)) {
+
+                                                            # begin save ForumNotifications
+
+                                                            $this->loadModel('ForumNotifications');
+
+                                                            $forum_notification = $this->ForumNotifications->newEntity();
+
+                                                            $forum_notification->user_notification_id = $userNotification->user_notification_id;
+                                                            $forum_notification->forum_notification_sender_user_id = $currentUser;
+                                                            $forum_notification->forum_notification_type_id = 1; # Discussion Reply
+                                                            $forum_notification->forum_notification_discussion_id = $getDiscussionID;
+
+                                                            if ($this->ForumNotifications->save($forum_notification)) {
+
+                                                                return $this->redirect(['controller' => 'ForumDiscussions','action' => 'forumReplies', $forum_category_name, $forum_topic_name , $forum_discussion_title]);
+                                                            }
+                                                            else {
+                                                                $this->log($forum_notification->errors(),'debug');
+                                                            }
+                                                            # end save ForumNotifications
+                                                        }
+                                                        else {
+                                                            $this->log($user_notification->errors(),'debug');
+                                                        }
+                                                        # end save UserNotifications
                                                     }
-
-
                                                 }
                                             }
                                         }
@@ -1194,10 +1264,12 @@ class ForumDiscussionsController extends AppController
         $this->loadModel('ForumActivities');
         $this->loadModel('UserForumDiscussionVotes');
         $this->loadModel('ForumDiscussions');
+        $this->loadModel('ForumDiscussionActivities');
         $this->loadModel('ForumDiscussionDetails');
 
         $userActivity = $this->UserActivities->newEntity();
         $forumActivity = $this->ForumActivities->newEntity();
+        $forumDiscussionActivity = $this->ForumDiscussionActivities->newEntity();
 
         $currentUser = $this->Auth->user('id');
 
@@ -1216,18 +1288,30 @@ class ForumDiscussionsController extends AppController
 
                 # begin save ForumActivities 
 
-                if ($userDiscussionVote == 'DiscussionUpvote' || $userDiscussionVote == 'DiscussionUpvoteCancelDownvote'|| $userDiscussionVote == 'DiscussionDownvote' || $userDiscussionVote == 'DiscussionDownvoteCancelUpvote' ) {
-                    $forumActivity->forum_activity_type_id = 14; # create discussion vote
+                if ($userDiscussionVote == 'DiscussionUpvote' || $userDiscussionVote == 'DiscussionUpvoteCancelDownvote'  ) {
+                    $forumActivity->forum_activity_type_id = 13; # Discussion Upvote
                 }
-                else if ($userDiscussionVote == 'DiscussionUpvoteCancel' || $userDiscussionVote == 'DiscussionDownvoteCancel') {
-                    $forumActivity->forum_activity_type_id = 15; # cancel discussion vote
+                else if ($userDiscussionVote == 'DiscussionDownvote' || $userDiscussionVote == 'DiscussionDownvoteCancelUpvote') {
+                    $forumActivity->forum_activity_type_id = 14; # Discussion Downvote
+                }
+                else if ($userDiscussionVote == 'DiscussionUpvoteCancel') {
+                    $forumActivity->forum_activity_type_id = 15; # Discussion Cancel Upvote
+                }
+                else if ($userDiscussionVote == 'DiscussionDownvoteCancel') {
+                    $forumActivity->forum_activity_type_id = 16; # Discussion Cancel Downvote
                 }
 
                 $forumActivity->forum_activity_user_id = $currentUser;
                 $forumActivity->forum_activity_activity_id = $activityID->user_activity_id;
 
                 if ($forumID = $this->ForumActivities->save($forumActivity)) {
-                    $this->log('Passed','debug');
+
+                    # begin save ForumDiscussionActivities
+
+                    $forumDiscussionActivity->forum_discussion_activity_forum_activity_id = $forumID->forum_activity_id;
+                    $forumDiscussionActivity->forum_discussion_activity_forum_discussion_id = $discussion_id;
+
+                    if ($forumDiscussionActivityID = $this->ForumDiscussionActivities->save($forumDiscussionActivity)) {
                     # begin save UserForumDiscussionVotes
 
                     $checkIfUserDiscussionVoteExists = $this->UserForumDiscussionVotes->find('all')->where(['UserForumDiscussionVotes.forum_discussion_id' => $discussion_id,'UserForumDiscussionVotes.user_id' => $currentUser]);
@@ -1247,7 +1331,6 @@ class ForumDiscussionsController extends AppController
                         else if ($userDiscussionVote == 'DiscussionUpvoteCancelDownvote') {
                             $forumDiscussionVote->forum_discussion_vote_upvote = true;
                             $forumDiscussionVote->forum_discussion_vote_downvote = false;
-                            $this->log('Vote: DiscussionUpvoteCancelDownvote','debug');
                         }
                         else if ($userDiscussionVote == 'DiscussionDownvote' ) {
                             $forumDiscussionVote->forum_discussion_vote_downvote = true;
@@ -1280,33 +1363,61 @@ class ForumDiscussionsController extends AppController
 
                             if ($userDiscussionVote == 'DiscussionUpvote') {
                                 $forumDiscussionDetail->forum_discussion_detail_upvote_count += 1;
-                                $this->log('Details: DiscussionUpvote','debug');
                             }
                             else if ($userDiscussionVote == 'DiscussionUpvoteCancelDownvote') {
                                 $forumDiscussionDetail->forum_discussion_detail_upvote_count += 1;
                                 $forumDiscussionDetail->forum_discussion_detail_downvote_count -= 1;
-                                $this->log('Details: DiscussionUpvoteCancelDownvote','debug');
                             }
                             else if ($userDiscussionVote == 'DiscussionDownvote') {
                                 $forumDiscussionDetail->forum_discussion_detail_downvote_count += 1;
-                                $this->log('Details: DiscussionDownvote','debug');
                             }
                             else if ($userDiscussionVote == 'DiscussionDownvoteCancelUpvote') {
                                 $forumDiscussionDetail->forum_discussion_detail_downvote_count += 1;
                                 $forumDiscussionDetail->forum_discussion_detail_upvote_count -= 1;
-                                $this->log('Details: DiscussionDownvoteCancelUpvote','debug');
                             }
                             else if ($userDiscussionVote == 'DiscussionUpvoteCancel') {
                                 $forumDiscussionDetail->forum_discussion_detail_upvote_count -= 1;
-                                $this->log('Details: DiscussionUpvoteCancel','debug');
                             }
                             else if ($userDiscussionVote == 'DiscussionDownvoteCancel') {
                                 $forumDiscussionDetail->forum_discussion_detail_downvote_count -= 1;
-                                $this->log('Details: DiscussionDownvoteCancel','debug');
                             }
 
                             if ($forumDiscussionDetailsTable->save($forumDiscussionDetail)) {
 
+                                # begin save UserNotifications
+
+                                $this->loadModel('UserNotifications');
+                                $user_notification = $this->UserNotifications->newEntity();
+
+                                $forum_discussion_user_id = $this->ForumDiscussions->find('all')->where(['ForumDiscussions.forum_discussion_id' => $discussion_id])->first()->forum_discussion_created_by_user_id;
+
+                                $user_notification->user_notification_receiver_user_id = $forum_discussion_user_id;
+
+                                if ($userNotification = $this->UserNotifications->save($user_notification)) {
+
+                                    # begin save ForumNotifications
+
+                                    $this->loadModel('ForumNotifications');
+
+                                    $forum_notification = $this->ForumNotifications->newEntity();
+
+                                    $forum_notification->user_notification_id = $userNotification->user_notification_id;
+                                    $forum_notification->forum_notification_sender_user_id = $currentUser;
+                                    $forum_notification->forum_notification_type_id = 2; # Discussion Reaction
+                                    $forum_notification->forum_notification_discussion_id = $discussion_id;
+
+                                    if ($this->ForumNotifications->save($forum_notification)) {
+
+                                    }
+                                    else {
+                                        $this->log($forum_notification->errors(),'debug');
+                                    }
+                                    # end save ForumNotifications
+                                }
+                                else {
+                                    $this->log($user_notification->errors(),'debug');
+                                }
+                                # end save UserNotifications
                             }
                             else {
                                 $this->log($forumDiscussionDetail->errors(),'debug');
@@ -1365,6 +1476,40 @@ class ForumDiscussionsController extends AppController
 
                             if ($forumDiscussionDetailsTable->save($forumDiscussionDetail)) {
 
+                                # begin save UserNotifications
+
+                                $this->loadModel('UserNotifications');
+                                $user_notification = $this->UserNotifications->newEntity();
+
+                                $forum_discussion_user_id = $this->ForumDiscussions->find('all')->where(['ForumDiscussions.forum_discussion_id' => $discussion_id])->first()->forum_discussion_created_by_user_id;
+
+                                $user_notification->user_notification_receiver_user_id = $forum_discussion_user_id;
+
+                                if ($userNotification = $this->UserNotifications->save($user_notification)) {
+
+                                    # begin save ForumNotifications
+
+                                    $this->loadModel('ForumNotifications');
+
+                                    $forum_notification = $this->ForumNotifications->newEntity();
+
+                                    $forum_notification->user_notification_id = $userNotification->user_notification_id;
+                                    $forum_notification->forum_notification_sender_user_id = $currentUser;
+                                    $forum_notification->forum_notification_type_id = 2; # Discussion Reaction
+                                    $forum_notification->forum_notification_discussion_id = $discussion_id;
+
+                                    if ($this->ForumNotifications->save($forum_notification)) {
+
+                                    }
+                                    else {
+                                        $this->log($forum_notification->errors(),'debug');
+                                    }
+                                    # end save ForumNotifications
+                                }
+                                else {
+                                    $this->log($user_notification->errors(),'debug');
+                                }
+                                # end save UserNotifications
                             }
                             else {
                                 $this->log($forumDiscussionDetail->errors(),'debug');
@@ -1376,6 +1521,7 @@ class ForumDiscussionsController extends AppController
                         }
                     }
                     # end if user doesn't have a vote in UserForumDiscussionVotes in chosen discussion
+                    }
                 }
                 else {
                     $this->log($forumActivity->errors(),'debug');
@@ -1399,14 +1545,18 @@ class ForumDiscussionsController extends AppController
         $this->loadModel('UserForumReplyVotes');
         $this->loadModel('ForumReplyDetails');
         $this->loadModel('ForumReplies');
+        $this->loadModel('ForumReplyActivities');
 
         $userActivity = $this->UserActivities->newEntity();
         $forumActivity = $this->ForumActivities->newEntity();
+        $forumReplyActivity = $this->ForumReplyActivities->newEntity();
 
         $currentUser = $this->Auth->user('id');
 
         $userReplyVote = $this->request->data['reply_vote'];
         $reply_id = $this->request->data['reply_id'];
+
+        $discussion_id = $this->ForumReplies->find('all')->where(['ForumReplies.forum_reply_id' => $reply_id])->first()->forum_discussion_id;
 
         if ($this->request->is(['post','put'])) {
             
@@ -1419,11 +1569,17 @@ class ForumDiscussionsController extends AppController
 
                 # begin save ForumActivities 
 
-                if ($userReplyVote == 'ReplyUpvote' || $userReplyVote == 'ReplyUpvoteCancelDownvote'|| $userReplyVote == 'ReplyDownvote' || $userReplyVote == 'ReplyDownvoteCancelUpvote' ) {
-                    $forumActivity->forum_activity_type_id = 16; # create reply vote
+                if ($userReplyVote == 'ReplyUpvote' || $userReplyVote == 'ReplyUpvoteCancelDownvote'  ) {
+                    $forumActivity->forum_activity_type_id = 17; # create discussion vote
                 }
-                else if ($userReplyVote == 'ReplyUpvoteCancel' || $userReplyVote == 'ReplyDownvoteCancel') {
-                    $forumActivity->forum_activity_type_id = 17; # cancel reply vote
+                else if ($userReplyVote == 'ReplyDownvote' || $userReplyVote == 'ReplyDownvoteCancelUpvote') {
+                    $forumActivity->forum_activity_type_id = 18; # cancel discussion vote
+                }
+                else if ($userReplyVote == 'ReplyUpvoteCancel') {
+                    $forumActivity->forum_activity_type_id = 19; # cancel discussion vote
+                }
+                else if ($userReplyVote == 'ReplyDownvoteCancel') {
+                    $forumActivity->forum_activity_type_id = 20; # cancel discussion vote
                 }
 
                 $forumActivity->forum_activity_user_id = $currentUser;
@@ -1431,6 +1587,11 @@ class ForumDiscussionsController extends AppController
 
                 if ($forumID = $this->ForumActivities->save($forumActivity)) {
                     
+                    $forumReplyActivity->forum_reply_activity_forum_activity_id = $forumID->forum_activity_id;
+                    $forumReplyActivity->forum_reply_activity_forum_reply_id = $reply_id;
+
+                    if ($replyActivityID = $this->ForumReplyActivities->save($forumReplyActivity)) {
+
                     # begin save UserForumReplyVotes
 
                     $checkIfUserReplyVoteExists = $this->UserForumReplyVotes->find('all')->where(['UserForumReplyVotes.forum_reply_id' => $reply_id,'UserForumReplyVotes.user_id' => $currentUser]);
@@ -1514,6 +1675,54 @@ class ForumDiscussionsController extends AppController
 
                             if ($forumReplyDetailsTable->save($forumReplyDetail)) {
 
+                                # begin save UserNotifications
+
+                                $this->loadModel('UserNotifications');
+                                $user_notification = $this->UserNotifications->newEntity();
+
+                                $forum_reply_created_by_user_id = $this->ForumReplies->find('all')->where(['ForumReplies.forum_reply_id' => $reply_id])->first()->forum_reply_created_by_user_id;
+
+                                $user_notification->user_notification_receiver_user_id = $forum_reply_created_by_user_id;
+
+                                if ($userNotification = $this->UserNotifications->save($user_notification)) {
+
+                                    # begin save ForumNotifications
+
+                                    $this->loadModel('ForumNotifications');
+
+                                    if ($userReplyVote == 'ReplyUpvote' || $userReplyVote == 'ReplyUpvoteCancelDownvote'  ) {
+                                        $forum_notification_type_id = 7; # create discussion vote
+                                    }
+                                    else if ($userReplyVote == 'ReplyDownvote' || $userReplyVote == 'ReplyDownvoteCancelUpvote') {
+                                        $forum_notification_type_id = 8; # cancel discussion vote
+                                    }
+                                    else if ($userReplyVote == 'ReplyUpvoteCancel') {
+                                        $forum_notification_type_id = 9; # cancel discussion vote
+                                    }
+                                    else if ($userReplyVote == 'ReplyDownvoteCancel') {
+                                        $forum_notification_type_id = 10; # cancel discussion vote
+                                    }
+
+                                    $forum_notification = $this->ForumNotifications->newEntity();
+
+                                    $forum_notification->user_notification_id = $userNotification->user_notification_id;
+                                    $forum_notification->forum_notification_sender_user_id = $currentUser;
+                                    $forum_notification->forum_notification_type_id = $forum_notification_type_id; # 
+                                    $forum_notification->forum_notification_discussion_id = $discussion_id;
+                                    $forum_notification->forum_notification_reply_id = $reply_id;
+
+                                    if ($this->ForumNotifications->save($forum_notification)) {
+
+                                    }
+                                    else {
+                                        $this->log($forum_notification->errors(),'debug');
+                                    }
+                                    # end save ForumNotifications
+                                }
+                                else {
+                                    $this->log($user_notification->errors(),'debug');
+                                }
+                                # end save UserNotifications
                             }
                             else {
                                 $this->log($forumReplyDetail->errors(),'debug');
@@ -1577,7 +1786,54 @@ class ForumDiscussionsController extends AppController
                             }
 
                             if ($forumReplyDetailsTable->save($forumReplyDetail)) {
+                                # begin save UserNotifications
 
+                                $this->loadModel('UserNotifications');
+                                $user_notification = $this->UserNotifications->newEntity();
+
+                                $forum_reply_created_by_user_id = $this->ForumReplies->find('all')->where(['ForumReplies.forum_reply_id' => $reply_id])->first()->forum_reply_created_by_user_id;
+
+                                $user_notification->user_notification_receiver_user_id = $forum_reply_created_by_user_id;
+
+                                if ($userNotification = $this->UserNotifications->save($user_notification)) {
+
+                                    # begin save ForumNotifications
+
+                                    $this->loadModel('ForumNotifications');
+
+                                    if ($userReplyVote == 'ReplyUpvote' || $userReplyVote == 'ReplyUpvoteCancelDownvote'  ) {
+                                        $forum_notification_type_id = 7; # create discussion vote
+                                    }
+                                    else if ($userReplyVote == 'ReplyDownvote' || $userReplyVote == 'ReplyDownvoteCancelUpvote') {
+                                        $forum_notification_type_id = 8; # cancel discussion vote
+                                    }
+                                    else if ($userReplyVote == 'ReplyUpvoteCancel') {
+                                        $forum_notification_type_id = 9; # cancel discussion vote
+                                    }
+                                    else if ($userReplyVote == 'ReplyDownvoteCancel') {
+                                        $forum_notification_type_id = 10; # cancel discussion vote
+                                    }
+
+                                    $forum_notification = $this->ForumNotifications->newEntity();
+
+                                    $forum_notification->user_notification_id = $userNotification->user_notification_id;
+                                    $forum_notification->forum_notification_sender_user_id = $currentUser;
+                                    $forum_notification->forum_notification_type_id = $forum_notification_type_id;
+                                    $forum_notification->forum_notification_discussion_id = $discussion_id;
+                                    $forum_notification->forum_notification_reply_id = $reply_id;
+
+                                    if ($this->ForumNotifications->save($forum_notification)) {
+
+                                    }
+                                    else {
+                                        $this->log($forum_notification->errors(),'debug');
+                                    }
+                                    # end save ForumNotifications
+                                }
+                                else {
+                                    $this->log($user_notification->errors(),'debug');
+                                }
+                                # end save UserNotifications
                             }
                             else {
                                 $this->log($forumReplyDetail->errors(),'debug');
@@ -1590,6 +1846,10 @@ class ForumDiscussionsController extends AppController
                         # end save UserForumReplyVotes
                     }
                     # end if user doesn't have a vote in UserForumReplyVotes in chosen reply
+                    }
+                    else {
+                        $this->log($forumReplyActivity->errors(),'debug');
+                    }
                 }
                 else {
                     $this->log($forumActivity->errors(),'debug');

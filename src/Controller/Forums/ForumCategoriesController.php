@@ -6,6 +6,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Mailer\Email;
 use App\Form\EmailForm;
+use Cake\Event\Event;
 
 /**
  * Users Controller
@@ -16,18 +17,18 @@ use App\Form\EmailForm;
  */
 class ForumCategoriesController extends AppController
 {
+	public function beforeFilter(Event $event)
+    {
+       // allow all action
+        $this->Auth->allow(['forumCategoriesIndex','forumCategoriesAll','forumTopicsIndex']);
+    }
+
     public function initialize()
     {
         parent::initialize();
         $this->checkLoginStatus();
     }
     
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-
     public function forumCategoriesIndex()
     {   
         $this->header();
@@ -84,82 +85,6 @@ class ForumCategoriesController extends AppController
         $this->set('forumTopics', $forumTopics);
         $this->set(compact('forumTopics'));
         $this->set('forumCategory', $forumCategory);
-    }
-
-    public function forumDiscussions()
-    {   
-        $this->header();
-        $this->title('PUPQC | Forum Discussions');
-
-        $this->loadModel('Posts');
-        $this->loadModel('Announcements');
-        $this->loadModel('Users');
-        $this->loadModel('UserProfiles');
-
-        $paginate = ['sortWhitelist' => 'Posts.post_modified'];
-        $posts = $this->paginate($this->Posts->find('all')->contain(['Users.UserProfiles','Announcements'])->where(['Posts.post_active' => 1]));
-        $this->log($posts->first(),'debug');
-        $this->set(compact('posts'));
-    }
-
-    public function forumReplies()
-    {   
-        $this->header();
-        $this->title('PUPQC | Forum Discussions');
-
-        $this->loadModel('Posts');
-        $this->loadModel('Announcements');
-        $this->loadModel('Users');
-        $this->loadModel('UserProfiles');
-
-        $paginate = ['sortWhitelist' => 'Posts.post_modified'];
-        $posts = $this->paginate($this->Posts->find('all')->contain(['Users.UserProfiles','Announcements'])->where(['Posts.post_active' => 1]));
-        $this->log($posts->first(),'debug');
-        $this->set(compact('posts'));
-    }
-
-    public function changePassword() {
-        $this->adminProfileSideBar('password');
-
-        $user = $this->Users->find('all')->where(['Users.id'=>$this->Auth->user('id')]);
-        $this->set('user',$user);
-        $row = $user->first();
-
-        if ($this->request->is(['post', 'put'])) {
-
-            $usersTable = TableRegistry::get('Users');
-
-            $usersTable = TableRegistry::getTableLocator()->get('Users');
-            $users = $usersTable->get($this->Auth->user('id'));
-
-            $current_password = $this->request->data['current_password'];
-
-            if ((new DefaultPasswordHasher)->check($current_password, $users->password)) {
-
-                $users->password = $this->request->data['new_password'];
-
-                 if ($usersTable->save($users)) {
-                    $this->Flash->success('User Updated!', [
-                    'params' => [
-                        'saves' => 'Password Updated!'
-                        ]
-                    ]);
-                return $this->redirect(['action' => 'changePassword', $this->Auth->user('id')]);
-                }
-                else {
-                debug($event->errors());
-                $this->Flash->error(__('Unable to add your article.'));
-                }
-            }
-            else {
-                    $this->Flash->error('incorrect Password', [
-                    'params' => [
-                        'saves' => 'incorrect Password!'
-                        ]
-                    ]);
-            }
-      }      
-        $this->set('user',$user);
     }
 
 

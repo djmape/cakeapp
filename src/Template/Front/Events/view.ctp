@@ -51,49 +51,102 @@
                             Last Updated: <?= $row->event_modified ?>
                         </small>
                     </p>
+                    <hr>
+                    <i class="fa fa-thumbs-up fa-fw fa-sm m-r-3">
+                        <?php
+                            if ($getReactionsCountAvailable == false) {
+                        ?>
+                            <p id="likes-count"> 0 </p>
+                        <?php
+                            }
+                            else {
+                        ?>
+                            <p id="likes-count"><?= ' ' . $reactions->post_likes_count ?></p>
+                        <?php
+                            }
+                        ?>                        
+                    </i>
+                    <i class="fa fa-thumbs-down fa-fw fa-sm m-r-3">
+                        <?php
+                            if ($getReactionsCountAvailable == false) {
+                        ?>
+                                <p id="dislikes-count"> 0 </p>
+                        <?php
+                            }
+                            else {
+                        ?>
+                                <p id="dislikes-count"><?= ' ' . $reactions->post_dislikes_count ?></p>
+                        <?php
+                            }
+                        ?> 
+                    </i>
+                    <p class="clicked-react"></p>
                     <div class="">
-                            <div id="post-reactions">
-                                <a href="javascript:;" class="m-r-15 post-reaction" style="color: gray">
-                                    <i class="fa fa-thumbs-up fa-fw fa-lg m-r-3"></i>
-                                    Like
-                                </a>
-                                <a href="javascript:;" class="m-r-15 post-reaction">
-                                    <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
-                                </a>
-                            </div>
-                            <hr>
-                            <div style="">    
-                                <div class="user" style="overflow: hidden; float: left">
-                                    <?php
-                                        if ($login_status == true ) {
-                                        if ($user_type == 'Employee') {
-                                            echo $this->Html->image("../webroot/img/upload/".$user->user_employee_photo, array());
-                                        }
-                                        else if ($user_type = 'Student') {
-                                            echo $this->Html->image("../webroot/img/upload/".$user->user_student_photo, array());
-                                        }
-                                        else if ($user_type == 'Alumni') {
-                                            echo $this->Html->image("../webroot/img/upload/".$user->user_alumni_photo, array());
-                                        }
-                                        }
-                                        else {
-                                            echo $this->Html->image("../webroot/img/upload/unknown-user.png", array());
-                                        }
-                                    ?>
-                                </div>
-                                <div class="input" style="margin-left: 7%">
-                                    <form action="">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control rounded-corner" placeholder="Write a comment..." />
-                                            <span class="input-group-btn p-l-10">
-                                                <button class="btn btn-primary f-s-12 rounded-corner" type="button">Comment</button>
-                                            </span>
+                        <div id="post-reactions">
+                            <a href="javascript:;" class="m-r-15 post-reaction btnReaction" data-reaction="Like" id="btnLike">
+                                <i class="fa fa-thumbs-up fa-fw fa-lg m-r-3"></i>
+                                Like
+                            </a>
+                            <a href="javascript:;" class="m-r-15  btnReaction"  data-reaction="Dislike" id="btnDislike">
+                                <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
+                            </a>
+                        </div>
+                        <hr>
+                        <div class = "row"> 
+                            <?php
+                                if ($login_status == true ) {
+                            ?>   
+                                        <div class="user col-md-3" style="overflow: hidden; float: left">
+                                
+                                                <?= $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, ['style' => 'display: block; margin-left: auto; margin-right: auto; width: 20%; height: auto']); ?>
+                                    
                                         </div>
-                                    </form>
+                                        <div class="input col-md-9" style="margin-left: 7%">
+                                            <form action="">
+                                                <div class="input-group">
+                                                    <input id="txtComment" type="text" class="form-control rounded-corner" placeholder="Write a comment..." />
+                                                    <span class="input-group-btn p-l-10">
+                                                        <button id="submit-comment" class="btn btn-primary f-s-12 rounded-corner" type="button">Comment</button>
+                                                    </span>
+                                                </div>
+                                            </form>
+                                        </div>
+                            <?php
+                                }
+                                else {
+                            ?>
+                                    <span class="input-group-btn p-l-10">
+                                        <button id="submit-comment" class="btn btn-maroon f-s-12 rounded-corner" type="button">
+                                            Login to comment
+                                        </button>
+                                    </span>
+                            <?php 
+                                }
+                            ?>
+                        </div>
+                    </div>
+                    <!-- end timeline single post -->
+                    <hr>
+                        <div id="comments-area">
+                            <?php foreach ($postCommentContents as $postCommentContent): ?>
+                            <div class="comment-box">
+                                <div class="user" style="overflow: hidden; float: left">
+                                    <?php echo $this->Html->image("../webroot/img/upload/".$postCommentContent->post_comment->user->user_profile->user_profile_photo, array()); ?>
                                 </div>
+                                <div class="comment" style="padding-left: 10%">
+                                    <p><?= $postCommentContent->post_comment_content ?></p>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="comment-box">
+                            <div class="user" style="overflow: hidden; float: left">
+                                <?php echo $this->Html->image("../webroot/img/upload/unknown-user.png", array()); ?>
+                            </div>
+                            <div class="comment" style="padding-left: 10%">
+                                <p>Qwe rtyu iop. Asdfgh jkl; zxc vbnm.</p>
                             </div>
                         </div>
-                        <!-- end timeline single post -->
 
 					<!-- begin Question Panel -->
                     <div class="panel panel-inverse" id="inquiry-panel">
@@ -170,28 +223,189 @@
 <!-- ================== END PAGE LEVEL JS ================== -->
 	
 	<script>
-		var iframe = document.getElementById('locationIframe');
 
 		$(document).ready(function() {
 			App.init();
-    		iframe.style.display = 'none';
+            currentReaction();
 		});
 
-		$(function(){
-    		$('#locationIframe').ready(function(){
-        		iframe.style.display = 'inline';
-    		});
-		});
+        $currentReaction = '';
+        $activeReaction = '';
 
-	</script>
-	<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        function currentReaction() {
+            $currentReaction = '<?php echo $currentReaction ?>';
+            if ($currentReaction == 'Like') {
+                $('#btnLike').css("color", "#7e0e09");
+                $('#btnDislike').css("color", "gray");
+                $activeReaction = 'Like';
+            }
+            else if ($currentReaction == 'Dislike') {
+                $('#btnDislike').css("color", "#7e0e09");
+                $('#btnLike').css("color", "gray");
+                $activeReaction = 'Dislike';
+            }
+            else {
+                $('#btnDislike').css("color", "gray");
+                $('#btnLike').css("color", "gray");
+                $activeReaction = '';
+            }
+            $('#current-react').html('Current is ' + $currentReaction);
+        }
+        
+        function btnReaction() {
+            $url = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "front","controller"=>"Events","action"=>"savePostReactions"]); ?>';
 
-		ga('create', 'UA-53034621-1', 'auto');
-		ga('send', 'pageview');
+            <?php
+                if ($login_status == true) {
+            ?>
+
+                    $.ajax({        
+                    type:"POST",
+                    url: $url,                
+                    data:{
+                        'reaction':$activeReaction,
+                        'event_id': <?php echo $row->event_id ?>
+                    },               
+                    success:function(data)
+                    {
+                        $reaction = $(this).data("reaction");
+                        $('.clicked-react').html('I clicked ' + $activeReaction);
+
+                        if ($currentReaction == $reaction) {
+                            $reaction = 'Cancel';
+                        }
+                        if ($activeReaction == 'Like'  || $activeReaction == 'LikeCancelDislike') {
+                            $('#btnLike').css("color", "#7e0e09");
+                            $('#btnDislike').css("color", "gray");
+                            $currentReaction = 'Like';
+                        }
+                        else if ($activeReaction == 'Dislike' || $activeReaction == 'DislikeCancelLike') {
+                            $('#btnDislike').css("color", "#7e0e09");
+                            $('#btnLike').css("color", "gray");
+                            $currentReaction = 'Dislike';
+                        }
+                        else {
+                            $('#btnLike').css("color", "gray");
+                            $('#btnDislike').css("color", "gray");
+                            $currentReaction = '';
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError) {
+                        swal("Error", thrownError, "error");
+                    }
+                });
+                    
+
+            <?php
+               }
+               else {
+            ?>
+                swal('Error','Login to react to the post','error');
+            <?php
+                }
+            ?>
+        }; 
+
+        $('#btnLike').click(function(){
+            <?php
+                if ($login_status == true) {
+            ?>
+
+            $likes = parseInt($('#likes-count').text());
+            $dislikes = parseInt($('#dislikes-count').text());
+
+            // if like is active then like is clicked.
+            // cancel like
+            if ($activeReaction == 'Like' || $activeReaction == 'LikeCancelDislike') {
+                $activeReaction = 'LikeCancel';
+                $likes -= 1;
+                $('#likes-count').html($likes);
+            }
+            else if ($activeReaction == 'Dislike' || $activeReaction == 'DislikeCancelLike') {
+                $activeReaction = 'LikeCancelDislike';
+                $likes += 1;
+                $dislikes -= 1;
+                $('#likes-count').html($likes);
+                $('#dislikes-count').html($dislikes);
+            }
+            else {
+                $activeReaction = 'Like';
+                $likes += 1;
+                $('#likes-count').html($likes);
+            }
+            btnReaction();
+
+            <?php
+               }
+               else {
+            ?>
+                swal('Error','Login to react to the post','error');
+            <?php
+                }
+            ?>
+        });
+
+        $('#btnDislike').click(function(){
+            <?php
+                if ($login_status == true) {
+            ?>
+            $likes = parseInt($('#likes-count').text());
+            $dislikes = parseInt($('#dislikes-count').text());
+
+            if ($activeReaction == 'Dislike' || $activeReaction == 'DislikeCancelLike') {
+                $activeReaction = 'DislikeCancel';
+                $dislikes -= 1;
+                $('#dislikes-count').html($dislikes);
+            }
+            else if ($activeReaction == 'Like' || $activeReaction == 'LikeCancelDislike') {
+                $activeReaction = 'DislikeCancelLike';
+                $dislikes += 1;
+                $likes -= 1;
+                $('#dislikes-count').html($dislikes);
+                $('#likes-count').html($likes);
+            }
+            else {
+                $activeReaction = 'Dislike';
+                $dislikes += 1;
+                $('#dislikes-count').html($dislikes);
+            }
+            btnReaction();
+            <?php
+               }
+               else {
+            ?>
+                swal('Error','Login to react to the post','error');
+            <?php
+                }
+            ?>
+        });
+
+        $('#submit-comment').click( function() {
+            $comment = $('#txtComment').val();
+            $url = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "front","controller"=>"Events","action"=>"savePostComment"]); ?>';
+
+            $.ajax({        
+                type:"POST",
+                url: $url,                
+                data:{
+                    'comment':$comment,
+                    'event_id': <?php echo $row->event_id ?>
+                },               
+                success:function(data)
+                {
+                    <?php 
+                        if ($login_status == true ) {
+                    ?>
+                            $('<div class="comment-box"><div class="user" style="overflow: hidden; float: left"><?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array()); ?></div><div class="comment" style="padding-left: 10%"><p>' + $comment + '</p></div></div>').prependTo('#comments-area');
+                    <?php 
+                        }
+                    ?>
+                },
+                error:function(xhr, ajaxOptions, thrownError) {
+                    swal("Error", thrownError + $reaction, "error");
+                }
+            });
+        }); 
 
 	</script>
 

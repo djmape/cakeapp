@@ -1,3 +1,7 @@
+body {
+	background-color: #ffffff;
+}
+
 #content-profile {
 	margin: 0;
 	padding: 0;
@@ -71,10 +75,15 @@
 	padding-top: 0;
 }
 
+#profile-activities a {
+	color: #7e0e09;
+}
+
 .post-header {
 	padding-bottom: 10px;
     border-bottom: 1px solid #e2e7eb;
     line-height: 30px;
+    margin: 2%;
 }
 
 table tr {
@@ -251,9 +260,9 @@ li .user img {
 }
 
 .post-header img {
-	width: 50px;
-	height: 50px;
-	border-radius: 50px;
+	width: 30px;
+	height: 30px;
+	border-radius: 30px;
 	margin-right: 2%
 }
 
@@ -264,4 +273,74 @@ li .user img {
 
 .table-home-announcements>tbody>tr>td {
 	padding: 3%;
+}
+
+.content.announcement-view-content {
+	padding: 3%;
+	text-align: justify;
+	background-color: white;
+}
+
+.content.announcement-view-content a {
+	color: #7e0e09;
+}
+
+.announcement-item {
+	margin: 2% 0;
+}
+
+.content.event-view-content {
+	padding: 3%;
+	text-align: justify;
+	background-color: white;
+}
+
+.content.event-view-content a {
+	color: #7e0e09;
+}
+
+.event-item {
+	margin: 2% 0;
+}
+
+.badge.badge-yellow, .label.label-yellow {
+	background: #FFEB3B;
+	color: #000;
+}
+
+.badge.badge-green, .label.label-green {
+	background: #4CAF50;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.post-title {
+	padding: 2%;
+	margin: 0,
+	background-color: #7e0e09;
+}
+
+.post-content-preview {
+	margin: 2%;
+}
+
+.user-home-content {
+	background-color: #eeeeee;
+}
+
+.user-home-content a {
+	color: #7e0e09;
+}
+.table-notification {
+	font-size: 14px;
+}
+
+li .user-activity-timestamp {
+	color: gray;
+	margin-left: 5%;
 }

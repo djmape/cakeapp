@@ -73,6 +73,24 @@ class UsersTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+        
+        $this->hasOne('OrganizationOfficers', [
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->hasMany('OrganizationMembers', [
+            'foreignKey' => 'user_id'
+        ]);
+
+        $this->hasMany('Employees', [
+            'foreignKey' => 'user_id'
+        ]);
+
+
+        $this->hasMany('ForumNotifications', [
+            'foreignKey' => 'forum_notification_sender_user_id'
+        ]);
     }
 
     /**

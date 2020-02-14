@@ -1,7 +1,7 @@
 <!-- src/Template/Admin/Users/Admin/admin_all.ctp -->
 
 <?php echo $this->element('AdminHeaderSideBar');?>
-<?php echo $this->Flash->render(); ?>
+        <?php echo $this->Html->css("admin.css"); ?> 
 
 <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
 <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
@@ -50,7 +50,6 @@
                 <?php foreach ($admins as $i => $admin): ?>
                     <tr class="odd gradeX" data-email-id="<?= $user->user_id ?>">
                         <td>
-                            <?= $i + 1?>
                         </td>
                         <td>
                             <?php echo $this->Html->image("../webroot/img/upload/".$admin->admin_photo,['style' => 'max-width: 100%']); ?>
@@ -64,6 +63,7 @@
                         </td>
                         <td>
                             <div class="center-block">
+                                <?= $this->Html->link('<i class="fa fa-eye"></i>', ['prefix' => false, 'controller' => 'Users', 'action' => 'userProfile', $admin->user->username],['class' => 'btn btn-yellow btn-sm','escape' => false,'title' => 'View Profile: ' . $admin->user->email]) ?>
                                 <?= $this->Html->link('<i class="fa fa-edit"></i> Edit', ['controller' => 'Users', 'action' => 'adminEdit', $admin->admin_id],['class' => 'btn btn-yellow btn-sm','escape' => false,'title' => $admin->user->email]) ?>
                                 <button type="button" onclick="confirmDelete()" class="btn btn-danger btn-sm" data-user-id = "<?php echo $admin->user_id?>" data-admin-id = "<?php echo $admin->admin_id?>" id="btnDelete" title = "<?php echo $admin->user->email ?>">
                                     <i class="fa fa-trash">
@@ -112,13 +112,22 @@
 
 <!-- ================== END PAGE LEVEL JS ================== -->
     
-<script>
+    <script>
 
-    $(document).ready(function() {
-        App.init();
-		TableManageTableSelect.init();
-        $('#data-table-select').DataTable();
-    });
+        $(document).ready(function() {
+            App.init();
+		  TableManageTableSelect.init();
+            $data_table = $('#data-table-select').DataTable();
+            $data_table.on( 'order.dt search.dt', 
+                function () {
+                    $data_table.column(0, {search:'applied', order:'applied'}).nodes().each( 
+                        function (cell, i) {
+                            cell.innerHTML = i+1;
+                        }
+                        );
+                }
+            ).draw();
+        });
 
     $("#inputGroupFile01").change(function(event) {  
         RecurFadeIn();

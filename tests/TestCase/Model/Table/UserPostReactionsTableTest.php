@@ -26,7 +26,8 @@ class UserPostReactionsTableTest extends TestCase
         'app.UserPostReactions',
         'app.Posts',
         'app.Users',
-        'app.UserPostActivities'
+        'app.UserPostActivities',
+        'app.UserActivities'
     ];
 
     /**

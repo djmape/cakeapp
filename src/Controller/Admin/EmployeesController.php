@@ -48,6 +48,32 @@ class EmployeesController extends AppController
         $this->set('employee_positions', $employee_positions);
 
         $employee = $this->Employees->newEntity();
+
+        $this->loadModel('Users');
+        $this->loadModel("User_Types");
+        $users = $this->Users->find('list', [
+            'keyField' => 'id',
+            'valueField' => function ($row) {
+                return $row['user_lastname'] . ', ' . $row['user_firstname'] . ' ' . $row['user_middlename'];
+            }
+        ])->notMatching("Employees", 
+                         function($q) {
+                            return $q->where(["Employees.active"=>1]);
+                         })
+        ->where(['Users.active' => 1,'Users.user_lastname IS NOT' => null])->order([
+        'Users.user_lastname' => 'ASC'
+        ]);
+        $this->log($users->count(),'debug');
+
+        $users_count = 1;
+        if ($users->count() == 0) {
+            $users_count = 0;
+        }
+        else {
+            $this->set('assignUsers', $users);
+        }
+        $this->set('users_count', $users_count);
+
         if ($this->request->is('post')) {
             if (!empty($this->request->data)) {
                 $this->log('Got here', 'debug');
@@ -81,6 +107,7 @@ class EmployeesController extends AppController
                 $employee->employee_position_id = $this->request->data['employee_position_id'];
                 $employee->employee_photo = $imageFileName;
                 $employee->active = 1;
+                $employee->user_id = $this->request->data['user_id'];
 
                     if (!empty($this->request->data['employee_photo']['name'])) {
                         $employee->employee_photo = $imageFileName;
@@ -116,17 +143,45 @@ class EmployeesController extends AppController
         $employee_positions =  $this->EmployeePositionNames->find('list', ['keyField' => 'employee_position_id', 'valueField' => 'employee_position_name'])->where(['EmployeePositionNames.active' => 1])->order([
         'EmployeePositionNames.employee_position_priority' => 'ASC'
         ]);
-        $employee_name = $this->Employees->find('all')->where(['Employees.employee_id'=>$employee_id])->contain(['EmployeePositionNames']);
+        $employee_name = $this->Employees->find('all')->where(['Employees.employee_id'=>$employee_id])->contain(['EmployeePositionNames','Users']);
 
         $row = $employee->first();
         $employee_name = $employee_name->first();
+
+        if ($employee_name->user_id != null) {
+             $currentUserFullName = $employee_name->user->user_lastname . ', ' . $employee_name->user->user_firstname . ' ' . $employee_name->user->user_middlename;
+            $this->set('currentUserFullName', $currentUserFullName);
+        }
 
         $this->set('employee_name', $employee_name);
         $this->set('employee_positions', $employee_positions);
         $this->set('employee', $employee);
         $this->set('row', $row);
 
-       
+        $this->loadModel('Users');
+        $this->loadModel("User_Types");
+        $users = $this->Users->find('list', [
+            'keyField' => 'id',
+            'valueField' => function ($row) {
+                return $row['user_lastname'] . ', ' . $row['user_firstname'] . ' ' . $row['user_middlename'];
+            }
+        ])->notMatching("Employees", 
+                         function($q) {
+                            return $q->where(["Employees.active"=>1]);
+                         })
+        ->where(['Users.active' => 1,'Users.user_lastname IS NOT' => null])->order([
+        'Users.user_lastname' => 'ASC'
+        ]);
+        $this->log($users->count(),'debug');
+
+        $users_count = 1;
+        if ($users->count() == 0) {
+            $users_count = 0;
+        }
+        else {
+            $this->set('assignUsers', $users);
+        }
+        $this->set('users_count', $users_count);
 
         if ($this->request->is(['post', 'put'])) {
             if (!empty($this->request->data)) {

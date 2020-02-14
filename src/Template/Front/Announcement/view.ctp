@@ -14,24 +14,46 @@
                     </p>
 				    <p>
                         <small>
-                            Last Updated: <?= $announcement->announcement_modified->format(DATE_RFC850) ?>
+                            Last Updated: <?= $announcement->announcement_modified->format('l, F d, Y g:i A') ?>
                         </small>
                     </p>
                     <hr>
                     <i class="fa fa-thumbs-up fa-fw fa-sm m-r-3">
-                        <p id="likes-count"><?= ' ' . $reactions->post_likes_count ?></p>
+                        <?php
+                            if ($getReactionsCountAvailable == false) {
+                        ?>
+                            <p id="likes-count"> 0 </p>
+                        <?php
+                            }
+                            else {
+                        ?>
+                            <p id="likes-count"><?= ' ' . $reactions->post_likes_count ?></p>
+                        <?php
+                            }
+                        ?>                        
                     </i>
                     <i class="fa fa-thumbs-down fa-fw fa-sm m-r-3">
-                        <p id="dislikes-count"><?= ' ' . $reactions->post_dislikes_count ?></p>
+                        <?php
+                            if ($getReactionsCountAvailable == false) {
+                        ?>
+                                <p id="dislikes-count"> 0 </p>
+                        <?php
+                            }
+                            else {
+                        ?>
+                                <p id="dislikes-count"><?= ' ' . $reactions->post_dislikes_count ?></p>
+                        <?php
+                            }
+                        ?> 
                     </i>
                     <hr>
                     <div class="">
                         <div id="post-reactions">
-                            <a href="javascript:;" class="m-r-15 post-reaction btnReaction"  data-reaction="Like" id="btnLike">
+                            <a class="m-r-15 post-reaction btnReaction"  data-reaction="Like" id="btnLike" disabled>
                                 <i class="fa fa-thumbs-up fa-fw fa-lg m-r-3"></i>
                                 Like
                             </a>
-                            <a href="javascript:;" class="m-r-15 post-reaction btnReaction"  data-reaction="Dislike" id="btnDislike">
+                            <a class="m-r-15 post-reaction btnReaction"  data-reaction="Dislike" id="btnDislike" disabled>
                                 <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
                             </a>
                         </div>
@@ -40,9 +62,9 @@
                             <?php 
                                     if ($login_status == true ) {
                             ?> 
-                            <div class="user" style="overflow: hidden; float: left">
+                            <div class="user" style="overflow: hidden; float: left;">
                                 
-                                <?= $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array()); ?>
+                                <?= $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, ['style' => 'display: block; margin-left: auto; margin-right: auto; width: 50%;']); ?>
                                     
                             </div>
                             <div class="input" style="margin-left: 7%">
@@ -84,11 +106,6 @@
                             <?php endforeach; ?>
                         </div>
                         <div class="comment-box">
-                            <div class="user" style="overflow: hidden; float: left">
-                                <?php echo $this->Html->image("../webroot/img/upload/unknown-user.png", array()); ?>
-                            </div>
-                            <div class="comment" style="padding-left: 10%">
-                                <p>Qwe rtyu iop. Asdfgh jkl; zxc vbnm.</p>
                                 <!--
                                 <div id="post-reactions">
                                     <a href="javascript:;" class="m-r-15 post-reaction">
@@ -188,40 +205,45 @@
 
         function currentReaction() {
             $currentReaction = '<?php echo $currentReaction ?>';
-            if ($currentReaction == 'Like') {
+            if ($currentReaction == 'Like'  || $activeReaction == 'LikeCancelDislike') {
                 $('#btnLike').css("color", "#7e0e09");
                 $('#btnDislike').css("color", "gray");
+                $activeReaction = 'Like';
             }
-            else if ($currentReaction == 'Dislike') {
+            else if ($currentReaction == 'Dislike' || $activeReaction == 'DislikeCancelLike') {
                 $('#btnDislike').css("color", "#7e0e09");
                 $('#btnLike').css("color", "gray");
                 $activeReaction = 'Dislike';
             }
+            else {
+                $('#btnDislike').css("color", "gray");
+                $('#btnLike').css("color", "gray");
+                $activeReaction = '';
+            }
             $('#current-react').html('Current is ' + $currentReaction);
         }
 		
-        $('.btnReaction').click(function(){
-            $reaction = $(this).data("reaction");
-            $('#clicked-react').html('I clicked ' + $reaction);
-            if ($currentReaction == $reaction) {
-                $reaction = 'Cancel';
-            }
+        function btnReaction() {
+            <?php
+                if ($login_status == true) {
+            ?>
+
             $url = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "front","controller"=>"Announcement","action"=>"savePostReactions"]); ?>';
 
             $.ajax({        
             type:"POST",
             //the function u wanna call
             url: $url,                
-            data:{'reaction':$reaction,
+            data:{'reaction': $activeReaction,
                   'announcement_id': <?php echo $announcement_id ?>},               
             success:function(data)
             {
-                if ($activeReaction == 'Like') {
+                if ($activeReaction == 'Like'  || $activeReaction == 'LikeCancelDislike') {
                     $('#btnLike').css("color", "#7e0e09");
                     $('#btnDislike').css("color", "gray");
                     $currentReaction = 'Like';
                 }
-                else if ($activeReaction == 'Dislike') {
+                else if ($activeReaction == 'Dislike' || $activeReaction == 'DislikeCancelLike') {
                     $('#btnDislike').css("color", "#7e0e09");
                     $('#btnLike').css("color", "gray");
                     $currentReaction = 'Dislike';
@@ -236,18 +258,32 @@
                 swal("Error", thrownError, "error");
             }
         });
-        }); 
+            <?php
+               }
+               else {
+            ?>
+                swal('Error','Login to react to the post','error');
+            <?php
+                }
+            ?>
+        }; 
 
         $('#btnLike').click(function(){
+            <?php
+                if ($login_status == true) {
+            ?>
             $likes = parseInt($('#likes-count').text());
             $dislikes = parseInt($('#dislikes-count').text());
-            if ($activeReaction == 'Like') {
-                $activeReaction = '';
+
+            // if like is active then like is clicked.
+            // cancel like
+            if ($activeReaction == 'Like' || $activeReaction == 'LikeCancelDislike') {
+                $activeReaction = 'LikeCancel';
                 $likes -= 1;
                 $('#likes-count').html($likes);
             }
-            else if ($activeReaction == 'Dislike') {
-                $activeReaction = 'Like';
+            else if ($activeReaction == 'Dislike' || $activeReaction == 'DislikeCancelLike') {
+                $activeReaction = 'LikeCancelDislike';
                 $likes += 1;
                 $dislikes -= 1;
                 $('#likes-count').html($likes);
@@ -259,19 +295,32 @@
                 $('#likes-count').html($likes);
             }
 
+            btnReaction();
+            
+            <?php
+               }
+               else {
+            ?>
+                swal('Error','Login to react to the post','error');
+            <?php
+                }
+            ?>
         });
 
         $('#btnDislike').click(function(){
+            <?php
+                if ($login_status == true) {
+            ?>
             $likes = parseInt($('#likes-count').text());
             $dislikes = parseInt($('#dislikes-count').text());
 
-            if ($activeReaction == 'Dislike') {
-                $activeReaction = '';
+            if ($activeReaction == 'Dislike' || $activeReaction == 'DislikeCancelLike') {
+                $activeReaction = 'DislikeCancel';
                 $dislikes -= 1;
                 $('#dislikes-count').html($dislikes);
             }
-            else if ($activeReaction == 'Like') {
-                $activeReaction = 'Dislike';
+            else if ($activeReaction == 'Like' || $activeReaction == 'LikeCancelDislike') {
+                $activeReaction = 'DislikeCancelLike';
                 $dislikes += 1;
                 $likes -= 1;
                 $('#dislikes-count').html($dislikes);
@@ -282,7 +331,15 @@
                 $dislikes += 1;
                 $('#dislikes-count').html($dislikes);
             }
-
+                btnReaction();
+            <?php
+               }
+               else {
+            ?>
+                swal('Error','Login to react to the post','error');
+            <?php
+                }
+            ?>
         });
         
         $('#submit-comment').click(function(){

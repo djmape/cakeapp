@@ -100,10 +100,10 @@ Router::scope('/', function ($routes) {
     ]);
 
     // front handbook
-    $routes->connect('/handbook/', [
+    $routes->connect('about/handbook/', [
         'prefix' => 'front',
         'controller' => 'abouts',
-        'action' => 'view'
+        'action' => 'handbook'
     ]);
 
     // front contacts
@@ -111,6 +111,13 @@ Router::scope('/', function ($routes) {
         'prefix' => 'front',
         'controller' => 'contacts',
         'action' => 'index'
+    ]);
+
+    // front error 404
+    $routes->connect('/not-found/', [
+        'prefix' => 'front',
+        'controller' => 'home',
+        'action' => 'error404'
     ]);
 
     $routes->connect('/viewEvent/*', [
@@ -135,11 +142,7 @@ Router::prefix('Admin', function ($routes) {
 
 
 Router::prefix('Front', function ($routes) {
-    // All routes here will be prefixed with `/admin`
-    // And have the prefix => admin route element added.
     $routes->fallbacks(DashedRoute::class);
-    $routes->connect('/abouts/handbook', ['controller' => 'Abouts', 'action' => 'view']);
-    //$routes->connect('/abouts/contacts', ['controller' => 'Abouts', 'action' => 'add']);
 
 });
 

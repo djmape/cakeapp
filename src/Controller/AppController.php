@@ -21,6 +21,7 @@ use Cake\View\Helper;
 use Cake\I18n\Date;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
+use Cake\ORM\Query;
 
 /**
  * Application Controller
@@ -72,22 +73,17 @@ class AppController extends Controller
                     ]
                 ]
             ],
-            'authError' => 'Incorrect!'
+            'authError' => 'Please login to access page.'
             ,
             'loginAction' => [
                 'prefix' => false,
                 'controller' => 'Users',
                 'action' => 'login'
             ],
-            'loginRedirect' => [
-                'prefix' => false,
-                'controller' => 'Users', 
-                'action' => 'index'
-            ],
              // If unauthorized, return them to page they were just on
             'unauthorizedRedirect' => [
                 'prefix' => 'front',
-                'controller' => 'abouts',
+                'controller' => 'home',
                 'action' => 'index']
         ]);
 
@@ -102,10 +98,11 @@ class AppController extends Controller
         }
 
         $this->set('login_status', false);
-
-        
+        $this->checkLoginStatus();
 
         $this->userSettings(false);
+
+
     }
 
     public function checkLoginStatus() {
@@ -177,6 +174,10 @@ class AppController extends Controller
         $this->set('user_settings', false);
     }
 
+    public function organizationPanelSidebar($active) {
+        $this->set('active', $active);
+    }
+
     public function footer() {
         $this->loadModel('ContactEmails');
         $emails =  $this->ContactEmails->find('all')->where(['ContactEmails.active' => 1]);
@@ -197,11 +198,9 @@ class AppController extends Controller
         $dateNow = $now->format('Y-m-d');
         $timeNow = $now->format('h:i A'); 
         $date_time_now = strtotime("$dateNow $timeNow");
-        $this->log($date_time_now ,'debug');
 
         foreach ($events as $event) {
             
-            $this->log($event->event_id ,'debug');
             $event_start_date = $event->event_start_date;
             $event_start_time = $event->event_start_time;
             $event_start_date = $event_start_date->format('Y-m-d');
@@ -216,7 +215,6 @@ class AppController extends Controller
 
             // if event is less that now()
             if( $event_start_date_time >= $date_time_now ) {
-                $this->log('Upcoming','debug');
                 $event_status = 'Upcoming';
             }
             //
@@ -226,8 +224,7 @@ class AppController extends Controller
             else if( $event_start_date_time < $date_time_now AND $event_end_date_time < $date_time_now) {
                 $event_status = 'Past';
             }
-            else {
-                $this->log('Indecipherable','debug');  
+            else { 
                 $event_status = 'Pasts';              
             }
 
@@ -253,6 +250,7 @@ class AppController extends Controller
 
     public function userHeader() {
 
+        if ($this->Auth->user()) {
         $this->loadModel("Users");
         $this->loadModel("User_Types");
 
@@ -308,5 +306,45 @@ class AppController extends Controller
             $fullname = $user->first()->user_alumni_lastname .', '. $user->first()->user_alumni_firstname . ' ' . substr($user->first()->user_alumni_middlename,0 ,1) . '.';
             $this->title('PUPQC Web Portal | ' . $fullname);
         }
+        $this->userOrganizationPanel();
+        $this->getUserNotifications();
+        }
+    }
+
+    public function userOrganizationPanel() {
+
+        # check if user is an organization officer
+
+        $this->loadModel('OrganizationOfficers');
+
+        $organization_officer = $this->OrganizationOfficers->find('all')->contain(['Organizations'])->where(['OrganizationOfficers.user_id' => $this->Auth->user('id')]);
+
+        $organization_officer_count = 1;
+
+        if ($organization_officer->count() == 0) {
+            $this->set('organization_officer_count', 0);
+        }
+        else {
+            $this->set('organization_officer',$organization_officer);
+            $this->set('organization_officer_count', $organization_officer->count());
+        }
+        $this->set('get', 'get');
+    }
+
+    public function getUserNotifications() {
+
+        $this->loadModel('UserNotifications');
+        $user_notifications = $this->paginate($this->UserNotifications->find('all')->contain(['ForumNotifications.Users','ForumNotifications.ForumDiscussions.ForumDiscussionDetails','ForumNotifications.ForumDiscussions.ForumTopics.ForumCategories',
+            'ForumNotifications.ForumDiscussions.UserForumDiscussionVotes'=> 
+                function (Query $query) { 
+                    return $query->where(['UserForumDiscussionVotes.user_id' => $this->Auth->user('id') ]);
+            },
+            'ForumNotifications.ForumReplies.ForumReplyDetails'])
+            ->where(['UserNotifications.user_notification_receiver_user_id' => $this->Auth->user('id')])->order(['UserNotifications.user_notification_created' => 'DESC']));
+        $this->set(compact('user_notifications'));
+
+        $user_notification_count = $this->UserNotifications->find('all')->where(['UserNotifications.user_notification_read_status' => 0])->count();
+        $this->set('user_notification_count', $user_notification_count);
+        $this->log($user_notifications,'debug');
     }
 }

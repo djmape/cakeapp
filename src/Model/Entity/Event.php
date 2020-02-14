@@ -23,6 +23,7 @@ use Cake\ORM\Entity;
  * @property int $event_visibility
  * @property string|null $event_photo
  * @property int $active
+ * @property int|null $event_post_id
  */
 class Event extends Entity
 {
@@ -51,6 +52,7 @@ class Event extends Entity
         'event_status' => true,
         'event_visibility' => true,
         'event_photo' => true,
-        'active' => true
+        'active' => true,
+        'event_post_id' => true
     ];
 }

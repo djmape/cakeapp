@@ -15,8 +15,9 @@ use Cake\ORM\Entity;
  * @property string $employee_photo
  * @property string|null $employee_email
  * @property int $active
+ * @property int|null $user_id
  *
- * @property \App\Model\Entity\EmployeePosition $employee_position
+ * @property \App\Model\Entity\EmployeePositionName $employee_position_name
  * @property \App\Model\Entity\OfficeEmployee[] $office_employees
  */
 class Employee extends Entity
@@ -39,7 +40,8 @@ class Employee extends Entity
         'employee_photo' => true,
         'employee_email' => true,
         'active' => true,
-        'employee_position' => true,
+        'user_id' => true,
+        'employee_position_name' => true,
         'office_employees' => true
     ];
 }

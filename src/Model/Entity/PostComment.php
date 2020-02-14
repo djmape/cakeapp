@@ -11,12 +11,13 @@ use Cake\ORM\Entity;
  * @property int $post_comment_user_id
  * @property int $post_comment_post_id
  * @property int|null $post_comment_post_activity_id
+ * @property int|null $user_post_reactions_activity_id
  * @property int|null $post_comment_activity_id
  *
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Post $post
  * @property \App\Model\Entity\UserPostActivity $user_post_activity
- * @property \App\Model\Entity\PostCommentContent[] $post_comment_contents
+ * @property \App\Model\Entity\PostCommentContent $post_comment_content
  */
 class PostComment extends Entity
 {
@@ -34,10 +35,11 @@ class PostComment extends Entity
         'post_comment_user_id' => true,
         'post_comment_post_id' => true,
         'post_comment_post_activity_id' => true,
+        'user_post_reactions_activity_id' => true,
         'post_comment_activity_id' => true,
         'user' => true,
         'post' => true,
         'user_post_activity' => true,
-        'post_comment_contents' => true
+        'post_comment_content' => true
     ];
 }

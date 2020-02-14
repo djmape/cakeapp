@@ -9,7 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Employees Model
  *
- * @property |\Cake\ORM\Association\BelongsTo $EmployeePositionNames
+ * @property \App\Model\Table\EmployeePositionNamesTable|\Cake\ORM\Association\BelongsTo $EmployeePositionNames
+ * @property |\Cake\ORM\Association\BelongsTo $Users
  *
  * @method \App\Model\Entity\Employee get($primaryKey, $options = [])
  * @method \App\Model\Entity\Employee newEntity($data = null, array $options = [])
@@ -39,6 +40,9 @@ class EmployeesTable extends Table
         $this->belongsTo('EmployeePositionNames', [
             'foreignKey' => 'employee_position_id',
             'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id'
         ]);
 
         $this->hasMany('OfficeEmployees', [
@@ -111,6 +115,7 @@ class EmployeesTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['employee_position_id'], 'EmployeePositionNames'));
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
     }

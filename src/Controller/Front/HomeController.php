@@ -14,7 +14,7 @@ class HomeController extends AppController
 
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
-        $this->Auth->allow(['tags']);
+        $this->Auth->allow(['error404']);
         $margin = 'false';
         $this->set('margin', $margin);
         $this->navBar(' ');
@@ -154,6 +154,12 @@ class HomeController extends AppController
         $article = $this->Articles->findBySlug($slug)->first();
 
         return $article->user_id === $user['id'];
+    }
+
+
+    public function error404()
+    {
+        $this->title('Error 404 | Page Not Found');
     }
 
     public function sub()

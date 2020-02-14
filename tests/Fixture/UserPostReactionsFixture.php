@@ -16,8 +16,8 @@ class UserPostReactionsFixture extends TestFixture
     // @codingStandardsIgnoreStart
     public $fields = [
         'user_post_reactions_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
-        'user_post_reaction_like' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'user_post_reaction_dislike' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
+        'user_post_reaction_like' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
+        'user_post_reaction_dislike' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
         'user_post_reaction_post_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'user_post_reaction_user_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'user_post_reaction_post_activity_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
@@ -30,10 +30,6 @@ class UserPostReactionsFixture extends TestFixture
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['user_post_reactions_id'], 'length' => []],
-            'fk1_user_post_reactions_activity_id' => ['type' => 'foreign', 'columns' => ['user_post_reactions_activity_id'], 'references' => ['user_activities', 'user_activity_id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
-            'fk_user_post_reaction_post_activity_id' => ['type' => 'foreign', 'columns' => ['user_post_reaction_post_activity_id'], 'references' => ['user_post_activities', 'user_post_activity_id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
-            'fk_user_post_reaction_post_id' => ['type' => 'foreign', 'columns' => ['user_post_reaction_post_id'], 'references' => ['posts', 'post_id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
-            'fk_user_post_reaction_user_id' => ['type' => 'foreign', 'columns' => ['user_post_reaction_user_id'], 'references' => ['users', 'id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',

@@ -18,12 +18,14 @@ class AnnouncementController extends AppController
         $this->navBar('announcements');
         $currentUser = $this->Auth->user('id');
         $this->loadComponent('RequestHandler');
+        $this->checkLoginStatus();
     }
 
     public function index()
     {
+        $this->title('PUPQC | All Announcements');
         $this->loadModel('Announcements');
-        $this->set('announcements', $this->paginate($this->Announcements->find('all')->where(['Announcements.active' => 1])));
+        $this->set('announcements', $this->paginate($this->Announcements->find('all')->contain(['Posts'])->where(['Announcements.active' => 1])));
     }
 
     public function view($announcement_id)
@@ -46,10 +48,21 @@ class AnnouncementController extends AppController
 
         $announcement = $announcement->first();
 
+        if ($announcement->active == 0) {
+            return $this->redirect(['prefix' => 'front','controller' => 'home','action' => 'error404']);
+        }
+        else {
+
         $getCurrentReaction = $this->UserPostReactions->find('all')->where(['UserPostReactions.user_post_reaction_user_id' => $currentUser])->where(['UserPostReactions.user_post_reaction_post_id' => $post_id]);
         $currentReaction = '';
+        $getReactionsCountAvailable = false;
 
-        $getReactionsCount = $this->PostReactions->find('all')->where(['PostReactions.post_reactions_post_id' => $post_id])->first();
+        $getReactionsCount = $this->PostReactions->find('all')->where(['PostReactions.post_reactions_post_id' => $post_id]);
+
+        if ($getReactionsCount->count() > 0) {
+            $getReactionsCountAvailable = true;
+            $getReactionsCount = $getReactionsCount->first();
+        }
 
         if ($getCurrentReaction->count() > 0) {
             if ($getCurrentReaction->first()->user_post_reaction_like == true) {
@@ -57,11 +70,12 @@ class AnnouncementController extends AppController
             }
             else if ($getCurrentReaction->first()->user_post_reaction_dislike == true) {
                 $currentReaction = 'Dislike';
-                }
+            }
         }
 
+        $this->log($currentReaction ,'debug');
+
         $postCommentContents = $this->paginate($this->PostCommentContents->find('all')->contain(['PostComments','PostComments.Users.UserProfiles'])->where(['PostComments.post_comment_post_id' => $post_id]));
-        $this->log($postCommentContents->first(),'debug');
         $this->set(compact('postCommentContents'));
 
         if ($this->request->is(['post', 'put'])) {
@@ -77,6 +91,8 @@ class AnnouncementController extends AppController
         $this->set('announcement_id', $announcement_id);
         $this->set('currentReaction', $currentReaction);
         $this->set('reactions', $getReactionsCount);
+        $this->set('getReactionsCountAvailable', $getReactionsCountAvailable);
+    }
 	}
 
 
@@ -103,21 +119,34 @@ class AnnouncementController extends AppController
 
         if ($this->request->is(['post','put'])) {
 
+            $reaction = $this->request->data('reaction');
+
             $userActivity->user_activity_activity_type_id = 1;
             $userActivity->user_activity_user_id = $currentUser;
             $userActivity->user_activity_post_id = $announcement;
 
             if($activityID = $this->UserActivities->save($userActivity)) {
 
+                if ($reaction == 'Like' || $reaction == 'LikeCancelDislike') {
+                    $user_post_activity_type_id = 3;
+                }
+                else if ($reaction == 'Dislike' || $reaction == 'DislikeCancelLike') {
+                    $user_post_activity_type_id = 4;
+                }
+                else if ($reaction == 'LikeCancel') {
+                    $user_post_activity_type_id = 5;
+                }
+                else if ($reaction == 'DislikeCancel') {
+                    $user_post_activity_type_id = 6;
+                }
+
                 $userPostActivity->user_post_activity_user_id = $currentUser;
-                $userPostActivity->user_post_activity_type_id = 3;
+                $userPostActivity->user_post_activity_type_id = $user_post_activity_type_id;
                 $userPostActivity->user_post_activity_post_id = $announcement;
                 $userPostActivity->user_post_activities_user_activity_id = $activityID->user_activity_id;
 
                 if ($postActivityID = $this->UserPostActivities->save($userPostActivity)) {
-
-                    $reaction = $this->request->data('reaction');
-
+                    
                     // begin save UserPostReactions
                     $checkIfUserPostReactionRowExists = $this->UserPostReactions->find('all')->where(['UserPostReactions.user_post_reaction_user_id' => $currentUser])->where(['UserPostReactions.user_post_reaction_post_id' => $announcement]);
 
@@ -129,15 +158,24 @@ class AnnouncementController extends AppController
 
                         if ($reaction == 'Like') {
                             $userPostReaction->user_post_reaction_like = true;
+                        }
+                        else if ($reaction == 'LikeCancelDislike') {
+                            $userPostReaction->user_post_reaction_like = true;
                             $userPostReaction->user_post_reaction_dislike = false;
+                        }
+                        else if ($reaction == 'LikeCancel') {
+                            $userPostReaction->user_post_reaction_like = false;
                         }
                         else if ($reaction == 'Dislike') {
                             $userPostReaction->user_post_reaction_dislike = true;
                             $userPostReaction->user_post_reaction_like = false;
                         }
-                        else if ($reaction == 'Cancel') {
-                            $userPostReaction->user_post_reaction_dislike = false;
+                        else if ($reaction == 'DislikeCancelLike') {
+                            $userPostReaction->user_post_reaction_dislike = true;
                             $userPostReaction->user_post_reaction_like = false;
+                        }
+                        else if ($reaction == 'DislikeCancel') {
+                            $userPostReaction->user_post_reaction_dislike = false;
                         }
 
                         $userPostReaction->user_post_reaction_post_id = $announcement;
@@ -148,7 +186,7 @@ class AnnouncementController extends AppController
 
                         }
                         else {
-
+                            $this->log($userPostReaction->errors(),'debug');
                         }
                     }
                     else {
@@ -177,16 +215,36 @@ class AnnouncementController extends AppController
 
                     // begin save PostReactions
                     $checkIfPostReactionRowExists = $this->PostReactions->find('all')->where(['PostReactions.post_reactions_post_id' => $announcement]);
+
                     if (!$checkIfPostReactionRowExists->isEmpty()) {
                         $post_reactions_id = $checkIfPostReactionRowExists->first()->post_reactions_id;
                         $postReactionsTable = TableRegistry::get('PostReactions');
                         $postReactionsTable = TableRegistry::getTableLocator()->get('PostReactions');
                         $postReaction = $postReactionsTable->get($post_reactions_id);
 
-                        $postReaction->post_likes_count = $this->UserPostReactions->find('all')->where(['UserPostReactions.user_post_reaction_post_id' => $announcement])->where(['UserPostReactions.user_post_reaction_like' => true])->count();
-                        $postReaction->post_dislikes_count = $this->UserPostReactions->find('all')->where(['UserPostReactions.user_post_reaction_post_id' => $announcement])->where(['UserPostReactions.user_post_reaction_dislike' => true])->count();
+                        if ($reaction == 'Like') {
+                            $postReaction->post_likes_count += 1;
+                        }
+                        else if ($reaction == 'LikeCancelDislike') {
+                            $postReaction->post_likes_count += 1;
+                            $postReaction->post_dislikes_count -= 1;
+                        }
+                        else if ($reaction == 'LikeCancel') {
+                            $postReaction->post_likes_count -= 1;
+                        }
+                        else if ($reaction == 'Dislike') {
+                            $postReaction->post_dislikes_count += 1;
+                        }
+                        else if ($reaction == 'DislikeCancelLike') {
+                            $postReaction->post_dislikes_count += 1;
+                            $postReaction->post_likes_count -= 1;
+                        }
+                        else if ($reaction == 'DislikeCancel') {
+                            $postReaction->post_dislikes_count -= 1;
+                        }
 
                         $postReaction->post_reactions_post_id = $announcement;
+
                         if ($getpostReactionsID = $postReactionsTable->save($postReaction)) {
                             
                         }
@@ -307,24 +365,6 @@ class AnnouncementController extends AppController
             $this->Flash->error(__('Unable to delete your article.'));
         }
         $this->set('article', $article);
-    }
-
-    public function tags()
-    {
-        // The 'pass' key is provided by CakePHP and contains all
-        // the passed URL path segments in the request.
-        $tags = $this->request->getParam('pass');
-
-        // Use the ArticlesTable to find tagged articles.
-        $articles = $this->Articles->find('tagged', [
-            'tags' => $tags
-        ]);
-
-        // Pass variables into the view template context.
-        $this->set([
-            'articles' => $articles,
-            'tags' => $tags
-        ]);
     }
 
     public function isAuthorized($user)

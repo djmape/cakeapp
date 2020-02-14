@@ -14,18 +14,19 @@ class EmployeesController extends AppController
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
         $this->Auth->allow(['index']);
-        $this->navBar();
-        $this->adminSideBar('employees');
+        $this->navBar('employees');
+        $this->checkLoginStatus();
     }
 
     public function index()
     {
-        $employees = $this->Employees->find('all')->contain(['EmployeePositions' => ['sort' => ['EmployeePositions.employee_position_priority' => 'DESC']]])->innerJoinWith('EmployeePositions')->order([
-        'EmployeePositions.employee_position_priority' => 'ASC'
+        $this->title('PUPQC | Employees');
+        $employees = $this->Employees->find('all')->contain(['EmployeePositionNames' => ['sort' => ['EmployeePositionNames.employee_position_priority' => 'DESC']]])->innerJoinWith('EmployeePositionNames')->order([
+        'EmployeePositionNames.employee_position_priority' => 'ASC'
         ])->where(['Employees.active' => 1]);
         $employees = $this->paginate($employees);
         $this->set(compact('employees'));
-
+        $this->log($employees->first(),'debug');
     }
 
 

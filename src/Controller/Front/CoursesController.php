@@ -14,8 +14,8 @@ class CoursesController extends AppController
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
         $this->Auth->allow(['index']);
-        $this->navBar();
-        $this->adminSideBar('courses');
+        $this->navBar('courses');
+        $this->checkLoginStatus();
     }
 
     public function index()
@@ -34,6 +34,12 @@ class CoursesController extends AppController
         $organization = $this->Courses->find('all')->where(['Courses.course_id'=>$course_id])->contain(['Organizations']);
         $course = $this->Courses->find('all')->where(['Courses.course_id'=>$course_id]);
         $course = $course->first();
+        if ($course->active == 0) {
+            return $this->redirect(['prefix' => 'front','controller' => 'home','action' => 'error404']);
+        }
+        else {
+
+        $this->title('PUPQC | ' . $course->course_name);
 
         $organization = $organization->first();
         #$organization = $organization->organization->organization_name;
@@ -41,6 +47,7 @@ class CoursesController extends AppController
         $this->log($organization, 'debug');
         $this->set('course', $course);
         $this->set('organization', $organization);
+    }
 	}
 
     public function add()

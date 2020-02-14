@@ -48,10 +48,26 @@
 			?>
 			<!-- begin header-nav -->
 			<ul class="navbar-nav navbar-right">
-				<
+				<li>
+					<?php
+						if ($user_notification_count > 0) {
+							# code...
+					?>
+					<?php
+							echo $this->Html->link('<i class="fa fa-bell fa-2x"></i> '.$user_notification_count,['prefix' => false,'controller' => 'Users','action'=>'userNotifications', $user->user->username],array('escape' => false, 'title' => 'You have ' . $user_notification_count . ' unread notifications', 'style' => 'color: #7e0e09'));
+					?>
+					<?php
+						}
+						else {
+							echo $this->Html->link('<i class="fa fa-bell fa-2x"></i> ',['prefix' => false,'controller' => 'Users','action'=>'userNotifications', $user->user->username],array('escape' => false, 'title' => 'You have no unread notifications'));
+						}
+					?>
+				</li>
+				
 				<li class="dropdown navbar-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
 						<span class="d-none d-md-inline">
+							
 							Hi, 
 
 							<?php
@@ -73,9 +89,18 @@
 					<div class="dropdown-menu dropdown-menu-right">
 						<?php echo $this->Html->link('View Profile',array('prefix' => false,'controller' => 'Users','action'=>'userProfile', $user->user->username ),array('class'=>'dropdown-item')) ?>
 						<?php echo $this->Html->link('Settings',array('prefix' => false,'controller' => 'Users','action'=>'userSettingsProfile'),array('class'=>'dropdown-item')) ?>
-						<div class="dropdown-divider"></div>
-						<?php echo $this->Html->link('Log Out',array('prefix' => false,'controller' => 'Users','action'=>'logout'),array('escape' => false,'class'=>'dropdown-item')) ?>
-
+						<?php
+							if ($organization_officer_count != 0) {
+								foreach ($organization_officer as $organization_officer):
+						?>
+							<div class="dropdown-divider"></div>
+							<?php echo $this->Html->link($organization_officer->organization->organization_acronym,array('prefix' => false,'controller' => 'Users','action'=>'organizationPanel',str_replace(' ', '-', $organization_officer->organization->organization_name)),array('class'=>'dropdown-item')) ?>
+							<div class="dropdown-divider"></div>
+						<?php
+								endforeach;
+							}
+						?>
+						<a href="javascript:;" onclick="confirmLogout()" class="dropdown-item">Log Out</a>
 					</div>
 				</li>
 			</ul>
@@ -92,8 +117,39 @@
 		
 		
 		<!-- begin scroll to top btn -->
-		<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top">
+		<a href="javascript:;" class="btn btn-icon btn-circle btn-maroon btn-scroll-to-top fade" data-click="scroll-top">
 			<i class="material-icons">keyboard_arrow_up</i>
 		</a>
 		<!-- end scroll to top btn -->
 
+		<script type="text/javascript">
+
+			function confirmLogout() {
+            var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => false ,"controller"=>"Users","action"=>"logout"]); ?>';
+            var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => false ,"controller"=>"Users","action"=>"login"]); ?>';
+            swal({
+                title: "Are you sure?",
+                text: "You want to logout?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn btn-maroon",
+                confirmButtonText: "Logout",
+                cancelButtonText: "Cancel",
+    			confirmButtonColor: "#7e0e09"
+            },  function(isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type:'post',
+                            url: targeturl,              
+                            success:function(query)  {
+                                window.location = redirectURL;
+                            },
+                            error:function(xhr, ajaxOptions, thrownError) {
+                                swal("Error", thrownError, "error");
+                            }
+                        });
+                    }
+                });
+        }
+
+		</script>

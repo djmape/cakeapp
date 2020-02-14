@@ -59,13 +59,13 @@ class UsersController extends AppController
     public function adminAll()
     {       
         $this->header();
-        $this->adminHeaderSidebar('users-admin');
+        $this->adminHeaderSidebar('user-admin');
         $this->title('Admin | All Users');
 
         $this->loadModel("Users");
         $this->loadModel("User_Administrators");
 
-        $admins = $this->User_Administrators->find('all')->contain(["Users.UserTypes"])->where(['Users.active' => 1]);
+        $admins = $this->User_Administrators->find('all')->contain(["Users.UserTypes","Users.UserProfiles"])->where(['Users.active' => 1]);
         $admins = $this->paginate($admins);
 
         $this->set(compact('admins'));
@@ -74,7 +74,7 @@ class UsersController extends AppController
     public function adminAdd()
     {       
         $this->header();
-        $this->adminHeaderSidebar('users-admin');
+        $this->adminHeaderSidebar('user-admin');
         $this->title('Admin | Add User');
 
         $this->loadModel('Users');
@@ -178,7 +178,7 @@ class UsersController extends AppController
     public function adminEdit($admin_id)
     {       
         $this->header();
-        $this->adminHeaderSidebar('users-admin');
+        $this->adminHeaderSidebar('user-admin');
         $this->title('Admin | Update User');
 
         $this->loadModel('Users');
@@ -312,13 +312,13 @@ class UsersController extends AppController
     public function employeesAll() 
     {
         $this->header();
-        $this->adminHeaderSidebar('users-employees');
+        $this->adminHeaderSidebar('user-employees');
         $this->title('Admin | User Employees');
 
         $this->loadModel("Users");
         $this->loadModel("User_Employees");
 
-        $employees = $this->User_Employees->find('all')->contain(["Users.UserTypes"])->where(['Users.active' => 1]);
+        $employees = $this->User_Employees->find('all')->contain(["Users.UserTypes","Users.UserProfiles"])->where(['Users.active' => 1]);
         $employees = $this->paginate($employees);
 
         $this->set(compact('employees'));
@@ -329,7 +329,7 @@ class UsersController extends AppController
     public function employeeAdd()
     {       
         $this->header();
-        $this->adminHeaderSidebar('users-employees');
+        $this->adminHeaderSidebar('user-employees');
         $this->title('Admin | Add User');
 
         $this->loadModel('Users');
@@ -439,7 +439,7 @@ class UsersController extends AppController
     public function employeeEdit($user_employee_id)
     {       
         $this->header();
-        $this->adminHeaderSidebar('users-employees');
+        $this->adminHeaderSidebar('user-employees');
         $this->title('Admin | Update User Employee');
 
         $this->loadModel('Users');
@@ -543,7 +543,7 @@ class UsersController extends AppController
         $this->loadModel("Users");
         $this->loadModel("User_Students");
 
-        $students = $this->User_Students->find('all')->contain(["Users.UserTypes"])->where(['Users.active' => 1]);
+        $students = $this->User_Students->find('all')->contain(["Users.UserTypes","Users.UserProfiles"])->where(['Users.active' => 1]);
         $students = $this->paginate($students);
 
         $this->set(compact('students'));
@@ -763,7 +763,7 @@ class UsersController extends AppController
         $this->loadModel("Users");
         $this->loadModel("User_Alumni");
 
-        $alumni = $this->User_Alumni->find('all')->contain(["Users.UserTypes"])->where(['Users.active' => 1]);
+        $alumni = $this->User_Alumni->find('all')->contain(["Users.UserTypes","Users.UserProfiles"])->where(['Users.active' => 1]);
         $alumni = $this->paginate($alumni);
 
         $this->set(compact('alumni'));

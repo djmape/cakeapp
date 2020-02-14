@@ -67,7 +67,7 @@
                                 </td>
                                 <td class="actions">
                                     <div class="pull-right center-block">
-                                        <?= $this->Html->link('<i class="fa fa-user"></i>View Officers', ['action' => 'positions', $office->office_id],['class' => 'btn btn-primary btn-sm','escape' => false, 'style' => 'color: black', 'title' => 'View officers in ' . $office->office_name] ) ?>
+                                        <?= $this->Html->link('<i class="fa fa-eye"></i>', ['action' => 'positions', $office->office_id],['class' => 'btn btn-maroon btn-sm','escape' => false, 'style' => 'color: #ffffff', 'title' => 'View officers in ' . $office->office_name] ) ?>
                                         <?= $this->Html->link('<i class="fa fa-edit"></i>', ['action' => 'edit', $office->office_id],['escape' => false, 'class' => 'btn btn-yellow btn-sm', 'title' => 'Edit ' . $office->office_name ]) ?>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $office->office_id ?> )" title="Delete <?php echo $office->office_name ?>">
                                             <i class="fa fa-trash"></i>

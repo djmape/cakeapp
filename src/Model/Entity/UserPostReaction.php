@@ -17,6 +17,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Post $post
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\UserPostActivity $user_post_activity
+ * @property \App\Model\Entity\UserActivity $user_activity
  */
 class UserPostReaction extends Entity
 {
@@ -38,6 +39,7 @@ class UserPostReaction extends Entity
         'user_post_reactions_activity_id' => true,
         'post' => true,
         'user' => true,
-        'user_post_activity' => true
+        'user_post_activity' => true,
+        'user_activity' => true
     ];
 }

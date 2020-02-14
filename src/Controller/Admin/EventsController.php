@@ -19,6 +19,7 @@ class EventsController extends AppController
         $this->updateEventStatus();
         $this->adminSideBarHasSub('posts');
         $this->adminHeaderSideBar('events');
+        $this->header();
     }
 
     public function index()
@@ -27,14 +28,27 @@ class EventsController extends AppController
 
         $this->updateEventStatus();
         $event = $this->Paginator->paginate($this->Events->find('all', array(
-        'order'=>array('FIELD(Events.event_status,"Ongoing","Upcoming","Past") ASC')))->where(['Events.active' => 1]));
+        'order'=>array('FIELD(Events.event_status,"Ongoing","Upcoming","Past") ASC')))->contain(['Posts'])->where(['Events.active' => 1,'Events.event_post_id  IS NOT' => null]));
         $this->set(compact('event'));
     }
 
     public function add()
     {   
         $this->title('Admin | Add Event');
+
+        $this->loadModel('Posts');
+        $this->loadModel('UserActivities');
+        $this->loadModel('UserPostActivities');
+        $this->loadModel('PostReactions');
+
         $event = $this->Events->newEntity();
+        $post = $this->Posts->newEntity();
+        $userActivity = $this->UserActivities->newEntity();
+        $userPostActivity = $this->UserPostActivities->newEntity();
+        $postReactions = $this->PostReactions->newEntity();
+
+        $currentUser = $this->Auth->user('id');
+
         if ($this->request->is('post')) {
 
             if (!empty($this->request->data)) {
@@ -58,44 +72,98 @@ class EventsController extends AppController
                     else {
                         $imageFileName = '';
                     }
-
-                $event_start_date = date('Y-m-d', strtotime($this->request->data['event_start_date']));
-                $event_start_time = date('H:i:s', strtotime($this->request->data['event_start_time']));
-                $event_end_date = date('Y-m-d', strtotime($this->request->data['event_end_date']));
-                $event_end_time = date('H:i:s', strtotime($this->request->data['event_end_time']));
-
-                $event->event_title = $this->request->data['event_title'];
-                $event->event_body = $this->request->data['event_body'];
-                $event->event_created = Time::now();;
-                $event->event_modified = Time::now();;
-                $event->event_start_date = $event_start_date;
-                $event->event_start_time = $event_start_time;
-                $event->event_end_date = $event_end_date;
-                $event->event_end_time = $event_end_time;
-                $event->event_sponsors = $this->request->data['event_sponsors'];
-                $event->event_participants = $this->request->data['event_participants'];
-                $event->event_location = $this->request->data['event_location'];
-                //$event->event_location_embed = $this->request->data['event_location_embed'];
-                $event->event_status = '';
-                $event->event_photo = $imageFileName;
-                $event->active = 1;
-
             }
 
-            if ($saved  =$this->Events->save($event)) {
-                $this->Flash->success('Event Added!', [
-                    'params' => [
-                        'saves' => 'Event Added!'
-                        ]
-                    ]);
-                return $this->redirect(['action' => 'index']);
+            $post->post_user_id = $currentUser;
+            $post->post_post_type_id = 2; # events
+            $post->post_active = 1;
+
+
+            if ($postID = $this->Posts->save($post)) {
+
+                # begin save UserActivities
+
+                $userActivity->user_activity_activity_type_id = 1; # post
+                $userActivity->user_activity_user_id = $currentUser;
+
+                if ($this->UserActivities->save($userActivity)) {
+
+                    # begin save UserPostActivities
+
+                    $userPostActivity->user_post_activity_user_id = $currentUser;
+                    $userPostActivity->user_post_activity_type_id = 1; # create
+                    $userPostActivity->user_post_activity_post_id = $postID->post_id;
+
+                    if ($this->UserPostActivities->save($userPostActivity)) {
+
+                        # begin save PostReactions
+
+                        $postReactions->post_comments_count = 0;
+                        $postReactions->post_likes_count = 0;
+                        $postReactions->post_dislikes_count = 0;
+                        $postReactions->post_reactions_post_id = $postID->post_id;
+
+                        if ($this->PostReactions->save($postReactions)) {
+
+                            # begin save Events
+
+                            $event_start_date = date('Y-m-d', strtotime($this->request->data['event_start_date']));
+                            $event_start_time = date('H:i:s', strtotime($this->request->data['event_start_time']));
+                            $event_end_date = date('Y-m-d', strtotime($this->request->data['event_end_date']));
+                            $event_end_time = date('H:i:s', strtotime($this->request->data['event_end_time']));
+
+                            $event->event_title = $this->request->data['event_title'];
+                            $event->event_body = $this->request->data['event_body'];
+                            $event->event_created = Time::now();;
+                            $event->event_modified = Time::now();;
+                            $event->event_start_date = $event_start_date;
+                            $event->event_start_time = $event_start_time;
+                            $event->event_end_date = $event_end_date;
+                            $event->event_end_time = $event_end_time;
+                            $event->event_sponsors = $this->request->data['event_sponsors'];
+                            $event->event_participants = $this->request->data['event_participants'];
+                            $event->event_location = $this->request->data['event_location'];
+                            //$event->event_location_embed = $this->request->data['event_location_embed'];
+                            $event->event_status = '';
+                            $event->event_photo = $imageFileName;
+                            $event->active = 1;
+                            $event->event_post_id = $postID->post_id;
+
+                            if ($saved  = $this->Events->save($event)) {
+
+                                $this->Flash->success('Event Added!', [
+                                    'params' => [
+                                        'saves' => 'Event Added!'
+                                    ]
+                                ]);
+                                return $this->redirect(['action' => 'index']);
+                            }
+                            else {
+                                $this->log($event->errors(),'debug');
+                            }
+                            # end save Events
+                        }
+                        else {
+                            $this->log($postReactions->errors(),'debug');
+                        }
+                        # end save PostReactions
+                    }
+                    else {
+                        $this->log($userPostActivity->errors(),'debug');
+                    }
+                    # end save UserPostActivities
+                }
+                else {
+                    $this->log($userPostActivity->errors(),'debug');
+                }
+                # end save UserActivities
             }
             else {
-                debug($event->errors());
+                $this->log($post->errors(),'debug');
             }
-            
-            $this->Flash->error(__('Unable to add your article.'));
+            # end save Posts            
         }
+
         // Get a list of tags.
         $this->log($event,'debug');
         $this->set('event', $event);

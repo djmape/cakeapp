@@ -13,12 +13,13 @@ class ContactsController extends AppController
 
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); 
-        $this->navBar();
-        $this->adminSideBar('about');
+        $this->navBar('abouts');
+        $this->checkLoginStatus();
     }
 
     public function index()
     {
+        $this->title('PUPQC | Contacts');
         $this->loadModel('ContactEmails');
         $emails = $this->ContactEmails->find('all')->where(['ContactEmails.active' => 1]);
         $emails = $this->Paginator->paginate($emails);

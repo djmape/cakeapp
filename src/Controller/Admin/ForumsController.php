@@ -118,7 +118,7 @@ class ForumsController extends AppController
 
                 if ($activityID = $this->UserActivities->save($userActivity)) {
 
-                    $forumActivity->forum_activity_type_id = 1;
+                    $forumActivity->forum_activity_type_id = 1; # Create Category
                     $forumActivity->forum_activity_user_id = $currentUser;
                     $forumActivity->forum_activity_activity_id = $activityID->user_activity_id;
 

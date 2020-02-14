@@ -51,6 +51,11 @@ class ForumActivitiesTable extends Table
             'joinType' => 'INNER'
         ]);
 
+        $this->hasMany('ForumCategoryActivities', [
+            'foreignKey' => 'forum_category_activity_forum_activity_id',
+            'joinType' => 'INNER'
+        ]);
+
         $this->hasMany('ForumTopicActivities', [
             'foreignKey' => 'forum_topic_activity_forum_activity_id',
             'joinType' => 'INNER'

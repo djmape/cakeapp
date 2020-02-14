@@ -69,7 +69,7 @@
                                 <td>
                                     <div class="pull-right center-block">                              
                                         <?= $this->Html->link('<i class="fa fa-edit"></i>', ['action' => 'editOfficePosition', $office_employee->office_employees_id, $offices->office_id, $office_employee->employee->employee_id],[ 'class' => 'btn btn-yellow btn-sm', 'title' => 'Edit ' . $office_employee->employee->employee_lastname . ', ' . $office_employee->employee->employee_firstname . ' ' . substr($office_employee->employee->employee_middlename,0,1) . '.', 'escape' => false  ]) ?>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $office_employee->office_employees_id ?> )">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $office_employee->office_employees_id ?> )" title="Remove <?php echo $office_employee->employee->employee_lastname . ', ' . $office_employee->employee->employee_firstname . ' ' . substr($office_employee->employee->employee_middlename,0,1)?>">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </div>      

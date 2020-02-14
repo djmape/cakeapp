@@ -50,6 +50,14 @@ class ForumDiscussionsTable extends Table
         $this->hasOne('ForumDiscussionDetails', [
             'foreignKey' => 'forum_discussion_detail_discussion_id'
         ]);
+        
+        $this->hasMany('ForumNotifications', [
+            'foreignKey' => 'forum_notification_discussion_id'
+        ]);
+        
+        $this->hasMany('UserForumDiscussionVotes', [
+            'foreignKey' => 'forum_discussion_id'
+        ]);
     }
 
     /**

@@ -2,7 +2,7 @@
             <?php echo $this->Html->css("front.css")?>
             
             <!-- begin #content -->
-            <div id="content" class="content">
+            <div id="content" class="content announcement-view-content">
     
                 <h1 class="page-header" style="color: #7e0e09;">
                     <span class="fa fa-info"></span>
@@ -10,7 +10,7 @@
                 </h1>
 
                 <!-- begin row -->
-                <div id="announcements-list" class="grid_entry row masonry" style="width:80%" > 
+                <div id="announcements-list" class="grid_entry row masonry" style="width:70%" > 
                     <?php
                         foreach ($announcements as $announcement): ?>
                         <div class="announcement-item">
@@ -18,7 +18,8 @@
                                 <?= $this->Html->link($announcement->announcement_title, ['action' => 'view', $announcement->announcement_id]) ?>
                             </h3>
                             <?= $announcement->announcement_modified->format('l, F d, Y g:i A') ?>
-
+                            <br>
+                            <br>
                             <?php 
                                 if (strlen($announcement->announcement_body) >= 500 )  {
                             ?>
@@ -46,16 +47,16 @@
                 <!-- status elements -->
                 <div class="scroller-status">
                     <div class="infinite-scroll-request loader-ellips">
-                    ...
+                        <i class="fas fa-spinner fa-spin"></i>
                     </div>
                     <p class="infinite-scroll-last">End of content</p>
-                    <p class="infinite-scroll-error">No more pages to load</p>
+                    <p class="infinite-scroll-error">No more announcements to load</p>
                 </div>
-                    <p class="pagination">
-                        <a class="pagination__next" href="page2.html">Next page</a>
-                    </p>
-    </div>
-    </div>
+                <p class="pagination">
+                    <a class="pagination__next" href="page2.html">Next page</a>
+                </p>
+            </div>
+        </div>
     <?php echo $this->element('footer');?>
 </body>
     
@@ -95,7 +96,7 @@
                     debug         : true,
                     dataType      : 'html',
                     loading: {
-                        finishedMsg: 'No more posts to load. All Hail Star Wars God!',
+                        finishedMsg: 'No more posts to load.',
                         img: ''
                     },
                     status: '.scroller-status',

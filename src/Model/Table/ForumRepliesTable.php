@@ -69,6 +69,10 @@ class ForumRepliesTable extends Table
         $this->hasMany('UserForumReplyVotes', [
             'foreignKey' => 'forum_reply_id'
         ]);
+        
+        $this->hasMany('ForumNotifications', [
+            'foreignKey' => 'forum_notification_reply_id'
+        ]);
     }
 
     /**

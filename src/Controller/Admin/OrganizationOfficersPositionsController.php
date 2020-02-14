@@ -22,13 +22,14 @@ class OrganizationOfficersPositionsController extends AppController
 
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
-        $this->sideBar();
-        $this->adminSideBarHasSub('settings');
-        $this->adminSideBar('officers');
+        $this->adminSideBarHasSub('students');
+        $this->adminHeaderSideBar('organizations');
+        $this->header();
     }
 
     public function index()
     {   
+        $this->title('Admin Panel | Organization Officer Positions');
         $organization_officers_positions = $this->Paginator->paginate($this->OrganizationOfficersPositions->find('all')->where(['OrganizationOfficersPositions.active' => 1])->order([
         'OrganizationOfficersPositions.officers_position_priority' => 'ASC'
         ]));
@@ -37,6 +38,7 @@ class OrganizationOfficersPositionsController extends AppController
 
     public function add()
     {
+        $this->title('Admin Panel | Add Organization Officer Position');
         $organization_officers_positions = $this->OrganizationOfficersPositions->newEntity();
 
         if ($this->request->is('post')) {
@@ -63,6 +65,7 @@ class OrganizationOfficersPositionsController extends AppController
     
     public function edit($officers_position_id)
     {
+        $this->title('Admin Panel | Edit Organization Officer Position');
         $organization_officers_positions = $this->OrganizationOfficersPositions->find('all', 
                    array('conditions'=>array('OrganizationOfficersPositions.officers_position_id'=>$officers_position_id)));
         $row = $organization_officers_positions->first();

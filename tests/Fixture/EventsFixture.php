@@ -32,8 +32,13 @@ class EventsFixture extends TestFixture
         'event_visibility' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'event_photo' => ['type' => 'string', 'length' => 2550, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'active' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'event_post_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        '_indexes' => [
+            'fk_event_post_id' => ['type' => 'index', 'columns' => ['event_post_id'], 'length' => []],
+        ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['event_id'], 'length' => []],
+            'fk_event_post_id' => ['type' => 'foreign', 'columns' => ['event_post_id'], 'references' => ['posts', 'post_id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
         ],
         '_options' => [
             'engine' => 'InnoDB',
@@ -53,12 +58,12 @@ class EventsFixture extends TestFixture
                 'event_id' => 1,
                 'event_title' => 'Lorem ipsum dolor sit amet',
                 'event_body' => 'Lorem ipsum dolor sit amet',
-                'event_created' => 1565898248,
-                'event_modified' => 1565898248,
-                'event_start_date' => '2019-08-16',
-                'event_start_time' => '04:44:08',
-                'event_end_date' => '2019-08-16',
-                'event_end_time' => '04:44:08',
+                'event_created' => 1580894738,
+                'event_modified' => 1580894738,
+                'event_start_date' => '2020-02-05',
+                'event_start_time' => '18:25:38',
+                'event_end_date' => '2020-02-05',
+                'event_end_time' => '18:25:38',
                 'event_sponsors' => 'Lorem ipsum dolor sit amet',
                 'event_participants' => 'Lorem ipsum dolor sit amet',
                 'event_location' => 'Lorem ipsum dolor sit amet',
@@ -66,7 +71,8 @@ class EventsFixture extends TestFixture
                 'event_status' => 'Lorem ipsum dolor sit amet',
                 'event_visibility' => 1,
                 'event_photo' => 'Lorem ipsum dolor sit amet',
-                'active' => 1
+                'active' => 1,
+                'event_post_id' => 1
             ],
         ];
         parent::init();

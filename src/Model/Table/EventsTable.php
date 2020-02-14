@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Events Model
  *
+ * @property |\Cake\ORM\Association\BelongsTo $Posts
+ *
  * @method \App\Model\Entity\Event get($primaryKey, $options = [])
  * @method \App\Model\Entity\Event newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Event[] newEntities(array $data, array $options = [])
@@ -33,6 +35,12 @@ class EventsTable extends Table
         $this->setTable('events');
         $this->setDisplayField('event_id');
         $this->setPrimaryKey('event_id');
+
+        $this->belongsTo('Posts', [
+            'foreignKey' => 'event_post_id',
+            'joinType' => 'INNER'
+        ]);
+        
     }
 
     /**
@@ -131,5 +139,19 @@ class EventsTable extends Table
             ->allowEmptyString('active', false);
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['event_post_id'], 'Posts'));
+
+        return $rules;
     }
 }

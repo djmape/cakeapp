@@ -189,7 +189,7 @@
 					    </a>
 						<ul class="sub-menu">
               				<!-- Administrator -->
-              				<li class="<?php if ($active == 'users-admin') echo 'active'?>">
+              				<li class="<?php if ($active == 'user-admin') echo 'active'?>">
                     			<?php echo $this->Html->link('Administrator',array('prefix' => "admin", 'controller' => 'Users','action'=>'adminAll')) ?>
                     		</li>
               				<!-- Employees -->
@@ -242,7 +242,7 @@
 		
 		
 		<!-- begin scroll to top btn -->
-		<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top">
+		<a href="javascript:;" class="btn btn-icon btn-circle btn-scroll-to-top fade" data-click="scroll-top" style="">
 			<i class="material-icons">keyboard_arrow_up</i>
 		</a>
 		<!-- end scroll to top btn -->

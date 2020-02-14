@@ -13,11 +13,12 @@ class DashboardController extends AppController
         parent::initialize();
         $this->adminHeaderSidebar('dashboard');
         $this->adminSideBarHasSub('');
+        $this->header();
     }
 
     public function index()
     {   
-        
+        $this->title('PUPQC | Admin Panel');
     }
 
     public function isAuthorized($user)

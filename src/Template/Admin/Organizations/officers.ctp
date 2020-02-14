@@ -32,6 +32,10 @@
                 <?= $this->Html->link('<i class="fa fa-add"></i> Add Officer', ['action' => 'addOfficer', $organization->organization_id],['escape' => false, 'class' => 'btn btn-yellow btn-sm add-button' ]) ?>
                 <!-- end Add Organizations button -->
 
+                <!-- begin Organization Officer Positions -->
+                <?= $this->Html->link('<i class="fa fa-add"></i> Officer Positions', ['controller' => 'OrganizationOfficersPositions','action' => 'index'],['escape' => false, 'class' => 'btn btn-yellow btn-sm add-button' ]) ?>
+                <!-- end Organization Officer Positions -->
+
                 <!-- begin table -->
                 <table id="data-table-select" class="table table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="data-table_info">
                     <thead>

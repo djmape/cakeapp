@@ -29,6 +29,10 @@
             <?= $this->Html->link('<i class="fa fa-add"></i> Add Employee', ['action' => 'add'],['escape' => false, 'class' => 'btn btn-yellow btn-sm add-button' ]) ?>
             <!-- end Add Event button -->
 
+            <!-- begin Add Event button -->
+            <?= $this->Html->link('Employee Positions', ['controller' => 'EmployeePositions','action' => 'index'],['escape' => false, 'class' => 'btn btn-yellow btn-sm add-button' ]) ?>
+            <!-- end Add Event button -->
+
             <!-- begin data table -->
             <table id="data-table-select" class="table table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="data-table_info">
                 <thead> 

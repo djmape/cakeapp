@@ -49,7 +49,6 @@ src/Template/Admin/ContactNumbers/index.ctp
                     <?php foreach ($numbers as $i => $number): ?>
                         <tr class="odd gradeX" data-number-id="<?= $number->contact_number_id ?>">
                             <td>
-                                <?= $i + 1?>
                             </td>
                             <td>
                                 <?= $number->contact_number ?>
@@ -89,7 +88,7 @@ src/Template/Admin/ContactNumbers/index.ctp
                         <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
                             Close
                         </a>
-                        <button type="button" class="btn btn-yellow btn-sm" onclick="addNumber()">
+                        <button type="button" class="btn btn-maroon btn-sm" onclick="addNumber()">
                             <i class="fa fa-plus"></i>
                             Add Contact Number
                         </button>
@@ -114,7 +113,7 @@ src/Template/Admin/ContactNumbers/index.ctp
                         <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
                             Close
                         </a>
-                        <button type="button" class="btn btn-yellow btn-sm" onclick="updateNumber()">
+                        <button type="button" class="btn btn-maroon btn-sm" onclick="updateNumber()">
                             <i class="fa fa-plus"></i>
                             Update Contact Number
                         </button>
@@ -148,12 +147,21 @@ src/Template/Admin/ContactNumbers/index.ctp
 <?php echo $this->Html->script("apps.min.js")?>
 <!-- ================== END PAGE LEVEL JS ================== -->
     
-<script>
-    $(document).ready(function() {
-        App.init();
-        TableManageTableSelect.init();
-        $('#data-table-select').DataTable();
-    });
+    <script>
+        $(document).ready(function() {
+            App.init();
+            TableManageTableSelect.init();
+            $data_table = $('#data-table-select').DataTable();
+            $data_table.on( 'order.dt search.dt', 
+                function () {
+                    $data_table.column(0, {search:'applied', order:'applied'}).nodes().each( 
+                        function (cell, i) {
+                            cell.innerHTML = i+1;
+                        }
+                        );
+                }
+            ).draw();
+        });
 
     function confirmDelete($contact_number_id) {
         var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"delete"]); ?>';

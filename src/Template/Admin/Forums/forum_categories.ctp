@@ -56,7 +56,6 @@
                 <?php foreach ($forumCategories as $i => $forumCategory): ?>
                     <tr class="odd gradeX" data-email-id="<?= $user->user_id ?>">
                         <td>
-                            <?= $i + 1?>
                         </td>
                         <td>
                             <?php echo $this->Html->image("../webroot/img/upload/".$forumCategory->forum_category_icon,['style' => 'max-width: 100%']); ?>
@@ -123,13 +122,22 @@
 
 <!-- ================== END PAGE LEVEL JS ================== -->
     
-<script>
+    <script>
 
-    $(document).ready(function() {
-        App.init();
-		TableManageTableSelect.init();
-        $('#data-table-select').DataTable();
-    });
+        $(document).ready(function() {
+            App.init();
+		  TableManageTableSelect.init();
+            $data_table = $('#data-table-select').DataTable();
+            $data_table.on( 'order.dt search.dt', 
+                function () {
+                    $data_table.column(0, {search:'applied', order:'applied'}).nodes().each( 
+                        function (cell, i) {
+                            cell.innerHTML = i+1;
+                        }
+                        );
+                }
+            ).draw();
+        });
 
     $("#inputGroupFile01").change(function(event) {  
         RecurFadeIn();

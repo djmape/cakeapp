@@ -10,7 +10,8 @@ use Cake\Validation\Validator;
  * OrganizationOfficers Model
  *
  * @property \App\Model\Table\OrganizationsTable|\Cake\ORM\Association\BelongsTo $Organizations
- * @property \App\Model\Table\OrganizationOfficersPositionsTable|\Cake\ORM\Association\BelongsTo $OrganizationOfficersPositions
+ * @property |\Cake\ORM\Association\BelongsTo $OfficersPositions
+ * @property |\Cake\ORM\Association\BelongsTo $Users
  *
  * @method \App\Model\Entity\OrganizationOfficer get($primaryKey, $options = [])
  * @method \App\Model\Entity\OrganizationOfficer newEntity($data = null, array $options = [])
@@ -45,6 +46,9 @@ class OrganizationOfficersTable extends Table
             'foreignKey' => 'officers_position_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id'
+        ]);
     }
 
     /**
@@ -60,16 +64,26 @@ class OrganizationOfficersTable extends Table
             ->allowEmptyString('organization_officer_id', 'create');
 
         $validator
-            ->scalar('organization_officer_name')
-            ->maxLength('organization_officer_name', 255)
-            ->requirePresence('organization_officer_name', 'create')
-            ->allowEmptyString('organization_officer_name', false);
+            ->scalar('officer_lastname')
+            ->maxLength('officer_lastname', 255)
+            ->requirePresence('officer_lastname', 'create')
+            ->allowEmptyString('officer_lastname', false);
 
         $validator
-            ->scalar('organization_officer_photo')
-            ->maxLength('organization_officer_photo', 255)
-            ->requirePresence('organization_officer_photo', 'create')
-            ->allowEmptyString('organization_officer_photo', false);
+            ->scalar('officer_firstname')
+            ->maxLength('officer_firstname', 255)
+            ->requirePresence('officer_firstname', 'create')
+            ->allowEmptyString('officer_firstname', false);
+
+        $validator
+            ->scalar('officer_middlename')
+            ->maxLength('officer_middlename', 255)
+            ->allowEmptyString('officer_middlename');
+
+        $validator
+            ->scalar('officer_photo')
+            ->maxLength('officer_photo', 255)
+            ->allowEmptyString('officer_photo');
 
         $validator
             ->integer('active')
@@ -90,6 +104,7 @@ class OrganizationOfficersTable extends Table
     {
         $rules->add($rules->existsIn(['organization_id'], 'Organizations'));
         $rules->add($rules->existsIn(['officers_position_id'], 'OrganizationOfficersPositions'));
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
     }

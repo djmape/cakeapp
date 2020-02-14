@@ -43,6 +43,10 @@ class OrganizationsTable extends Table
             'className' => 'organization',
             'foreignKey' => 'organization_id'
         ]);
+
+        $this->hasMany('OrganizationAnnouncements', [
+            'foreignKey' => 'organization_id'
+        ]);
     }
 
     /**

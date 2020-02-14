@@ -50,7 +50,7 @@
                             <?php echo $this->Html->link('About',array('prefix' => 'front','controller'=>'abouts','action'=>'index')) ?>
                         </li>
                         <li>
-                            <?php echo $this->Html->link('The Student Handbook',array('prefix' => 'front','controller'=>'abouts','action'=>'view')) ?>
+                            <?php echo $this->Html->link('The Student Handbook',array('prefix' => 'front','controller'=>'abouts','action'=>'handbook')) ?>
                         </li>
                         <li>
                             <?php echo $this->Html->link('Contacts',array('prefix' => 'front','controller'=>'contacts','action'=>'index')) ?>
@@ -58,7 +58,7 @@
                     </ul>
                 </li>
                 <li class="<?php if ($active == 'forum') echo 'active'?>">
-                    <?php echo $this->Html->link('Forum',['controller' => 'Forums','action'=>'forumHome']) ?>
+                    <?php echo $this->Html->link('Forum',['prefix' => 'forums','controller' => 'ForumHome','action'=>'index']) ?>
                 </li>
             </ul>
             <!-- end top-menu nav -->

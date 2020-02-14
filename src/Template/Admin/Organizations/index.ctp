@@ -29,6 +29,7 @@
                 <?= $this->Html->link('<i class="fa fa-add"></i> Add Organization', ['action' => 'add'],['escape' => false, 'class' => 'btn btn-yellow btn-sm add-button' ]) ?>
                 <!-- end All Organizations button -->
 
+
                 <!-- begin table -->
                 <table id="data-table-select" class="table table-striped table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="data-table_info">
                     <thead>

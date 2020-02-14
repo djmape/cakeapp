@@ -1,56 +1,40 @@
 <!-- src/Template/Users/index.ctp -->
 
-        <?php echo $this->element('UserHeader');?>
+            <?php echo $this->element('UserHeader');?>
+            <?php echo $this->Html->css("forum.css")?>
+            <?php echo $this->Html->css("front.css")?>
 
-        <!-- begin #top-menu -->
-        <div id="top-menu" class="navbar-header top-menu">
-            <!-- begin top-menu nav -->
-            <ul class="nav navbar-nav">
+            <!-- begin #top-menu -->
+            <div id="top-menu" class="navbar-header top-menu">
+            
+                <!-- begin top-menu nav -->
+                <ul class="nav navbar-nav">
                 
-        <!-- begin breadcrumb -->
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">Forum</li>
-            <li class="breadcrumb-item active">
-                Home
-            </li>
-        </ol>
-        <!-- end breadcrumb -->
-                
-            </ul>
-            <!-- end top-menu nav -->
-        </div>
-        <!-- end #top-menu -->
-        <?php echo $this->Html->css("front.css")?>
-        <?php echo $this->Html->css("forum.css")?>
+                    <!-- begin breadcrumb -->
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active">Forum</li>
+                    </ol>
+                <!-- end breadcrumb -->
+                </ul>
+                <!-- end top-menu nav -->
+            </div>
+            <!-- end #top-menu -->
 
 
-        <!-- begin #content -->
-        <div id="content" class="content forum-content">
-            <!-- begin Categories -->
-            <div class="categories-table">
-            <h3> Categories </h3>  
-            <table id="data-table-default" class="table table-bordered">
-                        <thead>
-                            <th style="width: 70%">
-                                Category Name
-                            </th>
-                            <th style="width: 10%">
-                                Topics
-                            </th>
-                            <th style="width: 10%">
-                                Discussions
-                            </th>
-                            <th style="width: 10%">
-                                Replies
-                            </th>
-                        </thead>
+            <!-- begin #content -->
+            <div id="content" class="content forum-content forum-home-content">
+
+                <!-- begin Categories -->
+                <div class="categories-table">
+                    <h3> Categories </h3>  
+                    <table id="data-table-default" class="table table-bordered table-forum-home">
                         <tbody>
                             <?php foreach ($forumCategories as $i => $forumCategory): ?>
                             <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">
+                                <td class="f-s-600 text-inverse" style="width: 70%">
                                     <?= $this->Html->link($forumCategory->forum_category_name, ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex', strtolower(str_replace(' ', '-', $forumCategory->forum_category_name))],['escape' => false]) ?>
                                 </td>
-                                <td class="f-s-600 text-inverse">
+                                <td class="f-s-600 text-inverse" style="width: 10%">
                                     <?php 
                                         if ($forumCategory->forum_category_detail->forum_category_topics_count != 0) {
                                             echo $forumCategory->forum_category_detail->forum_category_topics_count . ' topics'  ;
@@ -60,7 +44,7 @@
                                         }
                                     ?>
                                 </td>
-                                <td class="f-s-600 text-inverse">
+                                <td class="f-s-600 text-inverse" style="width: 10%">
                                     <?php 
                                         if ($forumCategory->forum_category_detail->forum_category_discussions_count != 0) {
                                             echo $forumCategory->forum_category_detail->forum_category_discussions_count . ' discussions'  ;
@@ -70,7 +54,7 @@
                                         }
                                     ?>
                                 </td>
-                                <td class="f-s-600 text-inverse">
+                                <td class="f-s-600 text-inverse" style="width: 10%">
                                     <?php 
                                         if ($forumCategory->forum_category_detail->forum_category_replies_count != 0) {
                                             echo $forumCategory->forum_category_detail->forum_category_replies_count . ' replies'  ;
@@ -83,29 +67,18 @@
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
-            </table> 
-            <div class="pull-right">
-                <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'ForumCategories', 'action' => 'forumCategoriesIndex'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
-            </div>
-            </div> 
-            <!-- end Categories -->
+                    </table> 
 
-            <!-- begin Topics -->
-            <div class="categories-table">
-            <h3> Topics </h3>   
-            <table id="data-table-default" class="table table-bordered">
-                        <thead>
-                            <th style="width: 80%">
-                                Topic Name
-                            </th>
-                            </th>
-                            <th style="width: 10%">
-                                Discussions
-                            </th>
-                            <th style="width: 10%">
-                                Replies
-                            </th>
-                        </thead>
+                    <div class="pull-right">
+                        <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'ForumCategories', 'action' => 'forumCategoriesIndex'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
+                    </div>
+                </div> 
+                <!-- end Categories -->
+
+                <!-- begin Topics -->
+                <div class="categories-table">
+                <h3> Topics </h3>   
+                    <table id="data-table-default" class="table table-bordered table-forum-home">
                         <tbody>
                             <?php
                                 $forum_topic_count = 1;
@@ -115,13 +88,13 @@
                                     }
                             ?>
                             <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">
+                                <td class="f-s-600 text-inverse" style="width: 80%">
                                     <?= $this->Html->link($forumTopic->forum_topic_name, ['controller' => 'ForumDiscussions', 'action' => 'forumDiscussionsIndex', str_replace(' ', '-', $forumTopic->forum_category->forum_category_name), str_replace(' ', '-', $forumTopic->forum_topic_name)]) ?>
                                     in 
                                     <?= $this->Html->link($forumTopic->forum_category->forum_category_name, ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex', strtolower(str_replace(' ', '-', $forumTopic->forum_category->forum_category_name))],['escape' => false]) ?>
                                     <br>
                                     by
-                                    <?= $forumTopic->user->username ?> 
+                                    <?php echo $this->Html->link($forumTopic->user->username,array('prefix' => false,'controller' => 'Users','action'=>'userProfile', $forumTopic->user->username )) ?>
                                 </td>
                                 <td class="f-s-600 text-inverse" style="width: 10%">
                                     <?php 
@@ -146,89 +119,80 @@
                             </tr>
                             <?php $forum_topic_count++; endforeach; ?>
                         </tbody>
-            </table> 
-            <div class="pull-right">
-                <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'ForumCategories', 'action' => 'forumTopicsIndex'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
-            </div>
-            </div>
-            <!-- end Topics -->
+                    </table> 
+                    <div class="pull-right">
+                        <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'ForumCategories', 'action' => 'forumCategoriesIndex'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
+                    </div>
+                </div>
+                <!-- end Topics -->
 
-            <!-- begin Discussions -->
-            <div class="categories-table">
-            <h3> Discussions </h3>   
-            <table id="data-table-default" class="table table-bordered">
-                        <thead>
-                            <th style="width: 70%">
-                                Discussion Title
-                            </th>
-                            <th style="width: 10%">
-                                Likes
-                            </th>
-                            <th style="width: 10%">
-                                Dislikes
-                            </th>
-                            <th style="width: 10%">
-                                Replies
-                            </th>
-                        </thead>
-                        <tbody>
-                            <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">Discussion Title</td>
-                                <td class="f-s-600 text-inverse">348 likes</td>
-                                <td class="f-s-600 text-inverse">14 dislikes</td>
-                                <td class="f-s-600 text-inverse">446 replies</td>
-                            </tr>
-                            <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">Discussion Title</td>
-                                <td class="f-s-600 text-inverse">345 likes</td>
-                                <td class="f-s-600 text-inverse">1 dislikes</td>
-                                <td class="f-s-600 text-inverse">147 replies</td>
-                            </tr>
-                            <tr class="odd gradeX">
-                                <td class="f-s-600 text-inverse">Discussion Title</td>
-                                <td class="f-s-600 text-inverse">112 likes</td>
-                                <td class="f-s-600 text-inverse">16 dislikes</td>
-                                <td class="f-s-600 text-inverse">650 replies</td>
-                            </tr>
-                        </tbody>
-            </table> 
-            <div class="pull-right">
-                <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'Forums', 'action' => 'forumDiscussions'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
+                <!-- begin Discussions -->
+                <div class="categories-table">
+                <h3> Discussions </h3>   
+                <table id="data-table-default" class="table table-bordered table-forum-home">
+                    <tbody>
+                        <?php 
+                            foreach ($forumDiscussions as $i => $forumDiscussion): ?>
+                                <tr class="odd gradeX">
+                                    <td class="f-s-600 text-inverse" style="width: 70%">
+                                        <?= $this->Html->link($forumDiscussion->forum_discussion_title, ['controller' => 'ForumDiscussions', 'action' => 'forumReplies',str_replace(' ', '-',$forumDiscussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-',$forumDiscussion->forum_topic->forum_topic_name) , str_replace(' ', '-',$forumDiscussion->forum_discussion_title) ]) ?>
+                                        in
+                                        <?= $this->Html->link($forumDiscussion->forum_topic->forum_topic_name, ['controller' => 'ForumDiscussions', 'action' => 'forumDiscussionsIndex', str_replace(' ', '-', $forumDiscussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-', $forumDiscussion->forum_topic->forum_topic_name)]) ?>
+                                        <br>
+                                        by
+                                        <?php echo $this->Html->link($forumDiscussion->user->username,array('prefix' => false,'controller' => 'Users','action'=>'userProfile', $forumDiscussion->user->username )) ?>
+                                    </td>
+                                    <td class="f-s-600 text-inverse" style="width: 10%">
+                                        <?= $forumDiscussion->forum_discussion_detail->forum_discussion_detail_upvote_count . ' upvote/s' ?>
+                                    </td>
+                                    <td class="f-s-600 text-inverse" style="width: 10%">
+                                        <?= $forumDiscussion->forum_discussion_detail->forum_discussion_detail_downvote_count . ' downvote/s' ?>
+                                    </td>
+                                    <td class="f-s-600 text-inverse" style="width: 10%">
+                                        <?= $forumDiscussion->forum_discussion_detail->forum_discussion_detail_replies_count . ' replies' ?>
+                                    </td>
+                                </tr>
+                        <?php
+                            endforeach;
+                        ?>
+                    </tbody>
+                </table> 
+                <div class="pull-right">
+                    <?= $this->Html->link('<i class="fa fa-arrow-right"></i> more...', ['controller' => 'Forums', 'action' => 'forumDiscussions'],['class' => 'btn btn-maroon btn-sm','escape' => false]) ?>
+                </div>
+                <!-- end Discussions -->
             </div>
-            <!-- end Topics -->
+            <!-- end #content -->
         </div>
-        </div>
-        <!-- end #content -->
-    </div>
-    <!-- end #container -->
-</body>
+        <!-- end page container -->
+    </body>
     <?php echo $this->element('footer');?>      
 
 
 
-<!-- Include Base JS -->
-<?php echo $this->element('base_js');?>
+    <!-- Include Base JS -->
+    <?php echo $this->element('base_js');?>
 
 
-<!-- ================== BEGIN PAGE LEVEL JS ================== -->
-<?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/extensions/Select/js/dataTables.select.min.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-<?php echo $this->Html->script("table-manage-select.demo.min.js")?>
-<?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
-<?php echo $this->Html->script("../plugins/js-cookie/js.cookie.js")?>
-<?php echo $this->Html->script("apps.min.js")?>
-<!-- ================== END PAGE LEVEL JS ================== -->
+    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/extensions/Select/js/dataTables.select.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+    <?php echo $this->Html->script("table-manage-select.demo.min.js")?>
+    <?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
+    <?php echo $this->Html->script("../plugins/js-cookie/js.cookie.js")?>
+    <?php echo $this->Html->script("apps.min.js")?>
+    <!-- ================== END PAGE LEVEL JS ================== -->
     
-<script>
+    <script>
 
-    $(document).ready(function() {
-        App.init();
-    });
+        $(document).ready(function() {
+            App.init();
+        });
 
     </script>
 

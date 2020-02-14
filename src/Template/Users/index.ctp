@@ -4,76 +4,127 @@
         <?php echo $this->Html->css("front.css")?>
 
         <!-- begin #content -->
-        <div id="content" class="content">
+        <div id="content" class="content user-home-content">
             <!-- begin #timeline-contents -->
             <div id="timeline-content">
-                    <div id="timeline-posts-header">
-                        <h3>Posts</h3>
-                    </div>
                     <!-- begin timeline -->
                     <div id="timeline">
                         <!-- begin timeline single post -->
                         <?php foreach ($posts as $post): ?>
                         <ul class="timeline-single-post">
+                            <li class="post-title">
+                                    <?php 
+                                        # if post is Announcement
+                                        if ($post->post_post_type_id == 1) {
+                                    ?>      
+                                            Announcement
+                                            <hr>
+                                            <?= $this->Html->link($post->announcements[0]->announcement_title, ['prefix' => 'front','controller' => 'Announcement', 'action' => 'view', $post->announcements[0]->announcement_id]) ?>
+                                    <?php 
+                                        } # if post is Event
+                                        else if ($post->post_post_type_id == 2) {
+                                    ?>  
+                                            Event
+                                            <hr>
+                                            <?= $this->Html->link($post->events[0]->event_title, ['prefix' => 'front','controller' => 'Event', 'action' => 'view', $post->events[0]->event_id]) ?>
+                                    <?php 
+                                        } # if post is Organization Announcement
+                                        else if ($post->post_post_type_id == 4) {
+                                    ?>      
+                                            Announcement from 
+                                            <?= $this->Html->link($post->organization_announcement->organization->organization_name, ['prefix' => 'front','controller' => 'Organizations', 'action' => 'announcement_view', $post->organization_announcement->organization->organization_name]) ?>
+                                            <hr>
+                                            <?= $this->Html->link($post->organization_announcement->organization_announcement_title, ['prefix' => 'front','controller' => 'Organizations', 'action' => 'announcementView', $post->organization_announcement->organization_announcement_id]) ?>
+                                    <?php 
+                                        } # if post is Organization Event
+                                        else if ($post->post_post_type_id == 5) {
+                                    ?>      
+                                            Event by 
+                                            <?= $this->Html->link($post->organization_event->organization->organization_name, ['prefix' => 'front','controller' => 'Organizations', 'action' => 'view', $post->organization_event->organization->organization_id]) ?>
+                                            <hr>
+                                            <?= $this->Html->link($post->organization_event->organization_event_title, ['prefix' => 'front','controller' => 'Organizations', 'action' => 'eventView', $post->organization_event->organization_event_id]) ?>
+                                    <?php 
+                                        }
+                                    ?>
+                            </li>
                             <li class="post-header row">
                                 <?php echo $this->Html->image("../webroot/img/upload/".$post->user->user_profile->user_profile_photo, array('class' => '')); ?>
-                                <h4> <?= $post->user->username ?> </h4>
+                                <h6> <?= $post->user->username ?> </h6>
                             </li>
-                            <hr>
-                            <li>
-                                <h4>
-                                    <?php 
-                                        if ($post->post_post_type_id == 1) {
-                                    ?>
-                                    <?= $this->Html->link($post->announcement->announcement_title, ['prefix' => 'front','controller' => 'Announcement', 'action' => 'view', $post->announcement->announcement_id]) ?>
-                                    <?php 
-                                        }
-                                    ?>
-                                </h4>
-                                <?php 
-                                    if ($post->post_post_type_id == 1) {
-                                        echo $post->announcement->announcement_body;
+                            <!-- begin Post Content Preview -->
+                            <li class="post-content-preview">
+                            <?php 
+                                # begin if post is Announcement
+                                if ($post->post_post_type_id == 1) {
+                                    if (strlen($post->announcements[0]->announcement_body) > 1000 )  {
+                            ?>
+                                        <?= preg_replace("/\<[^>]+\>/"," ",substr($post->announcements[0]->announcement_body,0,999)) ?>
+                                        <small style="font-size: 12px">
+                                            <?= $this->Html->link('. . .read more', ['action' => 'view', $post->announcements[0]->announcement_id]) ?>
+                                        </small>
+                            <?php
                                     }
-                                ?>
+                                    else {
+                            ?>
+                                        <?= preg_replace("/\<[^>]+\>/"," ",$post->announcements[0]->announcement_body) ?>
+                            <?php
+                                    }
+                                }
+                                # end if post is Announcement
+                                # begin if post is Event
+                                else if ($post->post_post_type_id == 2) {
+                                    if (strlen($post->events[0]->event_body) > 1000 )  {
+                            ?>
+                                        <?= preg_replace("/\<[^>]+\>/"," ",substr($post->events[0]->event_body,0,999)) ?>
+                                        <small style="font-size: 12px">
+                                            <?= $this->Html->link('. . .read more', ['action' => 'view', $post->events[0]->event_id]) ?>
+                                        </small>
+                            <?php
+                                    }
+                                    else {
+                            ?>
+                                        <?= preg_replace("/\<[^>]+\>/"," ",$post->events[0]->event_body) ?>
+                            <?php
+                                    }
+                                }
+                                # end if post is Organization Announcement
+                                # begin if post is Event
+                                else if ($post->post_post_type_id == 4) {
+                                    if (strlen($post->organization_announcement->organization_announcement_body) > 1000 )  {
+                            ?>          
+                                        <?= preg_replace("/\<[^>]+\>/"," ",substr($post->organization_announcement->organization_announcement_body,0,999)) ?>
+                                        <small style="font-size: 12px">
+                                            <?= $this->Html->link('. . .read more', ['action' => 'view', $post->organization_announcement->organization_announcement_id]) ?>
+                                        </small>
+                            <?php
+                                    }
+                                    else {
+                            ?>          
+                                        <?= preg_replace("/\<[^>]+\>/"," ", $post->organization_announcement->organization_announcement_body) ?>
+                            <?php
+                                    }
+                                }
+                                # end if post is Organization Announcement
+                                # begin if post is Organization Event
+                                else if ($post->post_post_type_id == 5) {
+                                    if (strlen($post->organization_event->organization_event_body) > 1000 ) {
+                            ?>
+                                        <?= preg_replace("/\<[^>]+\>/"," ",substr($post->organization_event->organization_event_body,0,999)) ?>
+                                        <small style="font-size: 12px">
+                                            <?= $this->Html->link('. . .read more', ['action' => 'view', $post->organization_event->organization_event_id]) ?>
+                                        </small>
+                            <?php
+                                    }
+                                    else {
+                            ?>   
+                                        <?= preg_replace("/\<[^>]+\>/"," ", $post->organization_event->organization_event_body) ?>
+                            <?php
+                                    }
+                                }
+                                # end if post is Organization Event
+                            ?>
                             </li>
-                            <hr>
-                            <!-- 
-                            <li class="post-reactions">
-                                <a href="javascript:;" class="m-r-15 text-inverse-lighter">
-                                    <i class="fa fa-thumbs-up fa-fw fa-lg m-r-3"></i>
-                                    Like
-                                </a>
-                                <a href="javascript:;" class="m-r-15 text-inverse-lighter">
-                                    <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
-                                </a>
-                            </li>
-                            <hr>
-                            <li style="">    
-                                <div class="user" style="overflow: hidden; float: left">
-                                    <?php
-                                        if ($user_type == 'Employee') {
-                                            echo $this->Html->image("../webroot/img/upload/".$user->user_employee_photo, array());
-                                        }
-                                        else if ($user_type = 'Student') {
-                                            echo $this->Html->image("../webroot/img/upload/".$user->user_student_photo, array());
-                                        }
-                                        else if ($user_type == 'Alumni') {
-                                            echo $this->Html->image("../webroot/img/upload/".$user->user_alumni_photo, array());
-                                        }
-                                    ?>
-                                </div>
-                                <div class="input" style="margin-left: 7%">
-                                    <form action="">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control rounded-corner" placeholder="Write a comment..." />
-                                            <span class="input-group-btn p-l-10">
-                                                <button class="btn btn-primary f-s-12 rounded-corner" type="button">Comment</button>
-                                            </span>
-                                        </div>
-                                    </form>
-                                </div>
-                            </li>
-                            -->
+                            <!-- end Post Content Preview -->
                         </ul>
                         <?php endforeach; ?>
                         <!-- end timeline single post -->

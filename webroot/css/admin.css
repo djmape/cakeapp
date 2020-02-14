@@ -39,8 +39,17 @@
 
 .btn.btn-maroon {
 	background: #7e0e09;
+	color: #ffffff;
 }
 
 .content {
 	padding-bottom: 10%;
+}
+
+.dropdown-menu {
+	max-height: 400px;
+}
+
+.btn.btn-scroll-to-top {
+	color: #ffffff;
 }

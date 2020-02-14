@@ -9,10 +9,10 @@ use Cake\Validation\Validator;
 /**
  * UserPostReactions Model
  *
- * @property \App\Model\Table\PostsTable|\Cake\ORM\Association\BelongsTo $Posts
- * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
- * @property \App\Model\Table\UserPostActivitiesTable|\Cake\ORM\Association\BelongsTo $UserPostActivities
- * @property |\Cake\ORM\Association\BelongsTo $UserActivities
+ * @property |\Cake\ORM\Association\BelongsTo $UserPostReactionPosts
+ * @property |\Cake\ORM\Association\BelongsTo $UserPostReactionUsers
+ * @property |\Cake\ORM\Association\BelongsTo $UserPostReactionPostActivities
+ * @property |\Cake\ORM\Association\BelongsTo $UserPostReactionsActivities
  *
  * @method \App\Model\Entity\UserPostReaction get($primaryKey, $options = [])
  * @method \App\Model\Entity\UserPostReaction newEntity($data = null, array $options = [])
@@ -69,12 +69,10 @@ class UserPostReactionsTable extends Table
 
         $validator
             ->boolean('user_post_reaction_like')
-            ->requirePresence('user_post_reaction_like', 'create')
             ->allowEmptyString('user_post_reaction_like', false);
 
         $validator
             ->boolean('user_post_reaction_dislike')
-            ->requirePresence('user_post_reaction_dislike', 'create')
             ->allowEmptyString('user_post_reaction_dislike', false);
 
         return $validator;

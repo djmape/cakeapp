@@ -1,7 +1,7 @@
 <!-- src/Template/Admin/Users/admin_edit.ctp -->
 
 <?php echo $this->element('AdminHeaderSideBar');?>
-<?php echo $this->Flash->render(); ?>
+        <?php echo $this->Html->css("admin.css"); ?> 
 
 <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
 <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 

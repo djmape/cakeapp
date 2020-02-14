@@ -8,6 +8,8 @@
             <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
             <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
             <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css"); ?> 
+            <?php echo $this->Html->css("../plugins/bootstrap-select/bootstrap-select.min.css"); ?> 
+            <?php echo $this->Html->css("../plugins/select2/dist/css/select2.min.css"); ?> 
             <!-- end include -->
 
             <!-- begin #content -->
@@ -105,6 +107,23 @@
                         <label id="img_filename" style="margin-left: 1%">No image uploaded</label>
                     </div>
                 </div>
+                <div class="form-group row m-b-15">
+                    <label class="col-md-3 col-form-label">Link User</label>
+                    <div class="col-md-9">
+                        <?php
+                                $noAvailableUser = [
+                                ];
+                            if ($users_count == 0 ) {
+                                $noUser = [
+                                ];
+                                echo $this->Form->select('user_id',$noUser, ['class' => 'form-control selectpicker', 'data-size' => 'form-control','data-live-search' => true, 'data-style' => 'btn-white' ,'label' => false ]);
+                            }
+                            else  {
+                                echo $this->Form->select('user_id',$assignUsers, ['class' => 'form-control selectpicker', 'data-size' => 'form-control','data-live-search' => true, 'data-style' => 'btn-white' ,'label' => false, 'data-size' => '1','default' => $organization_officer->user_id]);
+                            } 
+                        ?>
+                    </div>
+                </div>
 
                 <div class="form-group row m-b-15 pull-right">
                     <?php
@@ -145,6 +164,9 @@
     <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-validate.js")?>
     <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.fileupload-video.js")?>
     <?php echo $this->Html->script("../plugins/jquery-file-upload/js/jquery.iframe-transport.js")?>
+
+    <?php echo $this->Html->script("../plugins/bootstrap-select/bootstrap-select.min.js")?>
+    <?php echo $this->Html->script("../plugins/select2/dist/js/select2.min.js")?>
     <!-- ================== END PAGE LEVEL JS ================== -->
     
     <script>
@@ -156,6 +178,7 @@
             <?php
                 }
             ?>
+            $('.selectpicker').selectpicker();
         });
 
         // begin script for image upload

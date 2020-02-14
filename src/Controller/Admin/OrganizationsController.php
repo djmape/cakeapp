@@ -18,6 +18,7 @@ class OrganizationsController extends AppController
         $this->loadComponent('Flash'); // Include the FlashComponent
         $this->adminSideBarHasSub('students');
         $this->adminHeaderSideBar('organizations');
+        $this->header();
     }
 
     public function index()
@@ -235,6 +236,31 @@ class OrganizationsController extends AppController
 
         $this->set('organization_officer', $organization_officer);
 
+        $this->loadModel('Users');
+        $this->loadModel("User_Types");
+        $users = $this->Users->find('list', [
+            'keyField' => 'id',
+            'valueField' => function ($row) {
+                return $row['user_lastname'] . ', ' . $row['user_firstname'] . ' ' . $row['user_middlename'];
+            }
+        ])->notMatching("OrganizationOfficers", 
+                         function($q) use($organization_id) {
+                            return $q->where(["OrganizationOfficers.active"=>1])->where(["OrganizationOfficers.organization_id"=>$organization_id]);
+                         })
+        ->where(['Users.active' => 1,'Users.user_lastname IS NOT' => null])->order([
+        'Users.user_lastname' => 'ASC'
+        ]);
+        $this->log($users->count(),'debug');
+
+        $users_count = 1;
+        if ($users->count() == 0) {
+            $users_count = 0;
+        }
+        else {
+            $this->set('assignUsers', $users);
+        }
+        $this->set('users_count', $users_count);
+
         if ($this->request->is('post')) {
             if (!empty($this->request->data)) {
                 $this->log('Got here', 'debug');
@@ -295,6 +321,7 @@ class OrganizationsController extends AppController
 
         $this->loadModel('OrganizationOfficersPositions');
         $this->loadModel('OrganizationOfficers');
+        $this->loadModel('Users');
         $organization_officers_positions =  $this->OrganizationOfficersPositions->find('list', ['keyField' => 'officers_position_id', 'valueField' => 'officers_position_name'])->notMatching("OrganizationOfficers", 
                          function($q) use($organization_id) {
                             return $q->where(["OrganizationOfficers.active"=>1])->where(["OrganizationOfficers.organization_id"=>$organization_id]);
@@ -303,7 +330,6 @@ class OrganizationsController extends AppController
         $this->set('organization_officers_positions', $organization_officers_positions);
 
         if ($organization_officers_positions->count() == 0) {
-            $this->log($organization_officers_positions->count(). ' zero','debug');
             $organization_officers_positions_count = 0;
         }
         else {
@@ -316,11 +342,40 @@ class OrganizationsController extends AppController
         $this->title('Edit Officer | ' . $organizations->first()->organization_name);
 
         $organization_officer =  $this->OrganizationOfficers->find('all', 
-                   array('conditions'=>array('OrganizationOfficers.organization_officer_id'=>$organization_officer_id)))->contain(['OrganizationOfficersPositions']);
+                   array('conditions'=>array('OrganizationOfficers.organization_officer_id'=>$organization_officer_id)))->contain(['OrganizationOfficersPositions','Users']);
         $organization_officer = $organization_officer->first();
         $this->set('organization_officer', $organization_officer);
+        $this->log($organization_officer,'debug');
 
+        if ($organization_officer->user_id != null) {
+             $currentUserFullName = $organization_officer->user->user_lastname . ', ' . $organization_officer->user->user_firstname . ' ' . $organization_officer->user->user_middlename;
+            $this->set('currentUserFullName', $currentUserFullName);
+        }
        
+        $this->loadModel('Users');
+        $this->loadModel("User_Types");
+        $users = $this->Users->find('list', [
+            'keyField' => 'id',
+            'valueField' => function ($row) {
+                return $row['user_lastname'] . ', ' . $row['user_firstname'] . ' ' . $row['user_middlename'];
+            }
+        ])->notMatching("OrganizationOfficers", 
+                         function($q) use($organization_id) {
+                            return $q->where(["OrganizationOfficers.active"=>1])->where(["OrganizationOfficers.organization_id"=>$organization_id]);
+                         })
+        ->where(['Users.active' => 1,'Users.user_lastname IS NOT' => null])->order([
+        'Users.user_lastname' => 'ASC'
+        ]);
+        $this->log($users->count(),'debug');
+
+        $users_count = 1;
+        if ($users->count() == 0) {
+            $users_count = 0;
+        }
+        else {
+            $this->set('assignUsers', $users);
+        }
+        $this->set('users_count', $users_count);
 
         if ($this->request->is(['post', 'put'])) {
             if (!empty($this->request->data)) {
@@ -351,15 +406,16 @@ class OrganizationsController extends AppController
             $officersTable = TableRegistry::getTableLocator()->get('OrganizationOfficers');
             $officers = $officersTable->get($organization_officer_id);
 
-                $officers->officers_position_id = $this->request->data['officers_position_id'];
-                $officers->officer_lastname = $this->request->data['officer_lastname'];
-                $officers->officer_firstname = $this->request->data['officer_firstname'];
-                $officers->officer_middlename = $this->request->data['officer_middlename'];
-                $officers->officer_photo = $imageFileName;
+            $officers->officers_position_id = $this->request->data['officers_position_id'];
+            $officers->officer_lastname = $this->request->data['officer_lastname'];
+            $officers->officer_firstname = $this->request->data['officer_firstname'];
+            $officers->officer_middlename = $this->request->data['officer_middlename'];
+            $officers->officer_photo = $imageFileName;
+            $officers->user_id = $this->request->data['user_id'];
 
-                    if (!empty($this->request->data['organization_officer_photo']['name'])) {
-                        $officers->employee_photo = $imageFileName;
-                    }
+            if (!empty($this->request->data['organization_officer_photo']['name'])) {
+                    $officers->employee_photo = $imageFileName;
+                }
 
             }
 

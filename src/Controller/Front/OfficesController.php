@@ -14,12 +14,13 @@ class OfficesController extends AppController
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
         $this->Auth->allow(['index']);
-        $this->navBar();
-        $this->adminSideBar('offices');
+        $this->navBar('offices');
+        $this->checkLoginStatus();
     }
 
     public function index()
     {
+        $this->title('PUPQC | Offices');
         $this->loadModel('Offices');
 
         $offices = $this->Offices->find('all')->where(['Offices.active' => 1])->order([
@@ -42,6 +43,11 @@ class OfficesController extends AppController
         $office = $this->Offices->find('all', 
                    array('conditions'=>array('Offices.office_id'=>$office_id)));
         $office = $office->first();
+        $this->title('PUPQC | ' . $office->office_name);
+        if ($office->active == 0) {
+            return $this->redirect(['prefix' => 'front','controller' => 'home','action' => 'error404']);
+        }
+        else {
 
         $this->set('office', $office);
 
@@ -51,6 +57,7 @@ class OfficesController extends AppController
         ])->where(['Offices.office_id' => $office_id])->where(['Employees.active' => 1])->where(['OfficeEmployees.active' => 1])->where(['OfficePositions.active' => 1]);
         $office_employees = $this->Paginator->paginate($office_employees);
         $this->set(compact('office_employees'));
+    }
 	}
 
     public function add()

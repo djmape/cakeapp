@@ -51,7 +51,6 @@
                     <?php foreach ($emails as $i => $email): ?>
                         <tr class="odd gradeX" data-email-id="<?= $email->contact_email_id ?>">
                             <td>
-                                <?= $i + 1?>
                             </td>
                             <td>
                                 <b> <?= $email->contact_email ?> </b>
@@ -91,7 +90,7 @@
                         <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
                             Close
                         </a>
-                        <button type="button" class="btn btn-success btn-sm" onclick="addEmail()">
+                        <button type="button" class="btn btn-maroon btn-sm" onclick="addEmail()">
                             <i class="fa fa-plus"></i>
                             Add Email
                         </button>
@@ -116,7 +115,7 @@
                         <a href="javascript:;" class="btn btn-white" data-dismiss="modal">
                             Close
                         </a>
-                        <button type="button" class="btn btn-success btn-sm" onclick="updateEmail()">
+                        <button type="button" class="btn btn-maroon btn-sm" onclick="updateEmail()">
                             <i class="fa fa-plus"></i>
                             Update Email
                         </button>
@@ -155,7 +154,16 @@
         $(document).ready(function() {
             App.init();
             TableManageTableSelect.init();
-            $('#data-table-select').DataTable();
+            $data_table = $('#data-table-select').DataTable();
+            $data_table.on( 'order.dt search.dt', 
+                function () {
+                    $data_table.column(0, {search:'applied', order:'applied'}).nodes().each( 
+                        function (cell, i) {
+                            cell.innerHTML = i+1;
+                        }
+                        );
+                }
+            ).draw();
         });
 
         function confirmDelete($contact_email_id) {

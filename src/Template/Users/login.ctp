@@ -54,32 +54,23 @@
 			text-align: center
 		}
 	</style>
-			<div class="panel" style="margin: auto; width: 350px; height:58%; margin-top: 9%;">
+			<div class="panel" style="margin: auto; width: 350px; margin-top: 7%;">
 				<div class="panel-body" style="padding: 10%;">
-					<div style=" text-align: center; width:100px; height: 100px; margin: auto">
+					<div style=" text-align: center; width:100px; height: 100px; margin: auto; margin-bottom: 20%">
 						<?php echo $this->Html->image('PUPlogo.png', array('style' => 'width: 100px; margin: auto')); ?>
 					</div>
 						<?= $this->Form->create() ?>
-                        <div class="row m-b-15"> </div>
-                        <div class="row m-b-15"> </div>
-						<div class="form-group row m-b-15">
-                                <label class="col-md-6 col-form-label">Email</label>
-                                <div class="">
-                                	<?= $this->Form->control('email',array('type' => 'email', 'class' => 'form-control','label' => false)); ?>
-                            </div>
+						<div class="form-group">
+                            <label class="col-form-label">Email</label>
+                            <?= $this->Form->control('email',array('type' => 'email', 'class' => 'form-control','label' => false)); ?>
                         </div>
-						<div class="form-group row m-b-15">
-                                <label class="col-md-6 col-form-label">Password</label>
-                                <div class="">
-                                	<?= $this->Form->control('password', array('type' => 'password', 'class' => 'form-control', 'label' => false)); ?>
-                            </div>
+						<div class="form-group">
+                            <label class="col-form-label">Password</label>
+                            <?= $this->Form->control('password', array('type' => 'password', 'class' => 'form-control', 'label' => false)); ?>
                         </div>
-                        <div class="row m-b-15"> </div>
-						<div class="form-group row m-b-15">
-                               <div class="">
-                                	<?= $this->Form->button('Login', array('class' => 'btn btn-sm btn-yellow','style' => 'width: 100%')) ?>
-									<?= $this->Form->end() ?>
-                            </div>
+						<div class="form-group">
+                            <?= $this->Form->button('Login', array('class' => 'btn btn-sm btn-yellow','style' => 'width: 100%')) ?>
+							<?= $this->Form->end() ?>
                         </div>
                 </div>
 			</div>

@@ -9,10 +9,11 @@ use Cake\Validation\Validator;
 /**
  * PostComments Model
  *
- * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
- * @property \App\Model\Table\PostsTable|\Cake\ORM\Association\BelongsTo $Posts
- * @property \App\Model\Table\UserPostActivitiesTable|\Cake\ORM\Association\BelongsTo $UserPostActivities
- * @property \App\Model\Table\UserPostActivitiesTable|\Cake\ORM\Association\BelongsTo $UserPostActivities
+ * @property |\Cake\ORM\Association\BelongsTo $PostCommentUsers
+ * @property |\Cake\ORM\Association\BelongsTo $PostCommentPosts
+ * @property |\Cake\ORM\Association\BelongsTo $PostCommentPostActivities
+ * @property |\Cake\ORM\Association\BelongsTo $UserPostReactionsActivities
+ * @property |\Cake\ORM\Association\BelongsTo $UserActivities
  *
  * @method \App\Model\Entity\PostComment get($primaryKey, $options = [])
  * @method \App\Model\Entity\PostComment newEntity($data = null, array $options = [])
@@ -50,12 +51,12 @@ class PostCommentsTable extends Table
         $this->belongsTo('UserPostActivities', [
             'foreignKey' => 'post_comment_post_activity_id'
         ]);
-        $this->belongsTo('UserPostActivities', [
+        $this->belongsTo('UserActivities', [
             'foreignKey' => 'post_comment_activity_id'
         ]);
         $this->hasOne('PostCommentContents', [
             'foreignKey' => 'post_comment_content_post_comment_id'
-        ]);
+        ]); 
     }
 
     /**
@@ -89,7 +90,7 @@ class PostCommentsTable extends Table
         $rules->add($rules->existsIn(['post_comment_user_id'], 'Users'));
         $rules->add($rules->existsIn(['post_comment_post_id'], 'Posts'));
         $rules->add($rules->existsIn(['post_comment_post_activity_id'], 'UserPostActivities'));
-        $rules->add($rules->existsIn(['post_comment_activity_id'], 'UserPostActivities'));
+        $rules->add($rules->existsIn(['post_comment_activity_id'], 'UserActivities'));
 
         return $rules;
     }

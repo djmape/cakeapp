@@ -1,16 +1,12 @@
-
-    
-    <!-- ================== BEGIN PAGE LEVEL JS ================== -->
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert.min.js")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert-dev.js")?>
-
 <?php
+$class = 'message';
+if (!empty($params['class'])) {
+    $class .= ' ' . $params['class'];
+}
 if (!isset($params['escape']) || $params['escape'] !== false) {
     $message = h($message);
 }
-    $messages = $params['saves'];
 ?>
-
-	<script>
-		swal('Error!','<?php echo $messages ?>','error');
-	</script>
+<div class="<?= h($class) ?>" onclick="this.classList.add('hidden');" style="color: white; text-align: center">
+	<?= $message ?>
+</div>

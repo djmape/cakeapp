@@ -107,6 +107,9 @@
                                                 <p id="clicked-react"></p>
                                                 <p id="sent-react"></p>
                                     <?= $discussion->forum_discussion_detail->forum_discussion_content?>
+                                    <?php
+                                        if ($login_status == true) {
+                                    ?>
                                     <!-- begin discussion reactions -->
                                     <div class="" style="vertical-align:bottom;position: absolute; bottom: 10%; width: 100%; margin-right: 1%;">
                                         <div class="" style="right: 1%; position: absolute;">
@@ -129,6 +132,10 @@
                                         </div>
                                     </div>
                                     <!-- end discussion reactions -->
+                                    <?php
+                                        }
+                                        # end if login_status is true
+                                    ?>
                                 </div>
                                 <!-- end discussion content -->
                             </td>
@@ -210,6 +217,10 @@
                                         ?>
                                         <?= $reply->forum_reply_detail->forum_reply_detail_content ?>
                                         <!-- begin discussion reactions -->
+
+                                    <?php
+                                        if ($login_status == true) {
+                                    ?>
                                     <div class="" style="vertical-align:bottom;position: absolute; bottom: 10%; width: 100%; margin-right: 1%">
                                         <div class="" style="right: 1%; position: absolute;">
                                             <div id="post-reactions">
@@ -263,6 +274,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <?php
+                                        }
+                                        # end if login_status is true
+                                    ?>
                                     <!-- end discussion reactions -->
                                     </div>
                                     <div class="row" style="clear: both;vertical-align:bottom;position: absolute;bottom: 1%; width: 100%">
@@ -467,14 +483,14 @@
             $discussionDownvotes = parseInt($('#txtDiscussionDownvoteCount').text());
             // if upvote is active when upvote is clicked, deactivate upvote and deduct number of upvotes
             // Cancel upvote
-            if ($activeReaction == 'DiscussionUpvote') {
+            if ($activeReaction == 'DiscussionUpvote' || $activeReaction == 'DiscussionUpvoteCancelDownvote') {
                 $activeVote = 'DiscussionUpvoteCancel';
                 $discussionUpvotes -= 1;
                 $('#txtDiscussionUpvoteCount').html($discussionUpvotes);
             }
             // if downvote is active when upvote is clicked, deactivate downvote and deduct number of downvotes, then activate upvote and increase number of upvotes
             // Cancel downvote, upvote discussion
-            else if ($activeReaction == 'DiscussionDownvote') {
+            else if ($activeReaction == 'DiscussionDownvote'|| $activeReaction == 'DiscussionDownvoteCancelUpvote') {
                 $activeVote = 'DiscussionUpvoteCancelDownvote';
                 $discussionUpvotes += 1;
                 $discussionDownvotes -= 1;
@@ -497,14 +513,14 @@
             // if downvote is active when downvote is clicked, deactivate downvote and deduct number of downvotes
             // Cancel downvote
 
-            if ($activeReaction == 'DiscussionDownvote') {
+            if ($activeReaction == 'DiscussionDownvote' || $activeReaction == 'DiscussionDownvoteCancelUpvote') {
                 $activeVote = 'DiscussionDownvoteCancel';
                 $discussionDownvotes -= 1;
                 $('#txtDiscussionDownvoteCount').html($discussionDownvotes);
             }
             // if upvote is active when downvote is clicked, deactivate upvote and deduct number of upvotes, then activate downvote and increase number of downvotes
             // Cancel upvote, downvote discussion
-            else if ($activeReaction == 'DiscussionUpvote') {
+            else if ($activeReaction == 'DiscussionUpvote'|| $activeReaction == 'DiscussionUpvoteCancelDownvote') {
                 $activeVote = 'DiscussionDownvoteCancelUpvote';
                 $discussionDownvotes += 1;
                 $discussionUpvotes -= 1;

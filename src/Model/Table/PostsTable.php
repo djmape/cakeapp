@@ -46,8 +46,23 @@ class PostsTable extends Table
             'joinType' => 'INNER'
         ]);
         
-        $this->hasOne('Announcements', [
+        $this->hasMany('Announcements', [
             'foreignKey' => 'announcement_post_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->hasMany('Events', [
+            'foreignKey' => 'event_post_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->hasOne('OrganizationAnnouncements', [
+            'foreignKey' => 'announcement_post_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->hasOne('OrganizationEvents', [
+            'foreignKey' => 'event_post_id',
             'joinType' => 'INNER'
         ]);
 
@@ -74,6 +89,7 @@ class PostsTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
+    
     public function validationDefault(Validator $validator)
     {
         $validator

@@ -13,24 +13,24 @@ class AboutsController extends AppController
 
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
-        $this->Auth->allow(['index']);
-        $this->navBar();
-        $this->adminSideBar('about');
+        $this->navBar('abouts');
+        $this->checkLoginStatus();
+        $this->Auth->allow('handbook');
     }
 
     public function index()
     {
+        $this->title('PUPQC | About');
         $abouts = $this->Abouts->find('all', [
             'order' => ['Abouts.about_modified' => 'DESC']
         ]);
         $abouts = $abouts->first();
         $this->set(compact('abouts'));
-        #$this->set('abouts', $abouts);
     }
 
-    public function view()
+    public function handbook()
 	{
-
+        $this->title('PUPQC | Handbook');
 	}
 
     public function add()
@@ -96,18 +96,9 @@ class AboutsController extends AppController
     {
         $action = $this->request->getParam('action');
         // The add and tags actions are always allowed to logged in users.
-        if (in_array($action, ['add', 'tags','index'])) {
+        if (in_array($action, ['add', 'handbook','index'])) {
             return true;
         }
-
-    }
-
-    public function handbook() {
-        $this->autoRender = false;
-        $handbook->render('handbook');
-    }
-
-    public function contact() {
 
     }
 

@@ -1,82 +1,47 @@
-<html>
-<head>
-    <!-- ================== BEGIN BASE CSS STYLE ================== -->
-    <title> Admin Panel | Organization Officer Positions </title>
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <?php echo $this->Html->css("../plugins/jquery-ui/themes/base/minified/jquery-ui.min.css")?>
-    <?php echo $this->Html->css("bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/font-awesome/css/font-awesome.min.css"); ?>
-    <?php echo $this->Html->css("animate.min.css")?>
-    <?php echo $this->Html->css("style.min.css")?>
-    <?php echo $this->Html->css("style-responsive.min.css")?>
-    <?php echo $this->Html->css("theme/default.css")?>
-    <!-- ================== END BASE CSS STYLE ================== -->
+<!-- src/Template/Admin/Organizations/officers.ctp --> 
 
-    <!-- ================== BEGIN PAGE LEVEL STYLE ================== -->
-    <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css")?>
-    <?php echo $this->Html->css("../plugins/bootstrap-wizard/css/bwizard.min.css")?>
-    <?php echo $this->Html->css("../plugins/isotope/isotope.css")?> 
-    <?php echo $this->Html->css("../plugins/lightbox/css/lightbox.css")?>
-    <?php echo $this->Html->css("../plugins/sweetalert/dist/sweetalert.css")?>
-    <!-- ================== END PAGE LEVEL STYLE ================== -->
-    
-    <!-- ================== BEGIN BASE JS ================== -->
-    <?php echo $this->Html->script("../plugins/pace/pace.min.js")?>
-    <!-- ================== END BASE JS ================== -->
+            <!-- begin include -->
+            <?php echo $this->element('AdminHeaderSideBar');?>
+            <?php echo $this->Html->css("admin.css"); ?> 
+            <?php echo $this->Flash->render(); ?>
 
-    <!-- ================== Sweet Alert ================== -->
-    <?php echo $this->Html->css("../plugins/sweetalert/dist/sweetalert.css")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert.min.js")?>
-    <?php echo $this->Html->script("../plugins/sweetalert/dist/sweetalert-dev.js")?>
+            <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
+            <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
+            <?php echo $this->Html->css("../plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css"); ?> 
+            <!-- end include -->
 
-    <!-- Include custom.css -->
-    <?php echo $this->Html->css("custom/admin.css")?>
-    
-</head>
+            <!-- begin #content -->
+            <div id="content" class="content">
 
+                <!-- begin breadcrumb -->
+                <ol class="breadcrumb pull-right">
+                    <li class="breadcrumb-item">
+                        <?php echo $this->Html->link('Organizations',['prefix' => "admin", 'controller' => 'Organizations','action'=>'index']) ?>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Officers Position
+                    </li>
+                </ol>
+                <!-- end breadcrumb -->
 
-<body>
-    <?php echo $this->element('AdminSideBar');?>
-    <?php echo $this->Flash->render(); ?>
-    <div id="content" class="content">
-        <?php echo $this->element('AdminHeader');?>
-            
-         <!-- begin row -->
-        <div class="panel panel-inverse" data-sortable-id="form-stuff-1" data-init="true">
-            <div class="row">
-                <!-- begin col-12 -->
-                <div class="col-md-12 ui-sortable">
-                    <!-- begin panel -->
-                    <div class="panel panel-inverse">
-                        <div class="panel-heading">
-                            <h5>
-                                <i class="fa fa-user"></i>
-                                <b> All Organization Officer Positions</b>
-                            </h5>
-                        </div>
-                        <div class="panel-body">
-                            <button type="button" class="btn btn-yellow btn-sm row m-b-15" style="margin-left: 0.5%">
-                                <i class="fa fa-plus">
-                                </i>
-                                <?= $this->Html->link('Add Officer Position', ['action' => 'add']) ?>
-                            </button>
-                            <div id="data-table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                <div class="row">
-                                    <div class="col-sm-12">
+                <!-- begin page-header -->
+                <h1 class="page-header"> Organization Officer Positions </h1>
+                <!-- end page-header -->
+                    <?= $this->Html->link('<i class="fa fa-add"></i> Add Officer Position', ['action' => 'add'],['escape' => false, 'class' => 'btn btn-yellow btn-sm add-button' ]) ?>
+                    <!-- end Add Organization Officer Position -->
                                         <table id="data-table" class="table table-striped table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="data-table_info">
                                             <thead>
                                     <tr role="row">
                                         <th class="sorting_asc" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 5%;">
                                             #
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 15%;">
+                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 70%;">
                                             Organization Officer Position
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 15%;">
+                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 10%;">
                                             Priority
                                         </th>
-                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 20%;">
+                                        <th class="sorting" tabindex="0" aria-controls="data-table" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 11%;">
                                             Actions
                                         </th>
                                     </tr>
@@ -88,22 +53,17 @@
                                             <?= $i + 1?>
                                         </td>
                                         <td>
-                                            <?= $this->Html->link($organization_officers_position->officers_position_name, ['action' => 'edit', $organization_officers_position->officers_position_id]) ?>
+                                            <?= $organization_officers_position->officers_position_name ?>
                                         </td>
                                         <td>
                                             <?= $organization_officers_position->officers_position_priority ?>
                                         </td>
                                         <td>
-                                            <div class="pull-right center-block">
-                                                <button type="button" class="btn btn-info btn-sm">
-                                                    <i class="fa fa-edit">
-                                                    </i>
-                                                    <?= $this->Html->link('Edit', ['action' => 'edit', $organization_officers_position->officers_position_id]) ?>
-                                                </button>
-                                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $organization_officers_position->officers_position_id ?> )">
+                                            <div class="pull-right center-block">           
+                                                    <?= $this->Html->link('<i class="fa fa-edit"></i>', ['action' => 'edit', $organization_officers_position->officers_position_id],['class' => 'btn btn-yellow btn-sm', 'title' => 'Edit ' . $organization_officers_position->officers_position_name, 'escape' => false]) ?>
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $organization_officers_position->officers_position_id ?> )" title="Delete <?php echo $organization_officers_position->officers_position_name ?>">
                                                     <i class="fa fa-trash">
                                                     </i>
-                                                    Delete
                                                 </button>
                                             </div>                                            
                                         </td>
@@ -112,20 +72,6 @@
                                 </tbody>
                             <!-- end table -->
                             </table>
-                        <!-- end col-sm-12 -->
-                        </div>
-                    <!-- end row -->
-                    </div>
-                <!-- end data-table_wrapper -->
-                </div>
-                <!-- panel-body -->
-                </div>
-        <!-- end panel -->
-        </div>
-    <!-- end col-md-12 ui-sortable -->
-    </div>
-    <!-- end row -->
-</div>
 </div>
 </div>
 
@@ -133,37 +79,26 @@
 
 
 
-<!-- ================== BEGIN BASE JS ================== -->
-<?php echo $this->Html->script("../plugins/jquery/jquery-migrate-1.1.0.min.js")?>
-<?php echo $this->Html->script("../plugins/bootstrap/js/bootstrap.min.js")?>
-    <!--[if lt IE 9]>
-        <script src="assets/crossbrowserjs/html5shiv.js"></script>
-        <script src="assets/crossbrowserjs/respond.min.js"></script>
-        <script src="assets/crossbrowserjs/excanvas.min.js"></script>
-    <![endif]-->
-    <?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
-    <?php echo $this->Html->script("../plugins/jquery-cookie/jquery.cookie.js")?>
-    <!-- ================== END BASE JS ================== -->
+    <!-- Include Base JS -->
+    <?php echo $this->element('base_js');?>
 
-<!-- ================== BEGIN PAGE LEVEL JS ================== -->
-<?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
-<?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-<?php echo $this->Html->script("table-manage-responsive.demo.min.js")?>
-<!-- <script src="assets/js/apps.min.js"></script> -->
-<?php echo $this->Html->script("apps.min.js")?>
-<!-- ================== END PAGE LEVEL JS ================== -->
-    
     <!-- ================== BEGIN PAGE LEVEL JS ================== -->
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/extensions/Select/js/dataTables.select.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+    <?php echo $this->Html->script("table-manage-select.demo.min.js")?>
+    <?php echo $this->Html->script("../plugins/slimscroll/jquery.slimscroll.min.js")?>
+    <?php echo $this->Html->script("../plugins/js-cookie/js.cookie.js")?>
+    <?php echo $this->Html->script("apps.min.js")?>
 
-        <!-- datatable scripts -->
-            <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
-            <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
-            <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
-            <?php echo $this->Html->script("table-manage-default.demo.min.js")?>
-        <!-- -->
-    <?php $this->Html->script("/apps.min.js")?>
-    <?php $this->Html->script("button.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/jquery.dataTables.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/media/js/dataTables.bootstrap.min.js")?>
+    <?php echo $this->Html->script("../plugins/DataTables/extensions/Responsive/js/dataTables.responsive.min.js")?>
+    <?php echo $this->Html->script("table-manage-default.demo.min.js")?>
     <!-- ================== END PAGE LEVEL JS ================== -->
     
     <script>

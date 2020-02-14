@@ -1,31 +1,31 @@
 <!-- src/Template/Users/index.ctp -->
 
         
-        <?php echo $this->element('UserHeader');?>
+            <?php echo $this->element('UserHeader');?>
+            <?php echo $this->Html->css("front.css")?>
+            <?php echo $this->Html->css("forum.css")?>
 
-        <!-- begin #top-menu -->
-        <div id="top-menu" class="navbar-header top-menu">
-            <!-- begin top-menu nav -->
-            <ul class="nav navbar-nav">
+            <!-- begin #top-menu -->
+            <div id="top-menu" class="navbar-header top-menu">
                 
-        <!-- begin breadcrumb -->
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">Forum</li>
-            <li class="breadcrumb-item">
-                <?php echo $this->Html->link('Home',['controller' => 'Forums','action'=>'forumHome']) ?>
-            </li>
-            <li class="breadcrumb-item active">
-                Categories
-            </li>
-        </ol>
-        <!-- end breadcrumb -->
+                <!-- begin top-menu nav -->
+                <ul class="nav navbar-nav">
+                
+                    <!-- begin breadcrumb -->
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <?php echo $this->Html->link('Forum',['controller' => 'ForumHome','action'=>'index']) ?>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            All Categories
+                        </li>
+                    </ol>
+                    <!-- end breadcrumb -->
                 
             </ul>
             <!-- end top-menu nav -->
         </div>
         <!-- end #top-menu -->
-        <?php echo $this->Html->css("front.css")?>
-        <?php echo $this->Html->css("forum.css")?>
 
 
         <!-- begin #content -->
