@@ -22,6 +22,7 @@ class AnnouncementsFixture extends TestFixture
         'announcement_modified' => ['type' => 'timestamp', 'length' => null, 'null' => false, 'default' => 'CURRENT_TIMESTAMP', 'comment' => '', 'precision' => null],
         'active' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'announcement_post_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'announcement_photo' => ['type' => 'text', 'length' => null, 'null' => false, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null],
         '_indexes' => [
             'fk_announcements_post_id' => ['type' => 'index', 'columns' => ['announcement_post_id'], 'length' => []],
         ],
@@ -47,10 +48,11 @@ class AnnouncementsFixture extends TestFixture
                 'announcement_id' => 1,
                 'announcement_title' => 'Lorem ipsum dolor sit amet',
                 'announcement_body' => 'Lorem ipsum dolor sit amet',
-                'announcement_created' => 1578290505,
-                'announcement_modified' => 1578290505,
+                'announcement_created' => 1583133288,
+                'announcement_modified' => 1583133288,
                 'active' => 1,
-                'announcement_post_id' => 1
+                'announcement_post_id' => 1,
+                'announcement_photo' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.'
             ],
         ];
         parent::init();

@@ -28,7 +28,8 @@
                             }
                         ?>
                                     <tbody>
-                                        <tr class="odd gradeX">
+                                        <tr class="odd gradeX <?php if ($user_notification->user_notification_read_status == true) { echo 'read';} else {
+                                            echo 'unread';} ?>" data-notification-id="<?= $user_notification->user_notification_id ?> " style="<?php if ($user_notification->user_notification_read_status == false) { echo 'background-color: #d9dadf';} ?>">
                                             <td class="f-s-600 text-inverse">
                                                 <?= $user_notification->user_notification_created->format('g:i A') ?>
                                             </td>
@@ -41,9 +42,11 @@
                                                         <?= $this->Html->link($user_notification->forum_notifications[0]->user->username, ['controller' => 'Users', 'action' => 'userProfile', $user_notification->forum_notifications[0]->user->username])  . ' added a reply on your discussion ' . $this->Html->link($user_notification->forum_notifications[0]->forum_discussion->forum_discussion_title, ['prefix' => 'forums','controller' => 'ForumDiscussions', 'action' => 'forumReplies', str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_topic->forum_topic_name), str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_discussion_title)]) ?>
                                                 <?php
                                                     }
-                                                    # if forum notification is Discussion Reaction
+                                                    # if forum notification is Reply Reply
                                                     else if ($user_notification->forum_notifications[0]->forum_notification_type_id == 2 ) {
-                                                ?>  
+                                                ?>
+
+                                                        <?= $this->Html->link($user_notification->forum_notifications[0]->user->username, ['controller' => 'Users', 'action' => 'userProfile', $user_notification->forum_notifications[0]->user->username])  . ' replied on your reply on ' . $this->Html->link($user_notification->forum_notifications[0]->forum_discussion->forum_discussion_title, ['prefix' => 'forums','controller' => 'ForumDiscussions', 'action' => 'forumReplies', str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_topic->forum_topic_name), str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_discussion_title)]) ?>
                                                 <?php
                                                     }
                                                     else if ($user_notification->forum_notifications[0]->forum_notification_type_id == 3 ) {
@@ -88,13 +91,25 @@
                                                     }
                                                     else if ($user_notification->forum_notifications[0]->forum_notification_type_id == 10 ) {
                                                 ?>
-                                                        <?= $this->Html->link($user_notification->forum_notifications[0]->user->username, ['controller' => 'Users', 'action' => 'userProfile', $user_notification->forum_notifications[0]->user->username])  . ' cancelled the downvote on your reply in ' . $this->Html->link($user_notification->forum_notifications[0]->forum_discussion->forum_discussion_title, ['prefix' => 'forums','controller' => 'ForumDiscussions', 'action' => 'forumReplies', str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_topic->forum_topic_name), str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_discussion_title)]) ?>  
+                                                        <?= $this->Html->link($user_notification->forum_notifications[0]->user->username, ['controller' => 'Users', 'action' => 'userProfile', $user_notification->forum_notifications[0]->user->username])  . ' cancelled the downvote on your reply in ' . $this->Html->link($user_notification->forum_notifications[0]->forum_discussion->forum_discussion_title, ['prefix' => 'forums','controller' => 'ForumDiscussions', 'action' => 'forumReplies', str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_topic->forum_category->forum_category_name), str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_topic->forum_topic_name), str_replace(' ', '-',$user_notification->forum_notifications[0]->forum_discussion->forum_discussion_title)]) ?> 
+                                                <?php
+                                                    }
+                                                    if ($user_notification->user_notification_read_status == true) {
+                                                ?>
+                                                        <div class='pull-right'>
+                                                            <small>
+                                                                <i class='fa fa-eye'></i> 
+                                                                <?= $user_notification->user_notification_date_read->format('n/d/Y g:i A') ?>
+                                                            </small>
+                                                        </div>
+                                                <?php
+                                                    }
+                                                ?>
                                             </td>
                                         </tr>
                                     </tbody>
 
                         <?php 
-                                                    }
                             $currentDate = $user_notification->user_notification_created->format('F d, Y, l');
                         ?>
                         <?php
@@ -141,6 +156,47 @@
 		$(document).ready(function() {
 			App.init();
 		});
+
+        $('#data-table-default tr').hover(function() {
+
+            if (!$(this).hasClass("read")) {
+
+                $(this).css("background","white");
+                $currentdate = new Date(); 
+                $datetime = $currentdate.getFullYear()  + '-' + ( '0' + ($currentdate.getMonth()+1) ).slice(-2) + '-' + $currentdate.getDate() + " " + $currentdate.getHours() + ":"  
+                + $currentdate.getMinutes() + ':' + $currentdate.getSeconds();
+
+                var hours = $currentdate.getHours();
+                var minutes = $currentdate.getMinutes();
+                var ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // the hour '0' should be '12'
+                minutes = minutes < 10 ? +minutes : minutes;
+                var strTime = hours + ':' + minutes + ' ' + ampm;
+                $viewdatetime =  $currentdate.getMonth()+1 + '/' + $currentdate.getDate() + '/' + $currentdate.getFullYear() + ' ' + hours + ':' + minutes + ' ' + ampm;
+                $(this).find("td:eq(1)").append("<div class='pull-right'><small><i class='fa fa-eye'></i> " + $viewdatetime + "</small></div>");
+                $(this).unbind('mouseenter mouseleave');
+
+
+                $user_notification_id = $(this).data("notification-id");
+
+                $targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => false ,"controller"=>"Users","action"=>"userNotificationRead"]); ?>';
+
+                $.ajax({
+                    type:'post',
+                    url: $targeturl, 
+                    data: {
+                        'user_notification_id' : parseInt($user_notification_id)
+                    },
+                    success:function(query)  {
+
+                    },
+                    error:function(xhr, ajaxOptions, thrownError) {
+                        swal("Error", thrownError, "error");
+                    }
+                });
+            }
+        });
 
 	</script>
 </html>

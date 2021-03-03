@@ -13,6 +13,9 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $announcement_modified
  * @property int $active
  * @property int $announcement_post_id
+ * @property string $announcement_photo
+ *
+ * @property \App\Model\Entity\Post $post
  */
 class Announcement extends Entity
 {
@@ -31,6 +34,8 @@ class Announcement extends Entity
         'announcement_created' => true,
         'announcement_modified' => true,
         'active' => true,
-        'announcement_post_id' => true
+        'announcement_post_id' => true,
+        'announcement_photo' => true,
+        'post' => true
     ];
 }

@@ -46,6 +46,22 @@ class AppController extends Controller
      * @return void
      */
 
+    public function beforeFilter(Event $event) {
+
+        $this->loadModel("Users");
+        $this->loadModel("User_Types");
+        $user_type = $this->Users->find('all')->contain(["UserTypes"])->where(['Users.id' => $this->Auth->user('id')])->first();
+        $this->log('type ' .$user_type,'debug');
+
+
+        if (empty($this->request->params['prefix']) || $this->request->params['prefix'] == 'admin') {
+            $this->log('beforeFilter','debug');
+            if ($user_type->user_type->user_type_name != 'Administrator') {
+                return $this->redirect(['prefix' => 'front','controller' => 'home','action' => 'error403']);
+            }
+        }
+    }
+
     public function initialize()
     {
         parent::initialize();
@@ -249,13 +265,13 @@ class AppController extends Controller
     }
 
     public function userHeader() {
+        $this->log('entered','debug');
 
         if ($this->Auth->user()) {
         $this->loadModel("Users");
         $this->loadModel("User_Types");
 
         $user_type = $this->Users->find('all')->contain(["UserTypes"])->where(['Users.id' => $this->Auth->user('id')])->first();
-            $this->log($user_type,'debug');
 
         if ($user_type->user_type->user_type_name == 'Administrator') {
 
@@ -317,7 +333,7 @@ class AppController extends Controller
 
         $this->loadModel('OrganizationOfficers');
 
-        $organization_officer = $this->OrganizationOfficers->find('all')->contain(['Organizations'])->where(['OrganizationOfficers.user_id' => $this->Auth->user('id')]);
+        $organization_officer = $this->OrganizationOfficers->find('all')->contain(['Organizations'])->where(['OrganizationOfficers.user_id' => $this->Auth->user('id')])->where(['OrganizationOfficers.active' => 1 ]);
 
         $organization_officer_count = 1;
 
@@ -345,6 +361,5 @@ class AppController extends Controller
 
         $user_notification_count = $this->UserNotifications->find('all')->where(['UserNotifications.user_notification_read_status' => 0])->count();
         $this->set('user_notification_count', $user_notification_count);
-        $this->log($user_notifications,'debug');
     }
 }

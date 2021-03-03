@@ -1,8 +1,7 @@
-<!-- src/Template/Users/user_settings_info.ctp -->
+<!-- src/Template/Users/user_settings_profile.ctp -->
 
-<?php echo $this->element('UserHeader');?>
 <?php echo $this->element('UserSettingsSidebar');?>
-<?php echo $this->Flash->render(); ?>
+<?php echo $this->Html->css("front.css")?>
 
 <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
 <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
@@ -11,7 +10,6 @@
 <?php echo $this->Html->css("../plugins/jquery-file-upload/css/jquery.fileupload-ui.css")?>
 
 <!-- user custom css -->
-<?php echo $this->Html->css("user.css")?>
 
         <!-- begin #content -->
         <div id="content" class="content">

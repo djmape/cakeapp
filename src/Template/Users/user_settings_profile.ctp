@@ -1,8 +1,7 @@
 <!-- src/Template/Users/user_settings_profile.ctp -->
 
-<?php echo $this->element('NavBar');?>
 <?php echo $this->element('UserSettingsSidebar');?>
-<?php echo $this->Flash->render(); ?>
+<?php echo $this->Html->css("front.css")?>
 
 <?php echo $this->Html->css("../plugins/DataTables/media/css/dataTables.bootstrap.min.css"); ?> 
 <?php echo $this->Html->css("../plugins/DataTables/extensions/Select/css/select.bootstrap.min.css"); ?> 
@@ -11,10 +10,10 @@
 <?php echo $this->Html->css("../plugins/jquery-file-upload/css/jquery.fileupload-ui.css")?>
 
 <!-- user custom css -->
-<?php echo $this->Html->css("user.css")?>
 
         <!-- begin #content -->
         <div id="content" class="content">
+
             <h3>Edit Profile</h3>
                 <!-- begin form -->
                 <?php echo $this->Form->create($profile,array('enctype'=>'multipart/form-data','class'=>'form-horizontal'));  
@@ -27,13 +26,14 @@
                             <span>Add image</span>
                             <?php echo $this->Form->control('user_profile_photo', array('id' => 'inputGroupFile01','type'=>'file','label' => false, 'required' => false));?>
                         </span>
-                        <div id="img_contain" class="row m-b-15" style=" height: 150px; width: 150px; margin-right: 1%; padding: 0">
-                        <?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array('id' => 'img_preview','style' => 'width:100%; height:auto;','class' => 'center-block'));
+                        <div id="img_contain" class="row m-b-15" style=" height: auto; width: 150px; margin-right: 1%; padding: 0; max-height: 150px">
+                        <?php echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array('id' => 'img_preview','style' => 'max-height:150px; height: 100%; width: 100% ;object-fit: cover'));
                         ?>
                         </div>
                         <label id="img_filename" style="margin-left: 1%" class="row m-b-15">No image uploaded</label>
                     </div>
                 </div>
+                <!--
                 <div class="form-group row m-b-15">
                     <label class="col-md-3 control-label">Cover Photo</label>
                     <div class="col-md-9">
@@ -49,6 +49,7 @@
                         <label id="cover-photo-filename" style="margin-left: 1%" class="row m-b-15">No image uploaded</label>
                     </div>
                 </div>
+            -->
                 <div class="form-group row m-b-15">
                     <label class="col-md-3 control-label">Bio</label>
                     <div class="col-md-9">

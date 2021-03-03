@@ -68,6 +68,11 @@ class EmployeePositionNamesTable extends Table
             ->requirePresence('active', 'create')
             ->allowEmptyString('active', false);
 
+        $validator
+            ->scalar('employee_position_description')
+            ->maxLength('employee_position_description', 1000)
+            ->allowEmptyString('employee_position_description');
+
         return $validator;
     }
 }

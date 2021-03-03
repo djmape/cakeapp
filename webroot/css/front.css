@@ -1,5 +1,6 @@
 body {
 	background-color: #ffffff;
+	font-size: 14px;
 }
 
 #content-profile {
@@ -7,6 +8,9 @@ body {
 	padding: 0;
 }
 
+.post-title-name a {
+	font-size: 18px;
+}
 
 #timeline-content {
 	margin: auto;
@@ -19,21 +23,13 @@ body {
 	position: relative;
 }
 
-#cover-photo {
-	width: 100%;
-	height: 300px;
-	background-color: #7e0e09;
-	padding-top: 15%
-}
-
 #profile-photo {
 	background-color: yellow;
 	border-radius: 250px; 
 	height: 250px;
 	width: 250px;  
 	display: block;
-  	margin-left: 5%;
-  	margin-right: auto;
+	margin: 10% auto 0 25%;
 }
 
 #profile-photo img {	
@@ -46,13 +42,13 @@ body {
 #profile-content {
 	width: 100%;
 	height: 500px;
-	background-color: #eeeeee;
+	background-color: #ffffff;
 	padding: 1%;
 }
 
 
 #profile-left {
-	width: 28%;
+	width: 100%;
 	background-color: white;
 	margin: 2%;
 	margin-left: 0;
@@ -68,10 +64,9 @@ body {
 }
 
 #profile-activities {
-	margin-left: 30%;
+	margin-left: 1%;
 	width: auto;
 	background-color: #eeeeee;
-	padding: 0.5%;
 	padding-top: 0;
 }
 
@@ -122,10 +117,9 @@ table tr {
 
 #profile-posts-header {
 	background-color: white;
-	padding: 1%;
+	padding: 2%;
 	margin: 1%;
 	margin-top: 0;
-	border-radius: 10px;
 }
 
 .header {
@@ -343,4 +337,15 @@ li .user img {
 li .user-activity-timestamp {
 	color: gray;
 	margin-left: 5%;
+}
+
+#content-profile .col-md-4 {
+}
+
+#content-profile .col-md-8 {
+	background-color: #eeeeee;
+}
+
+.sidebar {
+	margin-top: 10%
 }

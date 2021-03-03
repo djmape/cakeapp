@@ -70,16 +70,7 @@
 							
 							Hi, 
 
-							<?php
-								if ($user_type == 'Employee') {
-        							echo $user->user_employee_lastname . ' ' . $user->user_employee_firstname . ' ' .substr($user->user_employee_middlename,0 ,1) . '.';
-        						}
-        						else if ($user_type = 'Student') {
-        							echo $user->user_student_lastname . ', ' . $user->user_student_firstname . ' ' . substr($user->user_student_middlename,0 ,1 . '.');
-        						}
-        						else if ($user_type == 'Alumni') {
-        							echo $user->user_alumni_lastname . ', ' . $user->user_alumni_firstname . ' ' . substr($user->user_alumni_middlename,0 ,1 . '.');
-        						}
+							<?= $user->user->user_firstname . ' ' .substr($user->user->user_lastname,0 ,1) . '.';
         					?>
 
 						</span>

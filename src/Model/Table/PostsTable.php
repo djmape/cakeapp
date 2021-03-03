@@ -56,12 +56,12 @@ class PostsTable extends Table
             'joinType' => 'INNER'
         ]);
 
-        $this->hasOne('OrganizationAnnouncements', [
+        $this->hasMany('OrganizationAnnouncements', [
             'foreignKey' => 'announcement_post_id',
             'joinType' => 'INNER'
         ]);
 
-        $this->hasOne('OrganizationEvents', [
+        $this->hasMany('OrganizationEvents', [
             'foreignKey' => 'event_post_id',
             'joinType' => 'INNER'
         ]);

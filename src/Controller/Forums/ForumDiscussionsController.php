@@ -1401,9 +1401,24 @@ class ForumDiscussionsController extends AppController
 
                                     $forum_notification = $this->ForumNotifications->newEntity();
 
+                                    $forum_notification_type_id = 0;
+
+                                    if ($userDiscussionVote == 'DiscussionUpvote' || $userDiscussionVote == 'DiscussionUpvoteCancelDownvote') {
+                                        $forum_notification_type_id = 3;
+                                    }
+                                    else if ($userDiscussionVote == 'DiscussionDownvote' || $userDiscussionVote == 'DiscussionDownvoteCancelUpvote') {
+                                        $forum_notification_type_id = 4;
+                                    }
+                                    else if ($userDiscussionVote == 'DiscussionUpvoteCancel') {
+                                        $forum_notification_type_id = 5;
+                                    }
+                                    else if ($userDiscussionVote == 'DiscussionDownvoteCancel') {
+                                        $forum_notification_type_id = 6;
+                                    }
+
                                     $forum_notification->user_notification_id = $userNotification->user_notification_id;
                                     $forum_notification->forum_notification_sender_user_id = $currentUser;
-                                    $forum_notification->forum_notification_type_id = 2; # Discussion Reaction
+                                    $forum_notification->forum_notification_type_id = $forum_notification_type_id; # Discussion Reaction
                                     $forum_notification->forum_notification_discussion_id = $discussion_id;
 
                                     if ($this->ForumNotifications->save($forum_notification)) {
@@ -1492,10 +1507,25 @@ class ForumDiscussionsController extends AppController
                                     $this->loadModel('ForumNotifications');
 
                                     $forum_notification = $this->ForumNotifications->newEntity();
+                                    
+                                    $forum_notification_type_id = 0;
+
+                                    if ($userDiscussionVote == 'DiscussionUpvote' || $userDiscussionVote == 'DiscussionUpvoteCancelDownvote') {
+                                        $forum_notification_type_id = 3;
+                                    }
+                                    else if ($userDiscussionVote == 'DiscussionDownvote' || $userDiscussionVote == 'DiscussionDownvoteCancelUpvote') {
+                                        $forum_notification_type_id = 4;
+                                    }
+                                    else if ($userDiscussionVote == 'DiscussionUpvoteCancel') {
+                                        $forum_notification_type_id = 5;
+                                    }
+                                    else if ($userDiscussionVote == 'DiscussionDownvoteCancel') {
+                                        $forum_notification_type_id = 6;
+                                    }
 
                                     $forum_notification->user_notification_id = $userNotification->user_notification_id;
                                     $forum_notification->forum_notification_sender_user_id = $currentUser;
-                                    $forum_notification->forum_notification_type_id = 2; # Discussion Reaction
+                                    $forum_notification->forum_notification_type_id = $forum_notification_type_id; # Discussion Reaction
                                     $forum_notification->forum_notification_discussion_id = $discussion_id;
 
                                     if ($this->ForumNotifications->save($forum_notification)) {

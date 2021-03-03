@@ -13,7 +13,7 @@
                 <br>
                 <div class="row">
                     <div class="col-sm-12">
-                        <table id="data-table-select" class="table">
+                        <table id="data-table-select" class="table table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="data-table_info">
                             <thead>
                                 <th></th>
                             </thead>
@@ -38,9 +38,11 @@
                                                 </p>
                                                 <p>
                                                     <h6>
-                                                        <b>Position: </b>
                                                         <?= $employee->employee_position_name->employee_position_name;?>
                                                     </h6>
+                                                    <i>
+                                                        <?= $employee->employee_position_name->employee_position_description ?>
+                                                    </i>
                                                 </p>
 
 
@@ -103,8 +105,8 @@
 
 		$(document).ready(function() {
 			App.init();
-            $('#data-table').dataTable();
-            $('#data-table-select').DataTable();
+            $('#data-table-select').DataTable({"bSort" : false});
+            $data_table = $('#data-table-select').DataTable();
             $(".dataTables_paginate").addClass("pull-right");
             $("#data-table-select_filter").addClass("pull-right");
             $("#data-table-select thead").remove();

@@ -21,12 +21,10 @@ class EmployeesController extends AppController
     public function index()
     {
         $this->title('PUPQC | Employees');
-        $employees = $this->Employees->find('all')->contain(['EmployeePositionNames' => ['sort' => ['EmployeePositionNames.employee_position_priority' => 'DESC']]])->innerJoinWith('EmployeePositionNames')->order([
+        $employees = $this->paginate($this->Employees->find('all')->contain(['EmployeePositionNames' => ['sort' => ['EmployeePositionNames.employee_position_priority' => 'DESC']]])->innerJoinWith('EmployeePositionNames')->order([
         'EmployeePositionNames.employee_position_priority' => 'ASC'
-        ])->where(['Employees.active' => 1]);
-        $employees = $this->paginate($employees);
+        ])->where(['Employees.active' => 1]));
         $this->set(compact('employees'));
-        $this->log($employees->first(),'debug');
     }
 
 

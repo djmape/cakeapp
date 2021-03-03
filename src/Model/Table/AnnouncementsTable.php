@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Announcements Model
  *
- * @property |\Cake\ORM\Association\BelongsTo $Posts
+ * @property \App\Model\Table\PostsTable|\Cake\ORM\Association\BelongsTo $Posts
  *
  * @method \App\Model\Entity\Announcement get($primaryKey, $options = [])
  * @method \App\Model\Entity\Announcement newEntity($data = null, array $options = [])
@@ -78,6 +78,11 @@ class AnnouncementsTable extends Table
             ->integer('active')
             ->requirePresence('active', 'create')
             ->allowEmptyString('active', false);
+
+        $validator
+            ->scalar('announcement_photo')
+            ->requirePresence('announcement_photo', 'create')
+            ->allowEmptyString('announcement_photo', false);
 
         return $validator;
     }

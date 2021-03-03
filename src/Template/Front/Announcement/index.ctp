@@ -8,15 +8,21 @@
                     <span class="fa fa-info"></span>
                         Announcements
                 </h1>
-
+                <br>
+                <br>
                 <!-- begin row -->
-                <div id="announcements-list" class="grid_entry row masonry" style="width:70%" > 
-                    <?php
-                        foreach ($announcements as $announcement): ?>
-                        <div class="announcement-item">
+                <table id="data-table-select" class="table">
+                    <thead>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        <?php 
+                            foreach ($announcements as $announcement): ?>
+                                <tr>
+                                    <td class="" style="padding: 1%">
                             <h3>
                                 <?= $this->Html->link($announcement->announcement_title, ['action' => 'view', $announcement->announcement_id]) ?>
-                            </h3>
+                            </h3>   
                             <?= $announcement->announcement_modified->format('l, F d, Y g:i A') ?>
                             <br>
                             <br>
@@ -36,26 +42,15 @@
                                     <p>
                                         <?= preg_replace("/\<[^>]+\>/"," ",substr($announcement->announcement_body,0,500)) ?>
                                     </p>
-                            <?php
-                                }
-                            ?>
-                        </div>
+                                    </td>
+                                </tr>
                     <?php
+                                }
                         endforeach;
                     ?>
+                    </tbody>
+                </table>
                 </div>
-                <!-- status elements -->
-                <div class="scroller-status">
-                    <div class="infinite-scroll-request loader-ellips">
-                        <i class="fas fa-spinner fa-spin"></i>
-                    </div>
-                    <p class="infinite-scroll-last">End of content</p>
-                    <p class="infinite-scroll-error">No more announcements to load</p>
-                </div>
-                <p class="pagination">
-                    <a class="pagination__next" href="page2.html">Next page</a>
-                </p>
-            </div>
         </div>
     <?php echo $this->element('footer');?>
 </body>
@@ -86,23 +81,10 @@
     <script>
         $(document).ready(function() {
             App.init();
-            $(function() {
-                $('#announcements-list').infiniteScroll({
-                // options
-                    path: '.pagination__next',
-                    navSelector  : '.next',    // selector for the paged navigation 
-                    nextSelector : '.next a',  // selector for the NEXT link (to page 2)
-                    itemSelector : '.announcement-item',     // selector for all items you'll retrieve
-                    debug         : true,
-                    dataType      : 'html',
-                    loading: {
-                        finishedMsg: 'No more posts to load.',
-                        img: ''
-                    },
-                    status: '.scroller-status',
-                    hideNav: '.pagination'
-                });
-            });
+            $('#data-table-select').DataTable();
+            $(".dataTables_paginate").addClass("pull-right");
+            $("#data-table-select_filter").addClass("pull-right");
+            $("#data-table-select thead").remove();
         });
 
 

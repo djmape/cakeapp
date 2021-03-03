@@ -14,7 +14,7 @@ class HomeController extends AppController
 
         $this->loadComponent('Paginator');
         $this->loadComponent('Flash'); // Include the FlashComponent
-        $this->Auth->allow(['error404']);
+        $this->Auth->allow(['error404','error403']);
         $margin = 'false';
         $this->set('margin', $margin);
         $this->navBar(' ');
@@ -160,6 +160,11 @@ class HomeController extends AppController
     public function error404()
     {
         $this->title('Error 404 | Page Not Found');
+    }
+
+    public function error403()
+    {
+        $this->title('Error 403 Forbidden');
     }
 
     public function sub()

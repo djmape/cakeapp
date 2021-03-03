@@ -22,7 +22,7 @@
             <!-- end page-header -->
             
             <?php
-                echo $this->Form->create($announcement);
+                echo $this->Form->create($announcement,array('enctype'=>'multipart/form-data','class'=>'form-horizontal'));
             ?>
 
             <div class="form-group row m-b-15">
@@ -35,6 +35,20 @@
                 <label class="col-md-4 col-form-label">Content</label>
                 <div class="col-md-12">
                     <?php echo $this->Form->control('announcement_body', array('style' => 'height: 200px','class' => 'form-control wysiwyg', 'label' => false, 'required' => false)); ?>
+                </div>
+            </div>
+            <div class="form-group row m-b-15">
+                <label class="col-md-2 col-form-label">Upload Photo</label>
+                <div class="col-md-10">
+                    <label class="btn btn-yellow fileinput-button">
+                        <i class="fa fa-plus"></i>
+                        <span>Add image</span>
+                        <?php echo $this->Form->control('announcement_photo', array('id' => 'inputGroupFile01','type'=>'file','label' => false, 'required' => false, 'hidden' => true));?>
+                    </label>
+                    <div id="img_contain" class="col-md-2" style=" height: 150px; width: 150px; margin-top:2%; padding: 0; ">
+                        <?php echo $this->Html->image("../webroot/img/img_holder.png", array('id' => 'img_preview','style' => 'width:100%; height:100%;object-fit: contain; ','class' => 'center-block')); ?>
+                    </div>
+                    <label id="img_filename" style="margin: 2% 0 0 1%;"></label>
                 </div>
             </div>
             <div class="form-group row m-b-15 pull-right">
@@ -85,6 +99,43 @@
         menubar : false,
         statusbar: false
     });
+
+
+
+    $("#inputGroupFile01").change(function(event) {  
+        RecurFadeIn();
+        readURL(this); 
+    });
+
+    $("#inputGroupFile01").on('click',function(event){
+        RecurFadeIn();
+    });
+
+    function readURL(input) {    
+        if (input.files && input.files[0]) {   
+            var reader = new FileReader();
+            var filename = $("#inputGroupFile01").val();
+            filename = filename.substring(filename.lastIndexOf('\\')+1);
+            reader.onload = function(e) {
+                $('#img_preview').attr('src', e.target.result);
+                $('#img_preview').hide();
+                $('#img_preview').fadeIn(500);      
+                $('#img_filename').text(filename);             
+            }
+            reader.readAsDataURL(input.files[0]);    
+        } 
+        $(".alert").removeClass("loading").hide();
+    }
+
+    function RecurFadeIn(){ 
+        console.log('ran');
+        FadeInAlert("Wait for it...");  
+    }
+
+    function FadeInAlert(text){
+        $(".alert").show();
+        $(".alert").text(text).addClass("loading");  
+    }
 
 </script>
 

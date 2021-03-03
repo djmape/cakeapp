@@ -32,6 +32,7 @@ class UsersController extends AppController
         $this->loadComponent('Paginator');
         parent::initialize();
         $this->navBar('users');
+        $this->userHeader();
     }
     
     /**
@@ -41,6 +42,8 @@ class UsersController extends AppController
      */
     public function index()
     {   
+        $current_user = $this->Auth->user('id');
+
         $this->loadModel('Posts');
         $this->loadModel('Announcements');
         $this->loadModel('OrganizationAnnouncements');
@@ -48,20 +51,12 @@ class UsersController extends AppController
         $this->loadModel('Users');
         $this->loadModel('UserProfiles');
 
-        $posts = $this->paginate($this->Posts->find('all')->contain(['Users.UserProfiles','Announcements','Events',
-            'OrganizationAnnouncements.Organizations',
-            'OrganizationEvents.Organizations'])->leftJoinWith('Announcements')->leftJoinWith('Events')->
-            leftJoinWith('OrganizationAnnouncements', 
-                function ($q) {
-                    return $q->where(['OrganizationAnnouncements.organization_announcement_visibility_members_only' => 0]);
-                })->
-            leftJoinWith('OrganizationEvents', 
-                function ($q) {
-                    return $q->where(['OrganizationEvents.organization_announcement_visibility_members_only' => 0]);
-                })->
-            where(['Posts.post_active' => 1]));
-        $this->log($posts,'debug');
+        $posts = $this->Posts->find('all')->contain(['Users.UserProfiles','Announcements','Events',
+            'OrganizationAnnouncements.Organizations.OrganizationMembers',
+            'OrganizationEvents.Organizations'])->
+            where(['Posts.post_active' => 1]);
         $this->set(compact('posts'));
+        $this->set('current_user', $current_user);
     }
 
     public function userProfile($username)
@@ -86,16 +81,13 @@ class UsersController extends AppController
 
         $userActivities = $this->UserActivities->find('all')->contain([
             'UserPostReactions',
-            'UserPostActivities.Posts.Announcements'=> 
-                function (Query $query) { 
-                    return $query->limit(['UserPostActivities.Posts.post_id' => 'Announcements.announcement_post_id']);
-                },
-            'UserPostActivities.Posts.Events'=> 
-                function (Query $query) { 
-                    return $query->limit(['UserPostActivities.Posts.post_id' => 'Events.event_post_id']);
-                },
+            'UserPostActivities.Posts.Announcements',
+            'UserPostActivities.Posts.Events',
+            'UserPostActivities.Posts.OrganizationAnnouncements.Organizations.OrganizationMembers',
+            'UserPostActivities.Posts.OrganizationEvents.Organizations',
             'PostComments.PostCommentContents' ,'ForumCategoryActivities.ForumCategories','ForumActivities.ForumTopicActivities.ForumTopics','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumReplyDetails','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumDiscussionActivities.ForumDiscussions.ForumTopics.ForumCategories','ForumActivities.ForumTopicActivities.ForumTopics.ForumCategories','ForumActivities.ForumCategoryActivities.ForumCategories','ForumActivities.ForumReplyActivities.ForumReplies.ForumReplyDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumDiscussionDetails','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumTopics','ForumActivities.ForumReplyActivities.ForumReplies.ForumDiscussions.ForumTopics.ForumCategories','Users'])->where(['UserActivities.user_activity_user_id' => $user_id])->order(['UserActivities.user_activity_timestamp' => 'DESC']);
         $this->set(compact('userActivities')); 
+
 
 
         $this->loadModel('UserForumActivityCounts');
@@ -118,6 +110,7 @@ class UsersController extends AppController
 
         $this->header();
         $this->userSettingsSidebar('profile');
+        $this->userSettings(true);
         $this->title('PUPQC Web Portal | Edit Profile');   
 
         $this->loadModel('Users');
@@ -221,6 +214,7 @@ class UsersController extends AppController
     {   
         $this->header();
         $this->userSettingsSidebar('info');
+        $this->userSettings(true);
         $this->title('PUPQC Web Portal | Edit Info');
 
         $user_id = $this->Auth->user('id');  
@@ -349,7 +343,7 @@ class UsersController extends AppController
                     $user_type = $this->Users->find('all')->where(['Users.id' => $this->Auth->user('id')])->first()->user_type_id;
                     if ($user_type == 1) {
                         if ($redirectUrl == '') {
-                            return $this->redirect(["prefix" => "admin","controller" => "Dashboard","action" => "index"]);
+                            return $this->redirect(["prefix" => "admin","controller" => "Abouts","action" => "index"]);
                         }
                         else {
                             $url = 'http://localhost/cakeapp' ;
@@ -570,15 +564,16 @@ class UsersController extends AppController
 
                 $userActivity->user_activity_activity_type_id = 1; # posts
                 $userActivity->user_activity_user_id = $currentUser;
-                $userActivity->user_activity_reference_no = $postID->post_id;
+                $userActivity->user_activity_post_id = $postID->post_id;
 
-                if ($this->UserActivities->save($userActivity)) {
+                if ($userActivity = $this->UserActivities->save($userActivity)) {
 
                     # begin save UserPostActivities
 
                     $userPostActivity->user_post_activity_user_id = $currentUser;
                     $userPostActivity->user_post_activity_type_id = 1; # Create
                     $userPostActivity->user_post_activity_post_id = $postID->post_id;
+                    $userPostActivity->user_post_activities_user_activity_id = $userActivity->user_activity_id;
 
                     if ($this->UserPostActivities->save($userPostActivity)) {
 
@@ -758,6 +753,7 @@ class UsersController extends AppController
 
                 $userActivity->user_activity_activity_type_id = 1; # post
                 $userActivity->user_activity_user_id = $currentUser;
+                $userActivity->user_activity_post_id = $postID->post_id;
 
                 if ($this->UserActivities->save($userActivity)) {
 
@@ -766,6 +762,7 @@ class UsersController extends AppController
                     $userPostActivity->user_post_activity_user_id = $currentUser;
                     $userPostActivity->user_post_activity_type_id = 1; # create
                     $userPostActivity->user_post_activity_post_id = $postID->post_id;
+                    $userPostActivity->user_post_activities_user_activity_id = $userActivity->user_activity_id;
 
                     if ($this->UserPostActivities->save($userPostActivity)) {
 
@@ -1101,24 +1098,39 @@ class UsersController extends AppController
         $this->header();
         $this->title('PUPQC | Notifications');
 
-        $this->loadModel('UserNotifications');
+    }
 
-        $currentUser = $this->Auth->user('id');
+    public function userNotificationRead() {
 
-        if ($this->UserNotifications->query()->update()
-            ->set(['user_notification_read_status' => 1, 'user_notification_date_read' => Time::now()])
-            ->where(['user_notification_receiver_user_id' => $currentUser])->execute()) {
-            $this->getUserNotifications();
+        $this->layout = false;
+        $this->autoRender = false;
+
+        if ($this->request->is(['post', 'put'])) {
+            
+            $user_notification_id = $this->request->getData('user_notification_id');
+
+
+            $userNotificationsTable = TableRegistry::get('UserNotifications');
+
+            $userNotificationsTable = TableRegistry::getTableLocator()->get('UserNotifications');
+            $userNotification = $userNotificationsTable->get($user_notification_id);
+
+            $userNotification->user_notification_read_status = true;
+            $userNotification->user_notification_date_read = Time::now();
+
+            if ($userNotificationsTable->save($userNotification)) {
+
+            }
+            else {
+                $this->log($userNotification->errors(),'debug');
+            }
+            
         }
-        else {
-
-        }
-
     }
 
     public function isAuthorized($user) {
 
-    if (in_array($this->request->action, ['index', 'userProfile','userSettingsProfile','userSettingsInfo','userSettingsPassword','organizationPanel','organizationAnnouncementsAll','organizationAnnouncementAdd','organizationAnnouncementEdit','organizationAnnouncementDelete','organizationEventsAll','organizationEventAdd','organizationEventEdit','organizationEventDelete','organizationMembersAll','organizationMemberAdd','organizationMemberEdit','organizationInformationEdit','organizationMemberDelete','userNotifications','alumniEdit','deleteUser','logout'])) {
+    if (in_array($this->request->action, ['index', 'userProfile','userSettingsProfile','userSettingsInfo','userSettingsPassword','organizationPanel','organizationAnnouncementsAll','organizationAnnouncementAdd','organizationAnnouncementEdit','organizationAnnouncementDelete','organizationEventsAll','organizationEventAdd','organizationEventEdit','organizationEventDelete','organizationMembersAll','organizationMemberAdd','organizationMemberEdit','organizationInformationEdit','organizationMemberDelete','userNotifications','userNotificationRead','alumniEdit','deleteUser','logout'])) {
         return true;
     }
 

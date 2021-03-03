@@ -23,7 +23,8 @@ class AnnouncementsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.Announcements'
+        'app.Announcements',
+        'app.Posts'
     ];
 
     /**
@@ -66,6 +67,16 @@ class AnnouncementsTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     */
+    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

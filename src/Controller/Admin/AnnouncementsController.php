@@ -56,7 +56,30 @@ class AnnouncementsController extends AppController
         $postReactions = $this->PostReactions->newEntity();
 
         if ($this->request->is('post')) {
-            $announcement = $this->Announcements->patchEntity($announcement, $this->request->getData());
+
+            if (!empty($this->request->data)) {
+                if (!empty($this->request->data['announcement_photo']['name'])) {
+                    $file = $this->request->data['announcement_photo']; //put the data into a var for easy use
+
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+                    $arr_ext = array('jpg', 'jpeg', 'gif','png'); //set allowed extensions
+                    $setNewFileName = time() . "_" . rand(000000, 999999);
+
+                    //only process if the extension is valid
+                    if (in_array($ext, $arr_ext)) {
+                        //do the actual uploading of the file. First arg is the tmp name, second arg is 
+                        //where we are putting it
+                        move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/upload/' . $setNewFileName . '.' . $ext);
+
+                        //prepare the filename for database entry 
+                        $imageFileName = $setNewFileName . '.' . $ext;
+                        }
+                    }
+                    else {
+                        $imageFileName = '';
+                    }
+            }
+
 
             $post->post_user_id = $currentUser;
             $post->post_post_type_id = 1;
@@ -74,6 +97,7 @@ class AnnouncementsController extends AppController
 
             $announcement->announcement_title = $this->request->getData('announcement_title');
             $announcement->announcement_body = $this->request->getData('announcement_body');
+            $announcement->announcement_photo = $imageFileName;
             $announcement->active = 1;
 
             if ($postID = $this->Posts->save($post)) {
@@ -120,6 +144,30 @@ class AnnouncementsController extends AppController
         
         if ($this->request->is(['post', 'put'])) {
 
+
+            if (!empty($this->request->data)) {
+                if (!empty($this->request->data['announcement_photo']['name'])) {
+                    $file = $this->request->data['announcement_photo']; //put the data into a var for easy use
+
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+                    $arr_ext = array('jpg', 'jpeg', 'gif','png'); //set allowed extensions
+                    $setNewFileName = time() . "_" . rand(000000, 999999);
+
+                    //only process if the extension is valid
+                    if (in_array($ext, $arr_ext)) {
+                        //do the actual uploading of the file. First arg is the tmp name, second arg is 
+                        //where we are putting it
+                        move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/upload/' . $setNewFileName . '.' . $ext);
+
+                        //prepare the filename for database entry 
+                        $imageFileName = $setNewFileName . '.' . $ext;
+                        }
+                    }
+                    else {
+                        $imageFileName = $row->announcement_photo;
+                    }
+            }
+
             $announcementsTable = TableRegistry::get('Announcements');
 
             $announcementsTable = TableRegistry::getTableLocator()->get('Announcements');
@@ -128,6 +176,7 @@ class AnnouncementsController extends AppController
             $announcement->announcement_title = $this->request->data['announcement_title'];
             $announcement->announcement_body = $this->request->data['announcement_body'];
             $announcement->announcement_modified = Time::now();;
+            $announcement->announcement_photo = $imageFileName;
 
             if ($announcementsTable->save($announcement)) {
                 $this->Flash->success('Announcement Updated!', [

@@ -41,6 +41,7 @@ class OrganizationMembersTable extends Table
             'foreignKey' => 'organization_id',
             'joinType' => 'INNER'
         ]);
+        
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'

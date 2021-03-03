@@ -120,6 +120,13 @@ Router::scope('/', function ($routes) {
         'action' => 'error404'
     ]);
 
+    // front error 403
+    $routes->connect('/forbidden/', [
+        'prefix' => 'front',
+        'controller' => 'home',
+        'action' => 'error403'
+    ]);
+
     $routes->connect('/viewEvent/*', [
         'prefix' => 'admin','controller' => 'events','action' => 'view']);
 

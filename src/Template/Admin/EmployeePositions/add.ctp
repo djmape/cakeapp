@@ -24,18 +24,22 @@
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-15">
+                                    <label class="col-md-3 control-label">Position Description</label>
+                                    <div class="col-md-9">
+                                        <?php echo $this->Form->control('employee_position_description', array('class' => 'form-control','label' => false,'type' => 'textarea')); ?>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-b-15">
                                     <label class="col-md-3 control-label">Priority</label>
                                     <div class="col-md-9">
                                         <?php echo $this->Form->control('employee_position_priority', array('class' => 'form-control','label' => false,'type' => 'number')); ?>
                                         <small class="f-s-12 text-grey-darker">Set priority by number. 1 highest</small>
                                     </div>
                                 </div>
-                                <div class="form-group row m-b-15" style="margin-right: 1%">
-                                    <div class="pull-right">
-                                        <?php echo $this->Form->button(__('<i class="fa fa-plus"></i>  Add Employee Position'), array('class' => 'btn btn-sm btn-yellow'));
+                                <div class="form-group row m-b-15 pull-right" style="margin-right: 1%">
+                                    <?php echo $this->Form->button(__('<i class="fa fa-plus"></i>  Add Employee Position'), array('class' => 'btn btn-sm btn-yellow'));
                                               echo $this->Form->end();
                                         ?>
-                                    </div>
                                 </div>
                     </div>
             <!-- end panel-body -->

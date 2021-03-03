@@ -43,6 +43,7 @@ class EmployeePositionsController extends AppController
         if ($this->request->is('post')) {
 
             $employee_positions->employee_position_name = $this->request->getData('employee_position_name');
+            $employee_positions->employee_position_description = $this->request->getData('employee_position_description');
             $employee_positions->employee_position_priority = $this->request->getData('employee_position_priority');
             $employee_positions->active = 1;
 

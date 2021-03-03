@@ -19,6 +19,7 @@ class EmployeePositionNamesFixture extends TestFixture
         'employee_position_name' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'employee_position_priority' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'active' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'employee_position_description' => ['type' => 'string', 'length' => 1000, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['employee_position_id'], 'length' => []],
         ],
@@ -40,7 +41,8 @@ class EmployeePositionNamesFixture extends TestFixture
                 'employee_position_id' => 1,
                 'employee_position_name' => 'Lorem ipsum dolor sit amet',
                 'employee_position_priority' => 1,
-                'active' => 1
+                'active' => 1,
+                'employee_position_description' => 'Lorem ipsum dolor sit amet'
             ],
         ];
         parent::init();

@@ -63,10 +63,9 @@
         					?>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right">
-						<a href="javascript:;" class="dropdown-item">Edit Profile</a>
-						<a href="javascript:;" class="dropdown-item">Settings</a>
+						<?php echo $this->Html->link('Settings',array('prefix' => false,'controller' => 'Users','action'=>'userSettingsProfile'),array('class'=>'dropdown-item')) ?>
 						<div class="dropdown-divider"></div>
-						<?php echo $this->Html->link('Log Out',array('prefix' => "admin", 'controller' => 'Users','action'=>'logout'),array('escape' => false,'class'=>'dropdown-item')) ?>
+						<?php echo $this->Html->link('Log Out',array('prefix' => false, 'controller' => 'Users','action'=>'logout'),array('escape' => false,'class'=>'dropdown-item')) ?>
 					</div>
 				</li>
 			</ul>
@@ -94,10 +93,10 @@
               		<li>
                 		<?php echo $this->Html->link('<i class="fa fa-globe fw"></i><span>View Website</span>',['prefix' => "front", 'controller' => 'Home','action'=>'index'],array('escape' => false)) ?>
               		</li>
-              		<!-- Dashboard -->
+              		<!-- Dashboard 
               		<li class="<?php if ($active == 'dashboard') echo 'active'?>">
                 		<?php echo $this->Html->link('<i class="fa fa-home fw"></i><span>Dashboard</span>',['prefix' => "admin", 'controller' => 'Dashboard','action'=>'index'],array('escape' => false)) ?>
-              		</li>
+              		</li>-->
 					<li class="has-sub <?php if ($expand == 'site-info') echo 'active expand'?>">
 						<a href="javascript:;">
 					        <b class="caret"></b>

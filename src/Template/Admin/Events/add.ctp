@@ -109,18 +109,19 @@
                     <?php echo $this->Form->control('event_location_embed', array('class' => 'form-control', 'label' => false )); ?>
                 </div>
             </div>
+
             <div class="form-group row m-b-15">
                 <label class="col-md-2 col-form-label">Upload Photo</label>
                 <div class="col-md-10">
-                    <span class="btn btn-yellow fileinput-button">
+                    <label class="btn btn-yellow fileinput-button">
                         <i class="fa fa-plus"></i>
                         <span>Add image</span>
-                        <?php echo $this->Form->control('event_photo', array('id' => 'inputGroupFile01','type'=>'file','label' => false, 'required' => false));?>
-                    </span>
-                    <div id="img_contain" class="col-md-2" style=" height: 150px; width: 150px; margin-right: 1%; padding: 0">
-                        <?php echo $this->Html->image("../webroot/img/img_holder.png", array('id' => 'img_preview','style' => 'width:100%; height:auto;','class' => 'center-block')); ?>
+                        <?php echo $this->Form->control('event_photo', array('id' => 'inputGroupFile01','type'=>'file','label' => false, 'required' => false, 'hidden' => true));?>
+                    </label>
+                    <div id="img_contain" class="col-md-2" style=" height: 150px; width: 150px; margin-top:2%; padding: 0; ">
+                        <?php echo $this->Html->image("../webroot/img/img_holder.png", array('id' => 'img_preview','style' => 'width:100%; height:100%;object-fit: contain; ','class' => 'center-block')); ?>
                     </div>
-                    <label id="img_filename" style="margin-left: 1%;">No image uploaded</label>
+                    <label id="img_filename" style="margin: 2% 0 0 1%;"></label>
                 </div>
             </div>
             <div class="pull-right" style=" margin-bottom: 1%">

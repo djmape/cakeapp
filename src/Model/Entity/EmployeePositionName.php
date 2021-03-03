@@ -10,6 +10,9 @@ use Cake\ORM\Entity;
  * @property string $employee_position_name
  * @property int $employee_position_priority
  * @property int $active
+ * @property string|null $employee_position_description
+ *
+ * @property \App\Model\Entity\UserEmployee[] $user__employees
  */
 class EmployeePositionName extends Entity
 {
@@ -25,6 +28,8 @@ class EmployeePositionName extends Entity
     protected $_accessible = [
         'employee_position_name' => true,
         'employee_position_priority' => true,
-        'active' => true
+        'active' => true,
+        'employee_position_description' => true,
+        'user__employees' => true
     ];
 }

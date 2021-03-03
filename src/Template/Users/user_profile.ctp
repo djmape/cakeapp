@@ -1,79 +1,77 @@
 <!-- src/Template/Users/user_profile.ctp -->
 
-<?php echo $this->element('NavBar');?>
-        <?php echo $this->Html->css("front.css")?>
+			<?php echo $this->element('NavBar');?>
+        	<?php echo $this->Html->css("front.css")?>
 
-        <!-- begin #content -->
-        <div id="content-profile" class="content">
-            <div id="cover-photo">
-                <div id="profile-photo">
-                    <?php 
-                    if ($profile != '') {
-                        echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array());
-                    }
-                    ?>
+        	<!-- begin #content -->
+        	<div id="content-profile" class="content row">
+        		<div class="col-md-4 center-block">
+                	<div id="profile-photo" class="">
+                    	<?php 
+                    		if ($profile != '') {
+                        		echo $this->Html->image("../webroot/img/upload/".$profile->user_profile_photo, array());
+                    		}
+                    	?>
+                	</div>
+
+            		<!-- begin #profile-content -->
+            		<div id="profile-content">
+                		<!-- begin #profile-left -->
+                		<div id="profile-left">
+                    		<div id="profile-info">
+                        		<h3> 
+                            		<?= $userProfile->user_lastname . ', ' . $userProfile->user_firstname . ' ' .substr($userProfile->user_middlename,0 ,1) . '.'; ?> 
+                        		</h3>
+                        		<h4> <?= $user_type ?> </h4>
+                    			<hr>
+                    			<?= $userProfile->email ?>
+                    			<?php
+                        			if ($profile->user_profile_bio != '') {
+                    			?>
+                        		<hr>
+                        		<?= $profile->user_profile_bio ?>
+                    			<?php 
+                        			}
+                    			?>
+                    			<?php 
+                        			if ($user_forum_activity_statistics !=  '') {
+                    			?>
+                    			<hr>
+                    				<?php
+                        				if ($user_forum_activity_statistics->user_forum_activity_topics_count != '') {
+                    				?>
+                            				<?= $user_forum_activity_statistics->user_forum_activity_topics_count . ' forum topic/s' ?>
+                    						<br>
+                    				<?php 
+                        				}
+                    				?>
+                    				<?php
+                    					if ($user_forum_activity_statistics->user_forum_activity_discussions_count != '') {
+                    				?>
+                            				<?= $user_forum_activity_statistics->user_forum_activity_discussions_count . ' forum discussion/s' ?>
+                    						<br>
+                    				<?php 
+                    					}
+                    				?>
+                    			<?php
+                    					if ($user_forum_activity_statistics->user_forum_activity_replies_count != '') {
+                    						if ($user_forum_activity_statistics->user_forum_activity_replies_count == 0) {
+                    							echo '0 forum reply';
+                    						}
+                    						else {
+                    							echo $user_forum_activity_statistics->user_forum_activity_replies_count . ' forum replies';
+                            				}
+                        				}
+                    				}
+                    			?>
+                    			<hr>
+                    		</div>
+                		</div>
+                		<!-- end #profile-left -->
+                	</div>
                 </div>
-            </div>
-            <!-- end #cover-photo -->
 
-            <!-- begin #profile-content -->
-            <div id="profile-content">
-                <!-- begin #profile-left -->
-                <div id="profile-left">
-                    <div id="profile-info">
-                        <?php
-                        ?>
-                        <h3> 
-                            <?= $userProfile->user_lastname . ', ' . $userProfile->user_firstname . ' ' .substr($userProfile->user_middlename,0 ,1) . '.'; ?> 
-                        </h3>
-                        <h4> <?= $user_type ?> </h4>
-                    <hr>
-                    <?= $userProfile->email ?>
-                    <?php
-                        if ($profile->user_profile_bio != '') {
-                    ?>
-                        <hr>
-                        <?= $profile->user_profile_bio ?>
-                    <?php 
-                        }
-                    ?>
-                    <?php 
-                        if ($user_forum_activity_statistics !=  '') {
-                    ?>
-                    <hr>
-                    <?php
-                        if ($user_forum_activity_statistics->user_forum_activity_topics_count != '') {
-                    ?>
-                            <?= $user_forum_activity_statistics->user_forum_activity_topics_count . ' forum topic/s' ?>
-                    <br>
-                    <?php 
-                        }
-                    ?>
-                    <?php
-                        if ($user_forum_activity_statistics->user_forum_activity_discussions_count != '') {
-                    ?>
-                            <?= $user_forum_activity_statistics->user_forum_activity_discussions_count . ' forum discussion/s' ?>
-                    <br>
-                    <?php 
-                        }
-                    ?>
-                    <?php
-                        if ($user_forum_activity_statistics->user_forum_activity_replies_count != '') {
-                    
-                            if ($user_forum_activity_statistics->user_forum_activity_replies_count == 0) {
-                                echo '0 forum reply';
-                            }
-                            else {
-                                echo $user_forum_activity_statistics->user_forum_activity_replies_count . ' forum replies';
-                            }
-                        }
-                    }
-                    ?>
-                    <hr>
-                    </div>
-                </div>
-                <!-- end #profile-left -->
-
+                <div class="col-md-8">
                 <!-- begin #profile-activities -->
                 <div id="profile-activities">
                     <div id="profile-posts-header">
@@ -173,6 +171,27 @@
                                             <?= $this->Html->link($userActivity->user_post_activities[0]->post->events[0]->event_title, ['prefix' => 'front', 'controller' => 'Events', 'action' => 'view', $userActivity->user_post_activities[0]->post->events[0]->event_id]) ?>
 
 
+                                <?php
+                                        }
+                                        else if ($userActivity->user_post_activities[0]->post->post_post_type_id == 3) {
+                                ?>
+                                            
+                                <?php
+                                        }
+                                        else if ($userActivity->user_post_activities[0]->post->post_post_type_id == 4) {
+                                ?>
+                                        <?= $this->Html->link($userActivity->user_post_activities[0]->post->organization_announcements[0]->organization_announcement_title, ['prefix' => 'front', 'controller' => 'Organizations', 'action' => 'announcementView', $userActivity->user_post_activities[0]->post->organization_announcements[0]->organization_announcement_id]) ?>
+
+                                         announcement by 
+                                         <?= $this->Html->link($userActivity->user_post_activities[0]->post->organization_announcements[0]->organization->organization_name, ['prefix' => 'front', 'controller' => 'Organizations', 'action' => 'view', $userActivity->user_post_activities[0]->post->organization_announcements[0]->organization->organization_id]) ?>
+                                <?php
+                                        }
+                                        else if ($userActivity->user_post_activities[0]->post->post_post_type_id == 5) {
+                                ?>
+                                            <?= $this->Html->link($userActivity->user_post_activities[0]->post->organization_events[0]->organization_event_title, ['prefix' => 'front', 'controller' => 'Organizations', 'action' => 'announcementView', $userActivity->user_post_activities[0]->post->organization_events[0]->organization_event_id]) ?>
+
+                                            event by 
+                                            <?= $this->Html->link($userActivity->user_post_activities[0]->post->organization_events[0]->organization->organization_name, ['prefix' => 'front', 'controller' => 'Organizations', 'action' => 'view', $userActivity->user_post_activities[0]->post->organization_events[0]->organization->organization_id]) ?>
                                 <?php
                                         }
                                     }
@@ -345,6 +364,7 @@
                     </div>
                 </div>
                 <!-- end #profile-activities -->
+                </div>
             </div>
             <!-- end #profile-content -->
         </div>

@@ -229,7 +229,6 @@ src/Template/Admin/ContactNumbers/index.ctp
     function updateNumber() {
         $contact_number = $("#number-update").val();
         var targeturl = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"edit"]); ?>';
-        var redirectURL = ' http://localhost' + '<?= \Cake\Routing\Router::url(["prefix" => "admin" ,"controller"=>"ContactNumbers","action"=>"index"]); ?>';
         $.ajax({
             type:'post',
             url: targeturl, 
@@ -238,7 +237,6 @@ src/Template/Admin/ContactNumbers/index.ctp
                 'contact_number' : $contact_number 
             },
             success:function(query)  {
-                window.location = redirectURL;
             },
             error:function(xhr, ajaxOptions, thrownError) {
                 swal("Error", thrownError, "error");

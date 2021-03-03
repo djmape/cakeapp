@@ -23,7 +23,8 @@ class EmployeePositionNamesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.EmployeePositionNames'
+        'app.EmployeePositionNames',
+        'app.UserEmployees'
     ];
 
     /**
