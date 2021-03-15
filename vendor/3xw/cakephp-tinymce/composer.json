@@ -1,0 +1,23 @@
+{
+  "name": "3xw/cakephp-tinymce",
+  "description": "CakePHP utils plugins",
+  "type": "cakephp-plugin",
+  "require": {
+    "php": ">=5.5.9",
+    "cakephp/cakephp": "^3.5"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Trois\\Tinymce\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Trois\\Tinymce\\Test\\": "tests",
+      "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+    }
+  }
+}
